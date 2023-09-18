@@ -22,6 +22,7 @@ const Navigation = () => {
 				<Navbar.Toggle aria-controls='basic-navbar-nav' />
 				<Navbar.Collapse id='basic-navbar-nav'>
 					<Nav className='ms-auto'>
+						{/*Protected routes! */}
 						{currentUser ? (
 							<>
 								<NavDropdown title={userEmail}>
@@ -36,6 +37,7 @@ const Navigation = () => {
 							</>
 						) : (
 							<>
+								{/*NOT protected routes! */}
 								<Nav.Link as={NavLink} to='/signup'>
 									Sign up
 								</Nav.Link>
