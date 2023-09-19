@@ -19,6 +19,10 @@ function AdminPage() {
 				<Tab eventKey='restaurants' title='Restaurants'>
 					<SortedRestaurants />
 				</Tab>
+				<Tab eventKey='requests' title='Requests'>
+					Här kommer bilder och restauranger för godkännande av admin
+					att synas?
+				</Tab>
 			</Tabs>
 		</Container>
 	)
