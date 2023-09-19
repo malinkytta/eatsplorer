@@ -4,6 +4,7 @@ import './assets/scss/App.scss'
 import React from 'react'
 import HomePage from './pages/HomePage'
 import Navigation from './pages/partials/Navigation'
+import AdminPage from './pages/AdminPage'
 
 const App = () => {
 	return (
@@ -11,6 +12,7 @@ const App = () => {
 			<Navigation />
 			<Routes>
 				<Route path='/' element={<HomePage />} />
+				<Route path='/admin' element={<AdminPage />} />
 			</Routes>
 		</>
 	)
