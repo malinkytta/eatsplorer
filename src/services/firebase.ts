@@ -38,6 +38,6 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 	return collection(db, collectionName) as CollectionReference<T>
 }
 
-export const restaurantCol = createCollection<Restaurant>('restaurant')
+export const restaurantCol = createCollection<Restaurant>('Restaurants')
 
 export default app
