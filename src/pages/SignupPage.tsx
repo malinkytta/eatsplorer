@@ -29,21 +29,11 @@ const SignupPage = () => {
 	passwordRef.current = watch('password')
 
 	const onSignup: SubmitHandler<NewUserCredentials> = async (data) => {
-		const docRef = doc(newUsersCol)
-
-		await setDoc(docRef, {
-			_uid: uuid(),
-			name: data.name,
-			email: data.email,
-			isAdmin: false,
-			profileImage: null,
-		})
-
 		setErrorMessage(null)
 
 		try {
 			setLoading(true)
-			await signup(data.email, data.password)
+			await signup(data.name, data.email, data.password)
 			navigate('/')
 		} catch (error) {
 			if (error instanceof FirebaseError) {
