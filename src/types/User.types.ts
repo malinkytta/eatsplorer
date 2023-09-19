@@ -15,7 +15,7 @@ export type ForgotPasswordType = {
 }
 
 export type NewUser = {
-    //_uid: string
+    _uid: string
     name: string
     email: string
     isAdmin: false

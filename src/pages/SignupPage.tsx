@@ -10,6 +10,7 @@ import { FirebaseError } from 'firebase/app'
 import useAuth from '../hooks/useAuth'
 import { useRef, useState } from 'react'
 import { newUsersCol } from '../services/firebase'
+import { v4 as uuid } from 'uuid'
 
 const SignupPage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -31,6 +32,7 @@ const SignupPage = () => {
 		const docRef = doc(newUsersCol)
 
 		await setDoc(docRef, {
+			_uid: uuid(),
 			name: data.name,
 			email: data.email,
 			isAdmin: false,
