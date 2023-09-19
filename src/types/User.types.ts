@@ -1,4 +1,6 @@
 export type NewUserCredentials = {
+    name: string
+    profileImage: FileList
     email: string
     password: string 
     confirmPassword: string 
@@ -11,4 +13,12 @@ export type LoginCredentials = {
 
 export type ForgotPasswordType = {
     email: string 
+}
+
+export type NewUser = {
+    //_uid: string
+    name: string
+    email: string
+    isAdmin: false
+    profileImage: FileList | null
 }

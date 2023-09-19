@@ -1,3 +1,4 @@
+import { doc, setDoc } from 'firebase/firestore'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -8,6 +9,7 @@ import { NewUserCredentials } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
 import useAuth from '../hooks/useAuth'
 import { useRef, useState } from 'react'
+import { newUsersCol } from '../services/firebase'
 
 const SignupPage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -26,6 +28,15 @@ const SignupPage = () => {
 	passwordRef.current = watch('password')
 
 	const onSignup: SubmitHandler<NewUserCredentials> = async (data) => {
+		const docRef = doc(newUsersCol)
+
+		await setDoc(docRef, {
+			name: data.name,
+			email: data.email,
+			isAdmin: false,
+			profileImage: null,
+		})
+
 		setErrorMessage(null)
 
 		try {
@@ -52,6 +63,28 @@ const SignupPage = () => {
 								<Alert variant='warning'>{errorMessage}</Alert>
 							)}
 							<Form onSubmit={handleSubmit(onSignup)}>
+								<Form.Group controlId='name' className='mb-2'>
+									<Form.Label>Name:</Form.Label>
+									<Form.Control
+										placeholder='John Doe'
+										type='text'
+										{...register('name', {
+											required: 'You must enter a name.',
+											minLength: {
+												value: 2,
+												message:
+													"You're name must contain atleast 2 characters",
+											},
+										})}
+									/>
+									{errors.name && (
+										<p className='invalid'>
+											{errors.name.message ??
+												'Invalid value'}
+										</p>
+									)}
+								</Form.Group>
+
 								<Form.Group controlId='email' className='mb-2'>
 									<Form.Label>Email:</Form.Label>
 									<Form.Control
