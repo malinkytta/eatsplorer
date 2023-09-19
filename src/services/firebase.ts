@@ -8,8 +8,8 @@ import {
 	getFirestore,
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
-import { UsersData } from '../types/Users.types'
-import { Restaurant } from '../types/Restaurants.types'
+import { UsersData, NewUser } from '../types/User.types'
+import { Restaurant } from '../types/Restaurant.types'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -39,9 +39,8 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 	return collection(db, collectionName) as CollectionReference<T>
 }
 
-//export const dummyCol = createCollection<never>("stupid")
-
 export const usersCol = createCollection<UsersData>('users')
 export const restaurantCol = createCollection<Restaurant>('Restaurants')
+export const newUsersCol = createCollection<NewUser>('users')
 
 export default app
