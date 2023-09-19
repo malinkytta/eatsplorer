@@ -1,6 +1,5 @@
 export type NewUserCredentials = {
     name: string
-    profileImage: FileList
     email: string
     password: string 
     confirmPassword: string 
