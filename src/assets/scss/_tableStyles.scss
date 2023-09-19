@@ -1,0 +1,36 @@
+.table-img {
+	aspect-ratio: 1;
+	object-fit: cover;
+}
+
+.table > tbody {
+	vertical-align: revert;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.admin-page {
+	.nav-link {
+		color: $dark;
+
+		&.active {
+			font-weight: bold;
+		}
+	}
+}
+
+.admin-btn {
+	.btn {
+		padding: 0;
+		border: none;
+	}
+	a.dropdown-item {
+		text-align: end;
+	}
+
+	.dropdown-menu {
+		min-width: auto;
+	}
+}
