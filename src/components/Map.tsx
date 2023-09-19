@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api'
 import { Container } from 'react-bootstrap'
-import { containerStyle, options, center } from '../MapSettings'
+import { containerStyle, options } from '../MapSettings'
 import { Restaurant } from '../types/Restaurant.types'
 import { getLatLngFromAddress } from '../services/googleMapsAPI'
+import { UserLocation } from '../types/User.types'
 interface Iprops {
 	restaurants: Restaurant[]
 }
@@ -12,10 +13,11 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
 	})
-	console.log(restaurants)
 	const [restaurantsWithLatLng, setRestaurantsWithLatLng] = useState<
 		Restaurant[]
 	>([])
+	const [userLocation, setUserLocation] = useState<UserLocation | null>(null)
+	console.log('user location state', userLocation)
 
 	const mapRef = useRef<google.maps.Map | null>(null)
 	const onLoad = (map: google.maps.Map) => {
@@ -26,6 +28,19 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 	}
 	const onMarkerClick = (marker: Restaurant) => {
 		console.log(marker)
+	}
+
+	const getUserLocation = () => {
+		navigator.geolocation.getCurrentPosition(
+			(position: GeolocationPosition) => {
+				const { latitude, longitude } = position.coords
+				console.log('My Position', latitude, longitude)
+				setUserLocation({
+					lat: latitude,
+					lng: longitude,
+				})
+			}
+		)
 	}
 
 	useEffect(() => {
@@ -49,19 +64,20 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 
 		if (isLoaded) {
 			fetchLatLngForRestaurants()
+			getUserLocation()
 		}
 	}, [isLoaded, restaurants])
 
 	if (!isLoaded) return <p>Map not loaded</p>
+	if (!userLocation) return <p>User dont have location lol</p>
 
 	return (
 		<Container>
-			<p>karta!!!!</p>
 			<GoogleMap
 				mapContainerStyle={containerStyle}
 				options={options}
-				center={center}
-				zoom={12}
+				center={userLocation}
+				zoom={13}
 				onLoad={onLoad}
 				onUnmount={onUnMount}
 			>
@@ -76,6 +92,8 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 							{console.log(restaurant.latLng)}
 						</>
 					))}
+				{/* userlocation  */}
+				<Marker key={userLocation.lat} position={userLocation} />
 			</GoogleMap>
 		</Container>
 	)

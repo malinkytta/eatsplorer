@@ -29,3 +29,8 @@ export type UsersData = {
 	email: string
 	isAdmin: boolean
 }
+
+export type UserLocation = {
+	lat: number
+	lng: number
+}
