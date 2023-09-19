@@ -1,6 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import SortableTable from '../components/SortableTable'
-import { UsersData } from '../types/Users.types'
+import { UsersData } from '../types/User.types'
 import useGetUsers from '../hooks/useGetUsers'
 import Image from 'react-bootstrap/Image'
 import Dropdown from 'react-bootstrap/Dropdown'

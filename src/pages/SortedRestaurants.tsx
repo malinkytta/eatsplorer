@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import SortableTable from '../components/SortableTable'
 import useGetRestaurants from '../hooks/useGetRestaurants'
-import { Restaurant } from '../types/Restaurants.types'
+import { Restaurant } from '../types/Restaurant.types'
 
 const columnHelper = createColumnHelper<Restaurant>()
 
