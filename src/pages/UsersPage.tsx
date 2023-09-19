@@ -5,16 +5,22 @@ import useGetUsers from '../hooks/useGetUsers'
 import Image from 'react-bootstrap/Image'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Form from 'react-bootstrap/Form'
-import { useState } from 'react'
+import { usersCol } from '../services/firebase'
+import { doc, updateDoc } from 'firebase/firestore'
 
 const UsersPage = () => {
 	const { data, loading } = useGetUsers()
-	const [admin, setAdmin] = useState(false)
 
-	const handleIsAdminToggle = async (userId: number, isAdmin: boolean) => {
-		console.log(userId, isAdmin)
-		setAdmin(true)
-		console.log(admin)
+	const handleIsAdminToggle = async (userId: string, isAdmin: boolean) => {
+		try {
+			const docRef = doc(usersCol, userId)
+
+			await updateDoc(docRef, {
+				isAdmin: !isAdmin,
+			})
+		} catch (error) {
+			console.error('Error updating isAdmin:', error)
+		}
 	}
 
 	const columnHelper = createColumnHelper<UsersData>()

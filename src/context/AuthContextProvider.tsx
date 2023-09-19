@@ -6,15 +6,22 @@ import {
 	User,
 	signOut,
 	sendPasswordResetEmail,
+	updateProfile,
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
-import { auth } from '../services/firebase'
+import { auth, usersCol } from '../services/firebase'
 import { ScaleLoader } from 'react-spinners'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 
 type AuthContextType = {
 	currentUser: User | null
 	login: (email: string, password: string) => Promise<UserCredential>
-	signup: (email: string, password: string) => Promise<UserCredential>
+	admin: boolean
+	signup: (
+		name: string,
+		email: string,
+		password: string
+	) => Promise<UserCredential>
 	logout: () => Promise<void>
 	resetPassword: (email: string) => Promise<void>
 	userEmail: string | null
@@ -29,6 +36,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState<User | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [userEmail, setUserEmail] = useState<string | null>(null)
+	const [admin, setAdmin] = useState<boolean>(false)
 
 	const login = (email: string, password: string) => {
 		return signInWithEmailAndPassword(auth, email, password)
@@ -38,8 +46,23 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return signOut(auth)
 	}
 
-	const signup = (email: string, password: string) => {
-		return createUserWithEmailAndPassword(auth, email, password)
+	const signup = async (name: string, email: string, password: string) => {
+		const userCredentials = await createUserWithEmailAndPassword(
+			auth,
+			email,
+			password
+		)
+
+		const docRef = doc(usersCol, userCredentials.user.uid)
+
+		await setDoc(docRef, {
+			_uid: userCredentials.user.uid,
+			name: name,
+			email: email,
+			isAdmin: false,
+			profileImage: null,
+		})
+		return userCredentials
 	}
 
 	const resetPassword = (email: string) => {
@@ -49,15 +72,21 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	}
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
+		const unsubscribe = onAuthStateChanged(auth, async (user) => {
 			setCurrentUser(user)
 
 			if (user) {
 				// User is logged in
 				setUserEmail(user.email)
+				const docRef = doc(usersCol, user.uid)
+				const docSnap = await getDoc(docRef)
+				if (docSnap.exists()) {
+					const isAdminValue = docSnap.data().isAdmin
+					setAdmin(isAdminValue)
+				}
 			} else {
-				// No user is logged in
 				setUserEmail(null)
+				setAdmin(false)
 			}
 			setLoading(false)
 		})
@@ -69,6 +98,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		<AuthContext.Provider
 			value={{
 				currentUser,
+				admin,
 				login,
 				logout,
 				resetPassword,
