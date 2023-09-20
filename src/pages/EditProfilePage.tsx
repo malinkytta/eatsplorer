@@ -21,7 +21,6 @@ const EditProfilePage = () => {
 		currentUser,
 		reloadUser,
 		setDisplayName,
-		setEmail,
 		setPassword,
 		setPhotoUrl,
 		userPhotoUrl,
@@ -101,14 +100,6 @@ const EditProfilePage = () => {
 				)
 			}
 
-			if (data.email !== (currentUser.email ?? '')) {
-				console.log('Updating email..')
-				console.log(currentUser)
-				await setEmail(data.email)
-			}
-			console.log(currentUser)
-			console.log('Currentuser email:', currentUser.email)
-			console.log('data emaiL: ', data.email)
 			if (data.password) {
 				console.log('Updating password')
 				await setPassword(data.password)
@@ -236,6 +227,7 @@ const EditProfilePage = () => {
 											required:
 												'You have to enter an email',
 										})}
+										disabled
 									/>
 									{errors.email && (
 										<p className='invalid'>

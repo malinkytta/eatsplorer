@@ -6,7 +6,6 @@ import {
 	User,
 	signOut,
 	sendPasswordResetEmail,
-	updateEmail,
 	updatePassword,
 	updateProfile,
 } from 'firebase/auth'
@@ -21,7 +20,6 @@ type AuthContextType = {
 	logout: () => Promise<void>
 	resetPassword: (email: string) => Promise<void>
 	reloadUser: () => Promise<boolean>
-	setEmail: (email: string) => Promise<void>
 	setDisplayName: (displayName: string) => Promise<void>
 	setPassword: (password: string) => Promise<void>
 	setPhotoUrl: (photoURL: string) => Promise<void>
@@ -70,13 +68,6 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return sendPasswordResetEmail(auth, email, {
 			url: window.location.origin + '/login',
 		})
-	}
-
-	const setEmail = (email: string) => {
-		if (!currentUser) {
-			throw new Error('Current User is null!')
-		}
-		return updateEmail(currentUser, email)
 	}
 
 	const setPassword = (password: string) => {
@@ -129,7 +120,6 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 				resetPassword,
 				reloadUser,
 				setDisplayName,
-				setEmail,
 				setPassword,
 				setPhotoUrl,
 				signup,
