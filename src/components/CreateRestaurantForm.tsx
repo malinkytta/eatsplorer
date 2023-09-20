@@ -2,20 +2,16 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import Alert from 'react-bootstrap/Alert'
 
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Restaurant } from '../types/Restaurant.types'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 interface IProps {
 	onCreate: (data: Restaurant) => void
 }
 
 const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
-	const [success, setSuccess] = useState<boolean | null>(null)
-	const navigate = useNavigate()
 	const {
 		handleSubmit,
 		register,
@@ -24,17 +20,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 	} = useForm<Restaurant>()
 
 	const onFormSubmit: SubmitHandler<Restaurant> = (data: Restaurant) => {
-		try {
-			onCreate(data)
-			setSuccess(true)
-
-			setTimeout(() => {
-				navigate('/')
-			}, 2000)
-		} catch (err) {
-			setSuccess(false)
-			console.log(err)
-		}
+		onCreate(data)
 	}
 
 	useEffect(() => {
@@ -43,10 +29,6 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 
 	return (
 		<Form onSubmit={handleSubmit(onFormSubmit)} className='mt-4'>
-			{success && (
-				<Alert variant='success'>New restaurant created!</Alert>
-			)}
-
 			<Form.Group controlId='name' className='mb-2'>
 				<Form.Label>Name:</Form.Label>
 				<Form.Control
@@ -182,6 +164,20 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 					</Form.Group>
 				</Col>
 			</Row>
+			{/* <Form.Group controlId='photo' className='mb-2'>
+				<Form.Label>Photo</Form.Label>
+				<Form.Control
+					type='file'
+					accept='image/gif,image/jpeg,image/png,image/webp'
+					{...register('photo')}
+				/>
+				{errors.photo && (
+					<p className='invalid'>
+						{errors.photo.message ?? 'Invalid value'}
+					</p>
+				)}
+			</Form.Group> */}
+
 			<Form.Group controlId='description' className='mb-2'>
 				<Form.Label>Description:</Form.Label>
 				<Form.Control
