@@ -14,4 +14,15 @@ export type Restaurant = {
 	lat: number
 	lng: number
 	isConfirmedByAdmin: boolean
+	// photo: File
+}
+
+export type RestaurantImage = {
+	_id: string
+	name: string
+	path: string
+	size: number
+	type: string
+	uid: string
+	url: string
 }

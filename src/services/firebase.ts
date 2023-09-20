@@ -9,7 +9,7 @@ import {
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { UsersData, NewUser } from '../types/User.types'
-import { Restaurant } from '../types/Restaurant.types'
+import { Restaurant, RestaurantImage } from '../types/Restaurant.types'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -40,7 +40,10 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 }
 
 export const usersCol = createCollection<UsersData>('users')
+
 export const restaurantCol = createCollection<Restaurant>('restaurants')
+export const restaurantImageCol =
+	createCollection<RestaurantImage>('restaurants')
 export const newUsersCol = createCollection<NewUser>('users')
 
 export default app
