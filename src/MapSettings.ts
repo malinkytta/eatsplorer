@@ -12,6 +12,6 @@ export const containerStyle = {
 
 export const options = {
 	styles: MapStyles,
-	// disableDefaultUI: true,
+	disableDefaultUI: true,
 	zoomControl: true,
 }

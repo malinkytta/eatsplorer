@@ -11,8 +11,6 @@ export type Restaurant = {
 	website?: string
 	instagram?: string
 	facebook?: string
-	latLng: {
-		lat: number
-		lng: number
-	}
+	lat: number
+	lng: number
 }
