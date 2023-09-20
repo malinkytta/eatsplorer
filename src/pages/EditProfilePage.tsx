@@ -62,7 +62,7 @@ const EditProfilePage = () => {
 			setLoading(true)
 			if (data.name !== (currentUser.displayName ?? '')) {
 				console.log('Updating displayname...')
-				await setDisplayName(data.name)
+				await setDisplayName(currentUser, data.name)
 			}
 			if (data.photoFile.length) {
 				const photo = data.photoFile[0]

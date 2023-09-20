@@ -10,17 +10,22 @@ import {
 	updateProfile,
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
-import { auth } from '../services/firebase'
+import { auth, usersCol } from '../services/firebase'
 import { ScaleLoader } from 'react-spinners'
+import { doc, setDoc } from 'firebase/firestore'
 
 type AuthContextType = {
 	currentUser: User | null
 	login: (email: string, password: string) => Promise<UserCredential>
-	signup: (email: string, password: string) => Promise<UserCredential>
+	signup: (
+		email: string,
+		password: string,
+		name: string
+	) => Promise<UserCredential>
 	logout: () => Promise<void>
 	resetPassword: (email: string) => Promise<void>
 	reloadUser: () => Promise<boolean>
-	setDisplayName: (displayName: string) => Promise<void>
+	setDisplayName: (user: User, displayName: string) => Promise<void>
 	setPassword: (password: string) => Promise<void>
 	setPhotoUrl: (photoURL: string) => Promise<void>
 	userName: string | null
@@ -48,10 +53,6 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return signOut(auth)
 	}
 
-	const signup = (email: string, password: string) => {
-		return createUserWithEmailAndPassword(auth, email, password)
-	}
-
 	const reloadUser = async () => {
 		if (!auth.currentUser) {
 			return false
@@ -62,6 +63,24 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		setUserPhotoUrl(auth.currentUser.photoURL)
 		console.log('Reloaded user', auth.currentUser)
 		return true
+	}
+	const signup = async (email: string, password: string, name: string) => {
+		const userCredentials = await createUserWithEmailAndPassword(
+			auth,
+			email,
+			password
+		)
+		await setDisplayName(userCredentials.user, name)
+
+		const docRef = doc(usersCol, userCredentials.user.uid)
+		await setDoc(docRef, {
+			_uid: userCredentials.user.uid,
+			name,
+			email,
+			isAdmin: false,
+			profileImage: null,
+		})
+		return userCredentials
 	}
 
 	const resetPassword = (email: string) => {
@@ -77,11 +96,8 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return updatePassword(currentUser, password)
 	}
 
-	const setDisplayName = (displayName: string) => {
-		if (!currentUser) {
-			throw new Error('Current User is null!')
-		}
-		return updateProfile(currentUser, { displayName })
+	const setDisplayName = (user: User, displayName: string) => {
+		return updateProfile(user, { displayName })
 	}
 
 	const setPhotoUrl = (photoURL: string) => {

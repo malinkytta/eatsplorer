@@ -1,4 +1,3 @@
-import { doc, setDoc } from 'firebase/firestore'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -9,8 +8,6 @@ import { NewUserCredentials } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
 import useAuth from '../hooks/useAuth'
 import { useRef, useState } from 'react'
-import { newUsersCol } from '../services/firebase'
-import { v4 as uuid } from 'uuid'
 
 const SignupPage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -29,26 +26,17 @@ const SignupPage = () => {
 	passwordRef.current = watch('password')
 
 	const onSignup: SubmitHandler<NewUserCredentials> = async (data) => {
-		const docRef = doc(newUsersCol)
-
-		await setDoc(docRef, {
-			_uid: uuid(),
-			name: data.name,
-			email: data.email,
-			isAdmin: false,
-			profileImage: null,
-		})
-
 		setErrorMessage(null)
 
 		try {
 			setLoading(true)
-			await signup(data.email, data.password)
+			await signup(data.email, data.password, data.name)
 			navigate('/')
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				setErrorMessage(error.message)
 			} else {
+				console.error(error)
 				setErrorMessage("Something went wrong and it wasn't Firebase.")
 			}
 			setLoading(false)

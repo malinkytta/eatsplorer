@@ -23,7 +23,7 @@ export type NewUser = {
 }
 
 export type UsersData = {
-	_uid: number
+	_uid: string
 	name: string
 	profileImage: string | null
 	email: string

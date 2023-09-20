@@ -7,7 +7,7 @@ import useAuth from '../../hooks/useAuth'
 import { NavDropdown } from 'react-bootstrap'
 
 const Navigation = () => {
-	const { currentUser, userEmail } = useAuth()
+	const { currentUser, userEmail, userName } = useAuth()
 	return (
 		<Navbar
 			expand='lg'
@@ -24,7 +24,7 @@ const Navigation = () => {
 					<Nav className='ms-auto'>
 						{currentUser ? (
 							<>
-								<NavDropdown title={userEmail}>
+								<NavDropdown title={userName || userEmail}>
 									<NavDropdown.Item>
 										Placeholder
 									</NavDropdown.Item>
