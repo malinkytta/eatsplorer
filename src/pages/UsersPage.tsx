@@ -3,7 +3,6 @@ import SortableTable from '../components/SortableTable'
 import { UsersData } from '../types/User.types'
 import useGetUsers from '../hooks/useGetUsers'
 import Image from 'react-bootstrap/Image'
-import Dropdown from 'react-bootstrap/Dropdown'
 import Form from 'react-bootstrap/Form'
 import { usersCol } from '../services/firebase'
 import { doc, updateDoc } from 'firebase/firestore'
@@ -75,24 +74,6 @@ const UsersPage = () => {
 						{props.row.original.isAdmin ? 'User' : 'Admin'}
 					</option>
 				</Form.Select>
-				// <Dropdown className='admin-btn'>
-				// 	<Dropdown.Toggle variant='transparent' id='dropdown-basic'>
-				// 		{props.row.original.isAdmin ? 'Admin' : 'User'}
-				// 	</Dropdown.Toggle>
-
-				// 	<Dropdown.Menu>
-				// 		<Dropdown.Item
-				// 			onClick={() =>
-				// 				handleIsAdminToggle(
-				// 					props.row.original._uid,
-				// 					props.row.original.isAdmin
-				// 				)
-				// 			}
-				// 		>
-				// 			{props.row.original.isAdmin ? 'User' : 'Admin'}
-				// 		</Dropdown.Item>
-				// 	</Dropdown.Menu>
-				// </Dropdown>
 			),
 		}),
 		// ],
