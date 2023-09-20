@@ -1,4 +1,3 @@
-import { doc, setDoc } from 'firebase/firestore'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -9,8 +8,6 @@ import { NewUserCredentials } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
 import useAuth from '../hooks/useAuth'
 import { useRef, useState } from 'react'
-import { newUsersCol } from '../services/firebase'
-import { v4 as uuid } from 'uuid'
 
 const SignupPage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -31,14 +28,19 @@ const SignupPage = () => {
 	const onSignup: SubmitHandler<NewUserCredentials> = async (data) => {
 		setErrorMessage(null)
 
+		if (!data.photoFile) {
+			return null
+		}
+
 		try {
 			setLoading(true)
-			await signup(data.name, data.email, data.password)
+			await signup(data.email, data.password, data.name, data.photoFile)
 			navigate('/')
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				setErrorMessage(error.message)
 			} else {
+				console.error(error)
 				setErrorMessage("Something went wrong and it wasn't Firebase.")
 			}
 			setLoading(false)
@@ -72,6 +74,21 @@ const SignupPage = () => {
 									{errors.name && (
 										<p className='invalid'>
 											{errors.name.message ??
+												'Invalid value'}
+										</p>
+									)}
+								</Form.Group>
+
+								<Form.Group controlId='photo' className='mb-2'>
+									<Form.Label>Photo</Form.Label>
+									<Form.Control
+										type='file'
+										accept='image/gif,image/jpeg,image/png,image/webp'
+										{...register('photoFile')}
+									/>
+									{errors.photoFile && (
+										<p className='invalid'>
+											{errors.photoFile.message ??
 												'Invalid value'}
 										</p>
 									)}
@@ -128,7 +145,7 @@ const SignupPage = () => {
 											required:
 												'Please re-enter your password.',
 											minLength: {
-												value: 3,
+												value: 6,
 												message:
 													'Please enter at least 6 characters',
 											},

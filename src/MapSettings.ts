@@ -5,13 +5,8 @@ export const containerStyle = {
 	height: '100vh',
 }
 
-export const center = {
-	lat: 55.5914224,
-	lng: 13.0193254,
-}
-
 export const options = {
 	styles: MapStyles,
-	// disableDefaultUI: true,
+	disableDefaultUI: true,
 	zoomControl: true,
 }

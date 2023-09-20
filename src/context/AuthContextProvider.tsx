@@ -7,23 +7,33 @@ import {
 	signOut,
 	sendPasswordResetEmail,
 	updateProfile,
+	updatePassword,
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
-import { auth, usersCol } from '../services/firebase'
+import { auth, storage, usersCol } from '../services/firebase'
 import { ScaleLoader } from 'react-spinners'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 type AuthContextType = {
 	currentUser: User | null
 	login: (email: string, password: string) => Promise<UserCredential>
 	admin: boolean
+
 	signup: (
-		name: string,
 		email: string,
-		password: string
+		password: string,
+		name: string,
+		photo: FileList
 	) => Promise<UserCredential>
 	logout: () => Promise<void>
 	resetPassword: (email: string) => Promise<void>
+	reloadUser: () => Promise<boolean>
+	setDisplayName: (user: User, displayName: string) => Promise<void>
+	setPassword: (password: string) => Promise<void>
+	setPhotoUrl: (user: User, photoURL: FileList) => Promise<void>
+	userName: string | null
+	userPhotoUrl: string | null
 	userEmail: string | null
 }
 
@@ -37,6 +47,8 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	const [loading, setLoading] = useState(true)
 	const [userEmail, setUserEmail] = useState<string | null>(null)
 	const [admin, setAdmin] = useState<boolean>(false)
+	const [userName, setUserName] = useState<string | null>(null)
+	const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null)
 
 	const login = (email: string, password: string) => {
 		return signInWithEmailAndPassword(auth, email, password)
@@ -46,21 +58,38 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return signOut(auth)
 	}
 
-	const signup = async (name: string, email: string, password: string) => {
+	const reloadUser = async () => {
+		if (!auth.currentUser) {
+			return false
+		}
+
+		setUserName(auth.currentUser.displayName)
+		setUserEmail(auth.currentUser.email)
+		setUserPhotoUrl(auth.currentUser.photoURL)
+		console.log('Reloaded user', auth.currentUser)
+		return true
+	}
+	const signup = async (
+		email: string,
+		password: string,
+		name: string,
+		photo: FileList
+	) => {
 		const userCredentials = await createUserWithEmailAndPassword(
 			auth,
 			email,
 			password
 		)
+		await setDisplayName(userCredentials.user, name)
+		await setPhotoUrl(userCredentials.user, photo)
 
 		const docRef = doc(usersCol, userCredentials.user.uid)
-
 		await setDoc(docRef, {
 			_uid: userCredentials.user.uid,
-			name: name,
-			email: email,
+			name,
+			email,
 			isAdmin: false,
-			profileImage: null,
+			photoFile: userCredentials.user.photoURL,
 		})
 		return userCredentials
 	}
@@ -71,13 +100,46 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		})
 	}
 
+	const setPassword = (password: string) => {
+		if (!currentUser) {
+			throw new Error('Current User is null!')
+		}
+		return updatePassword(currentUser, password)
+	}
+
+	const setDisplayName = (user: User, displayName: string) => {
+		return updateProfile(user, { displayName })
+	}
+
+	const setPhotoUrl = async (user: User, photo: FileList) => {
+		//if (!currentUser) {
+		//	throw new Error('Current User is null!')
+		//}
+		let photoURL = auth.currentUser?.photoURL
+
+		if (photo) {
+			const fileRef = ref(storage, `photos/${user.uid}/${photo[0].name}`)
+			const uploadResult = await uploadBytes(fileRef, photo[0])
+
+			photoURL = await getDownloadURL(uploadResult.ref)
+			setUserPhotoUrl(photoURL)
+		}
+		return updateProfile(user, {
+			photoURL,
+		})
+
+		//return updateProfile(user, { photoURL })
+	}
+
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, async (user) => {
 			setCurrentUser(user)
 
 			if (user) {
-				// User is logged in
+				setUserName(user.displayName)
+				setUserPhotoUrl(user.photoURL)
 				setUserEmail(user.email)
+
 				const docRef = doc(usersCol, user.uid)
 				const docSnap = await getDoc(docRef)
 				if (docSnap.exists()) {
@@ -87,6 +149,8 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			} else {
 				setUserEmail(null)
 				setAdmin(false)
+				setUserName(null)
+				setUserPhotoUrl(null)
 			}
 			setLoading(false)
 		})
@@ -102,8 +166,14 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 				login,
 				logout,
 				resetPassword,
+				reloadUser,
+				setDisplayName,
+				setPassword,
+				setPhotoUrl,
 				signup,
 				userEmail,
+				userName,
+				userPhotoUrl,
 			}}
 		>
 			{loading ? (

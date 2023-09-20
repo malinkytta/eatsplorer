@@ -11,6 +11,7 @@ import RequireAuth from './components/RequireAuth'
 import NotFoundPage from './pages/NotFoundPage'
 import RequireAdmin from './components/RequireAdmin'
 import CreateRestaurantPage from './pages/CreateRestaurantPage'
+import EditProfilePage from './pages/EditProfilePage'
 
 const App = () => {
 	return (
@@ -40,7 +41,14 @@ const App = () => {
 						</RequireAuth>
 					}
 				/>
-
+				<Route
+					path='/edit-profile'
+					element={
+						<RequireAuth>
+							<EditProfilePage />
+						</RequireAuth>
+					}
+				/>
 				<Route
 					path='/forgot-password'
 					element={<ForgotPasswordPage />}

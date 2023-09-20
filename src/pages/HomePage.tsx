@@ -1,22 +1,20 @@
 import useGetRestaurants from '../hooks/useGetRestaurants'
 import Map from '../components/Map'
+import useAuth from '../hooks/useAuth'
 
 import { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import Form from 'react-bootstrap/Form'
-import useAuth from '../hooks/useAuth'
 
 const HomePage = () => {
 	const { currentUser } = useAuth()
-
 	const [show, setShow] = useState(false)
 	const handleClose = () => setShow(false)
 	const handleShow = () => setShow(true)
 
-	console.log(currentUser)
-
 	const { data: restaurants } = useGetRestaurants()
+	console.log('currentUser:', currentUser)
 	if (!restaurants) return <p>No restaurants for u m8</p>
 
 	return (

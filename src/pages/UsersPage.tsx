@@ -32,18 +32,18 @@ const UsersPage = () => {
 		// 	header: 'Users',
 		// columns: [
 		columnHelper.display({
-			id: 'profileImage',
+			id: 'photoFile',
 			header: 'Profile Image',
 			cell: (props) => (
 				<Image
 					src={
-						props.row.original.profileImage ||
+						props.row.original.photoFile ||
 						'https://placehold.co/100x100?text=Profile+Image'
 					}
 					alt='Profile'
 					roundedCircle
 					width={75}
-					className='table-img'
+					className='profileImage'
 				/>
 			),
 		}),

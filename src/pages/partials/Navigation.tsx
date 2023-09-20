@@ -1,14 +1,13 @@
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-//import NavDropdown from 'react-bootstrap/NavDropdown'
+import Image from 'react-bootstrap/Image'
+import NavDropdown from 'react-bootstrap/NavDropdown'
 import { Link, NavLink } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
-import { NavDropdown } from 'react-bootstrap'
 
 const Navigation = () => {
-	const { currentUser, userEmail, admin } = useAuth()
-
+	const { currentUser, userEmail, userName, userPhotoUrl, admin } = useAuth()
 	return (
 		<Navbar
 			expand='md'
@@ -32,7 +31,27 @@ const Navigation = () => {
 									>
 										Create Restaurant
 									</Nav.Link>
-									<NavDropdown title={userEmail}>
+									<NavDropdown
+										title={
+											userPhotoUrl ? (
+												<Image
+													src={userPhotoUrl}
+													height={30}
+													width={30}
+													title={
+														(userName ||
+															userEmail) ??
+														''
+													}
+													className='img-square profileImage'
+													roundedCircle
+													fluid
+												/>
+											) : (
+												userName || userEmail
+											)
+										}
+									>
 										{admin && (
 											<NavDropdown.Item
 												as={NavLink}
@@ -43,9 +62,9 @@ const Navigation = () => {
 										)}
 										<NavDropdown.Item
 											as={NavLink}
-											to='/update-profile'
+											to='/edit-profile'
 										>
-											Update Profile
+											Edit profile
 										</NavDropdown.Item>
 										<NavDropdown.Item
 											as={NavLink}
