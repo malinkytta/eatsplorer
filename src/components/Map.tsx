@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api'
+import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api'
 import { Container } from 'react-bootstrap'
 import { containerStyle, options, center } from '../MapSettings'
 import { Restaurant } from '../types/Restaurant.types'
@@ -57,7 +57,7 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 
 	return (
 		<Container>
-			<p>karta!!!!</p>
+			{/* <p>karta!!!!</p> */}
 			<GoogleMap
 				mapContainerStyle={containerStyle}
 				options={options}
@@ -69,12 +69,16 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 				{restaurantsWithLatLng.length > 0 &&
 					restaurantsWithLatLng.map((restaurant) => (
 						<>
-							<Marker
-								key={restaurant.latLng.lat}
-								position={restaurant.latLng}
+							<MarkerF
+								key={restaurant.lat}
+								position={{
+									lat: restaurant.lat,
+									lng: restaurant.lng,
+								}}
+								title={restaurant.name}
 								onClick={() => onMarkerClick(restaurant)}
 							/>
-							{console.log(restaurant.latLng)}
+							{console.log(restaurant.lat, restaurant.lng)}
 						</>
 					))}
 			</GoogleMap>

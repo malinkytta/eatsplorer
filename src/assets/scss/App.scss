@@ -5,3 +5,18 @@
 	color: red;
 	margin-top: 5px;
 }
+
+.search {
+	position: absolute;
+	width: 350px;
+	padding: 20px;
+	background: white;
+	top: 10vh;
+	left: 10px;
+	z-index: 1046;
+	border-radius: 10px;
+}
+
+.offcanvas-body {
+	padding: 140px 0 0 30px;
+}
