@@ -1,4 +1,3 @@
-import React from 'react'
 import useGetRestaurants from '../hooks/useGetRestaurants'
 import Map from '../components/Map'
 

@@ -8,7 +8,7 @@ import {
 import { Container } from 'react-bootstrap'
 import { containerStyle, options } from '../MapSettings'
 import { Restaurant } from '../types/Restaurant.types'
-import { getGeocode, getLatLng } from 'use-places-autocomplete'
+// import { getGeocode, getLatLng } from 'use-places-autocomplete'
 // import { getLatLngFromAddress } from '../services/googleMapsAPI'
 import { UserLocation } from '../types/User.types'
 import { Places } from '../../googleMapsConfig'
@@ -24,9 +24,9 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 	})
 
 	const [userLocation, setUserLocation] = useState<UserLocation | null>(null)
-	// const [selectedPlace, setSelectedPlace] = useState<string | null>(null)
-	// const [searchParams, setSearchParams] = useSearchParams()
-	// const search = searchParams.get('search')
+	const [searchedLocation, setSearchedLocation] =
+		useState<UserLocation | null>(null)
+	const [searchParams, setSearchParams] = useSearchParams()
 
 	const mapRef = useRef<google.maps.Map | null>(null)
 	const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null)
@@ -46,23 +46,26 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 		autocompleteRef.current = autocomplete
 	}
 	const handlePlaceChanged = () => {
-		const place = autocompleteRef.current?.getPlace()
+		const searchedLocation = autocompleteRef.current?.getPlace()
 
-		if (place) {
-			const { geometry, name } = place
-			console.log('search name', name)
-			console.log('geo', geometry)
-			const bounds = new window.google.maps.LatLngBounds()
+		if (searchedLocation) {
+			const { geometry, name } = searchedLocation
 
-			if (geometry?.viewport) {
-				bounds.union(geometry.viewport)
-			} else {
-				bounds.extend(
-					geometry?.location ?? { lat: 55.5914224, lng: 13.0193254 }
-				)
-			}
+			console.log('geometry location', geometry?.location)
+			setSearchParams({
+				lat: String(geometry?.location?.lat()),
+				lng: String(geometry?.location?.lng()),
+				q: name ? name : '',
+			})
+			// const bounds = new window.google.maps.LatLngBounds()
 
-			mapRef.current?.fitBounds(bounds)
+			// if (geometry?.viewport) {
+			// 	bounds.union(geometry.viewport)
+			// } else {
+			// 	bounds.extend(geometry?.location ?? { lat: 0, lng: 0 })
+			// }
+
+			// mapRef.current?.fitBounds(bounds)
 		}
 	}
 
@@ -79,7 +82,15 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 			)
 		}
 		getUserLocation()
-	}, [])
+		const latParam = searchParams.get('lat')
+		const lngParam = searchParams.get('lng')
+
+		if (latParam && lngParam) {
+			const lat = parseFloat(latParam)
+			const lng = parseFloat(lngParam)
+			setSearchedLocation({ lat, lng })
+		}
+	}, [searchParams])
 
 	if (!isLoaded || !userLocation || restaurants.length === 0)
 		return <p>Loading....</p>
@@ -89,7 +100,7 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 			<GoogleMap
 				mapContainerStyle={containerStyle}
 				options={options}
-				center={userLocation}
+				center={searchedLocation ? searchedLocation : userLocation}
 				zoom={12}
 				onLoad={onLoad}
 				onUnmount={onUnMount}
@@ -124,6 +135,14 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 						position={userLocation}
 						icon='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png'
 						title='Your Location'
+					/>
+				)}
+				{searchedLocation && (
+					<MarkerF
+						key={searchedLocation.lat}
+						position={searchedLocation}
+						icon='https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-green.png'
+						title='Searched Location'
 					/>
 				)}
 			</GoogleMap>
