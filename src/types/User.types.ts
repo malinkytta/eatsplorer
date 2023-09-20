@@ -34,3 +34,11 @@ export type UserLocation = {
 	lat: number
 	lng: number
 }
+
+export type UpdateProfileFormData = {
+	name: string
+	photoFile: FileList
+	email: string
+	password: string
+	passwordConfirm: string
+}

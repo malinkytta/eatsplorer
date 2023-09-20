@@ -29,6 +29,13 @@ const Navigation = () => {
 										Placeholder
 									</NavDropdown.Item>
 									<NavDropdown.Divider />
+									<NavDropdown.Item
+										as={NavLink}
+										to='/edit-profile'
+									>
+										Edit profile
+									</NavDropdown.Item>
+									<NavDropdown.Divider />
 									<NavDropdown.Item as={NavLink} to='/logout'>
 										Logout
 									</NavDropdown.Item>

@@ -3,7 +3,12 @@
 
 .invalid {
 	color: red;
-	margin-top: 5px;
+}
+
+.updateProfileImage{
+	aspect-ratio: 1;
+	object-fit: cover;
+	border-radius: 20%;
 }
 
 .search-input {

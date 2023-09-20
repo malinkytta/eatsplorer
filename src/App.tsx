@@ -9,6 +9,7 @@ import './assets/scss/App.scss'
 import LogoutPage from './pages/LogoutPage'
 import RequireAuth from './components/RequireAuth'
 import NotFoundPage from './pages/NotFoundPage'
+import EditProfilePage from './pages/EditProfilePage'
 
 const App = () => {
 	return (
@@ -25,6 +26,14 @@ const App = () => {
 					element={
 						<RequireAuth>
 							<LogoutPage />
+						</RequireAuth>
+					}
+				/>
+				<Route
+					path='/edit-profile'
+					element={
+						<RequireAuth>
+							<EditProfilePage />
 						</RequireAuth>
 					}
 				/>

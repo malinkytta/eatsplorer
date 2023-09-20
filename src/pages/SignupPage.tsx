@@ -138,7 +138,7 @@ const SignupPage = () => {
 											required:
 												'Please re-enter your password.',
 											minLength: {
-												value: 3,
+												value: 6,
 												message:
 													'Please enter at least 6 characters',
 											},
