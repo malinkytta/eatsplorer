@@ -29,3 +29,11 @@ export type UsersData = {
 	email: string
 	isAdmin: boolean
 }
+
+export type UpdateProfileFormData = {
+	name: string
+	photoFile: FileList
+	email: string
+	password: string
+	passwordConfirm: string
+}

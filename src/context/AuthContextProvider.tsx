@@ -6,6 +6,9 @@ import {
 	User,
 	signOut,
 	sendPasswordResetEmail,
+	updateEmail,
+	updatePassword,
+	updateProfile,
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
 import { auth } from '../services/firebase'
@@ -17,6 +20,13 @@ type AuthContextType = {
 	signup: (email: string, password: string) => Promise<UserCredential>
 	logout: () => Promise<void>
 	resetPassword: (email: string) => Promise<void>
+	reloadUser: () => Promise<boolean>
+	setEmail: (email: string) => Promise<void>
+	setDisplayName: (displayName: string) => Promise<void>
+	setPassword: (password: string) => Promise<void>
+	setPhotoUrl: (photoURL: string) => Promise<void>
+	userName: string | null
+	userPhotoUrl: string | null
 	userEmail: string | null
 }
 
@@ -29,6 +39,8 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState<User | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [userEmail, setUserEmail] = useState<string | null>(null)
+	const [userName, setUserName] = useState<string | null>(null)
+	const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null)
 
 	const login = (email: string, password: string) => {
 		return signInWithEmailAndPassword(auth, email, password)
@@ -42,10 +54,51 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return createUserWithEmailAndPassword(auth, email, password)
 	}
 
+	const reloadUser = async () => {
+		if (!auth.currentUser) {
+			return false
+		}
+
+		setUserName(auth.currentUser.displayName)
+		setUserEmail(auth.currentUser.email)
+		setUserPhotoUrl(auth.currentUser.photoURL)
+		console.log('Reloaded user', auth.currentUser)
+		return true
+	}
+
 	const resetPassword = (email: string) => {
 		return sendPasswordResetEmail(auth, email, {
 			url: window.location.origin + '/login',
 		})
+	}
+
+	const setEmail = (email: string) => {
+		if (!currentUser) {
+			throw new Error('Current User is null!')
+		}
+		return updateEmail(currentUser, email)
+	}
+
+	const setPassword = (password: string) => {
+		if (!currentUser) {
+			throw new Error('Current User is null!')
+		}
+		return updatePassword(currentUser, password)
+	}
+
+	const setDisplayName = (displayName: string) => {
+		if (!currentUser) {
+			throw new Error('Current User is null!')
+		}
+		return updateProfile(currentUser, { displayName })
+	}
+
+	const setPhotoUrl = (photoURL: string) => {
+		if (!currentUser) {
+			throw new Error('Current User is null!')
+		}
+		setUserPhotoUrl(photoURL)
+		return updateProfile(currentUser, { photoURL })
 	}
 
 	useEffect(() => {
@@ -53,11 +106,13 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			setCurrentUser(user)
 
 			if (user) {
-				// User is logged in
 				setUserEmail(user.email)
+				setUserName(user.displayName)
+				setUserPhotoUrl(user.photoURL)
 			} else {
-				// No user is logged in
 				setUserEmail(null)
+				setUserName(null)
+				setUserPhotoUrl(null)
 			}
 			setLoading(false)
 		})
@@ -72,8 +127,15 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 				login,
 				logout,
 				resetPassword,
+				reloadUser,
+				setDisplayName,
+				setEmail,
+				setPassword,
+				setPhotoUrl,
 				signup,
 				userEmail,
+				userName,
+				userPhotoUrl,
 			}}
 		>
 			{loading ? (
