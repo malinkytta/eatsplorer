@@ -10,9 +10,10 @@ import {
 	updateProfile,
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
-import { auth, usersCol } from '../services/firebase'
+import { auth, storage, usersCol } from '../services/firebase'
 import { ScaleLoader } from 'react-spinners'
 import { doc, setDoc } from 'firebase/firestore'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 type AuthContextType = {
 	currentUser: User | null
@@ -20,14 +21,15 @@ type AuthContextType = {
 	signup: (
 		email: string,
 		password: string,
-		name: string
+		name: string,
+		photo: FileList
 	) => Promise<UserCredential>
 	logout: () => Promise<void>
 	resetPassword: (email: string) => Promise<void>
 	reloadUser: () => Promise<boolean>
 	setDisplayName: (user: User, displayName: string) => Promise<void>
 	setPassword: (password: string) => Promise<void>
-	setPhotoUrl: (photoURL: string) => Promise<void>
+	setPhotoUrl: (user: User, photoURL: FileList) => Promise<void>
 	userName: string | null
 	userPhotoUrl: string | null
 	userEmail: string | null
@@ -64,13 +66,19 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		console.log('Reloaded user', auth.currentUser)
 		return true
 	}
-	const signup = async (email: string, password: string, name: string) => {
+	const signup = async (
+		email: string,
+		password: string,
+		name: string,
+		photo: FileList
+	) => {
 		const userCredentials = await createUserWithEmailAndPassword(
 			auth,
 			email,
 			password
 		)
 		await setDisplayName(userCredentials.user, name)
+		await setPhotoUrl(userCredentials.user, photo)
 
 		const docRef = doc(usersCol, userCredentials.user.uid)
 		await setDoc(docRef, {
@@ -78,7 +86,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			name,
 			email,
 			isAdmin: false,
-			profileImage: null,
+			photoFile: userCredentials.user.photoURL,
 		})
 		return userCredentials
 	}
@@ -100,12 +108,24 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return updateProfile(user, { displayName })
 	}
 
-	const setPhotoUrl = (photoURL: string) => {
-		if (!currentUser) {
-			throw new Error('Current User is null!')
+	const setPhotoUrl = async (user: User, photo: FileList) => {
+		//if (!currentUser) {
+		//	throw new Error('Current User is null!')
+		//}
+		let photoURL = auth.currentUser?.photoURL
+
+		if (photo) {
+			const fileRef = ref(storage, `photos/${user.uid}/${photo[0].name}`)
+			const uploadResult = await uploadBytes(fileRef, photo[0])
+
+			photoURL = await getDownloadURL(uploadResult.ref)
+			setUserPhotoUrl(photoURL)
 		}
-		setUserPhotoUrl(photoURL)
-		return updateProfile(currentUser, { photoURL })
+		return updateProfile(user, {
+			photoURL,
+		})
+
+		//return updateProfile(user, { photoURL })
 	}
 
 	useEffect(() => {

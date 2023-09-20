@@ -9,7 +9,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { UpdateProfileFormData } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
 import { storage } from '../services/firebase'
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import { ref, uploadBytesResumable } from 'firebase/storage'
 import { Alert, Button, Container } from 'react-bootstrap'
 import useAuth from '../hooks/useAuth'
 
@@ -48,11 +48,11 @@ const EditProfilePage = () => {
 		return <p>Error, error, error!</p>
 	}
 
-	const handleDeletePhoto = async () => {
-		await setPhotoUrl('')
-		await reloadUser()
-		console.log('Photo deleted successfully')
-	}
+	//const handleDeletePhoto = async () => {
+	//	// Ta bort på något sätt med refFromUrl eller deleteDoc
+	//	await reloadUser()
+	//	console.log('Photo deleted successfully')
+	//}
 
 	const onUpdateProfile: SubmitHandler<UpdateProfileFormData> = async (
 		data
@@ -91,8 +91,11 @@ const EditProfilePage = () => {
 					async () => {
 						console.log('Upload completed')
 
-						const photoURL = await getDownloadURL(fileRef)
-						await setPhotoUrl(photoURL)
+						//const photoURL = await getDownloadURL(fileRef)
+						if (photoFileRef.current === null) {
+							return
+						}
+						await setPhotoUrl(currentUser, photoFileRef.current)
 						setUploadProgress(null)
 						setLoading(false)
 						reset()
@@ -138,19 +141,19 @@ const EditProfilePage = () => {
 												'https://via.placeholder.com/225'
 											}
 											fluid
-											//roundedCircle
-											className='img-square updateProfileImage w-50'
+											roundedCircle
+											className='img-square profileImage w-50'
 										/>
 									</div>
 
-									<Button
+									{/*<Button
 										className='mt-3 border-white'
 										onClick={handleDeletePhoto}
 										size='sm'
 										variant='dark'
 									>
 										Delete Photo
-									</Button>
+									</Button>*/}
 								</div>
 								<Form.Group
 									controlId='displayName'

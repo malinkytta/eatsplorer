@@ -28,9 +28,13 @@ const SignupPage = () => {
 	const onSignup: SubmitHandler<NewUserCredentials> = async (data) => {
 		setErrorMessage(null)
 
+		if (!data.photoFile) {
+			return null
+		}
+
 		try {
 			setLoading(true)
-			await signup(data.email, data.password, data.name)
+			await signup(data.email, data.password, data.name, data.photoFile)
 			navigate('/')
 		} catch (error) {
 			if (error instanceof FirebaseError) {
@@ -70,6 +74,21 @@ const SignupPage = () => {
 									{errors.name && (
 										<p className='invalid'>
 											{errors.name.message ??
+												'Invalid value'}
+										</p>
+									)}
+								</Form.Group>
+
+								<Form.Group controlId='photo' className='mb-2'>
+									<Form.Label>Photo</Form.Label>
+									<Form.Control
+										type='file'
+										accept='image/gif,image/jpeg,image/png,image/webp'
+										{...register('photoFile')}
+									/>
+									{errors.photoFile && (
+										<p className='invalid'>
+											{errors.photoFile.message ??
 												'Invalid value'}
 										</p>
 									)}

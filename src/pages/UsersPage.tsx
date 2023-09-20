@@ -3,7 +3,6 @@ import SortableTable from '../components/SortableTable'
 import { UsersData } from '../types/User.types'
 import useGetUsers from '../hooks/useGetUsers'
 import Image from 'react-bootstrap/Image'
-import Dropdown from 'react-bootstrap/Dropdown'
 import Form from 'react-bootstrap/Form'
 import { useState } from 'react'
 
@@ -11,7 +10,7 @@ const UsersPage = () => {
 	const { data, loading } = useGetUsers()
 	const [admin, setAdmin] = useState(false)
 
-	const handleIsAdminToggle = async (userId: number, isAdmin: boolean) => {
+	const handleIsAdminToggle = async (userId: string, isAdmin: boolean) => {
 		console.log(userId, isAdmin)
 		setAdmin(true)
 		console.log(admin)
@@ -27,18 +26,18 @@ const UsersPage = () => {
 		// 	header: 'Users',
 		// columns: [
 		columnHelper.display({
-			id: 'profileImage',
+			id: 'photoFile',
 			header: 'Profile Image',
 			cell: (props) => (
 				<Image
 					src={
-						props.row.original.profileImage ||
+						props.row.original.photoFile ||
 						'https://placehold.co/100x100?text=Profile+Image'
 					}
 					alt='Profile'
 					roundedCircle
 					width={75}
-					className='table-img'
+					className='profileImage'
 				/>
 			),
 		}),
