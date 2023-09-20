@@ -35,7 +35,8 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 				restaurants.map(async (restaurant) => {
 					try {
 						const { lat, lng } = await getLatLngFromAddress(
-							restaurant.address
+							restaurant.address,
+							restaurant.city
 						)
 						return { ...restaurant, latLng: { lat, lng } }
 					} catch (error) {
