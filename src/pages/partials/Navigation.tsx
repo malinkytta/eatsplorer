@@ -25,25 +25,36 @@ const Navigation = () => {
 					<Nav className='ms-auto'>
 						<>
 							{currentUser ? (
-								<NavDropdown title={userEmail}>
-									{admin && (
+								<>
+									<Nav.Link
+										as={NavLink}
+										to='/create-restaurant'
+									>
+										Create Restaurant
+									</Nav.Link>
+									<NavDropdown title={userEmail}>
+										{admin && (
+											<NavDropdown.Item
+												as={NavLink}
+												to='/admin'
+											>
+												Admin
+											</NavDropdown.Item>
+										)}
 										<NavDropdown.Item
 											as={NavLink}
-											to='/admin'
+											to='/update-profile'
 										>
-											Admin
+											Update Profile
 										</NavDropdown.Item>
-									)}
-									<NavDropdown.Item
-										as={NavLink}
-										to='/update-profile'
-									>
-										Update Profile
-									</NavDropdown.Item>
-									<NavDropdown.Item as={NavLink} to='/logout'>
-										Logout
-									</NavDropdown.Item>
-								</NavDropdown>
+										<NavDropdown.Item
+											as={NavLink}
+											to='/logout'
+										>
+											Logout
+										</NavDropdown.Item>
+									</NavDropdown>
+								</>
 							) : (
 								<>
 									<Nav.Link as={NavLink} to='/signup'>

@@ -10,6 +10,7 @@ import LogoutPage from './pages/LogoutPage'
 import RequireAuth from './components/RequireAuth'
 import NotFoundPage from './pages/NotFoundPage'
 import RequireAdmin from './components/RequireAdmin'
+import CreateRestaurantPage from './pages/CreateRestaurantPage'
 
 const App = () => {
 	return (
@@ -28,6 +29,14 @@ const App = () => {
 					element={
 						<RequireAuth>
 							<LogoutPage />
+						</RequireAuth>
+					}
+				/>
+				<Route
+					path='/create-restaurant'
+					element={
+						<RequireAuth>
+							<CreateRestaurantPage />
 						</RequireAuth>
 					}
 				/>

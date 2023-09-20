@@ -15,4 +15,5 @@ export type Restaurant = {
 		lat: number
 		lng: number
 	}
+	isConfirmedByAdmin: boolean
 }
