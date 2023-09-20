@@ -76,13 +76,13 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 							aria-label='Default select example'
 							{...register('category')}
 						>
-							<option value='café'>Café</option>
-							<option value='restaurant'>Restaurant</option>
-							<option value='pub'>Pub</option>
-							<option value='fine-dining'>Fine Dining</option>
-							<option value='fast-food'>Fast Food</option>
-							<option value='bakery'>Bakery</option>
-							<option value='deli'>Deli</option>
+							<option value='Café'>Café</option>
+							<option value='Restaurant'>Restaurant</option>
+							<option value='Pub'>Pub</option>
+							<option value='Fine-dining'>Fine Dining</option>
+							<option value='Fast-food'>Fast Food</option>
+							<option value='Bakery'>Bakery</option>
+							<option value='Deli'>Deli</option>
 						</Form.Select>
 
 						{errors.category && (

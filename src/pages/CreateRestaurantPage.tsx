@@ -11,9 +11,12 @@ import CreateRestaurantForm from '../components/CreateRestaurantForm'
 
 const CreateRestaurantPage = () => {
 	const onCreate = async (data: Restaurant) => {
+		const { lat, lng } = await getLatLngFromAddress(data.address, data.city)
+
 		await addDoc(restaurantCol, {
 			...data,
-			latLng: await getLatLngFromAddress(data.address, data.city),
+			lat,
+			lng,
 			isConfirmedByAdmin: false,
 		})
 		console.log(data)
