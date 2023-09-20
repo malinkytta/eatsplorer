@@ -3,9 +3,6 @@ import Map from '../components/Map'
 
 const HomePage = () => {
 	const { data: restaurants } = useGetRestaurants()
-	// const { isLoaded } = useLoadScript({
-	// 	googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-	// })
 	if (!restaurants) return <p>No restaurants for u m8</p>
 
 	return (
