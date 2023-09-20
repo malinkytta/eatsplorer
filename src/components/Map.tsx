@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import {
 	GoogleMap,
 	MarkerF,
@@ -6,6 +6,7 @@ import {
 	Autocomplete,
 } from '@react-google-maps/api'
 import { Container } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
 import { containerStyle, options } from '../MapSettings'
 import { Restaurant } from '../types/Restaurant.types'
 // import { getGeocode, getLatLng } from 'use-places-autocomplete'
@@ -13,11 +14,17 @@ import { Restaurant } from '../types/Restaurant.types'
 import { UserLocation } from '../types/User.types'
 import { Places } from '../../googleMapsConfig'
 import { useSearchParams } from 'react-router-dom'
+import OffcanvasComponent from './OffcanvasComponent'
 interface Iprops {
 	restaurants: Restaurant[]
 }
 
 const Map: React.FC<Iprops> = ({ restaurants }) => {
+	const [show, setShow] = useState(true)
+	const handleClose = () => setShow(false)
+	const handleShow = () => setShow(true)
+	const toggleShow = () => setShow(!show)
+
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
 		libraries: Places,
@@ -96,7 +103,13 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 		return <p>Loading....</p>
 
 	return (
-		<Container>
+		<>
+			<OffcanvasComponent
+				show={show}
+				handleClose={handleClose}
+				handleShow={handleShow}
+				restaurants={restaurants}
+			/>
 			<GoogleMap
 				mapContainerStyle={containerStyle}
 				options={options}
@@ -109,14 +122,23 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 					onLoad={onLoadAutoComplete}
 					onPlaceChanged={handlePlaceChanged}
 				>
-					<input
-						type='text'
-						placeholder='Search Location'
-						className='search-input'
-					/>
+					<div className='search-input'>
+						<Button
+							variant='transparent'
+							onClick={toggleShow}
+							className='map-btn'
+						>
+							🍔
+						</Button>
+						<input
+							type='text'
+							placeholder='Search Location'
+							// className='search-input'
+						/>
+					</div>
 				</Autocomplete>
 				{restaurants.map((restaurant) => (
-					<>
+					<Fragment key={restaurant._id}>
 						<MarkerF
 							key={restaurant.lat}
 							position={{
@@ -126,8 +148,8 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 							title={restaurant.name}
 							onClick={() => onMarkerClick(restaurant)}
 						/>
-						{console.log(restaurant.lat, restaurant.lng)}
-					</>
+						{/* {console.log(restaurant.lat, restaurant.lng)} */}
+					</Fragment>
 				))}
 				{userLocation && (
 					<MarkerF
@@ -146,7 +168,7 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 					/>
 				)}
 			</GoogleMap>
-		</Container>
+		</>
 	)
 }
 

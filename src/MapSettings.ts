@@ -2,7 +2,7 @@ import MapStyles from './MapStyles'
 
 export const containerStyle = {
 	width: '100%',
-	height: '100vh',
+	height: '92vh',
 }
 
 export const options = {
