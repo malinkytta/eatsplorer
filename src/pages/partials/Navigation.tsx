@@ -77,7 +77,7 @@ const Navigation = () => {
 							) : (
 								<>
 									<Nav.Link as={NavLink} to='/signup'>
-										Sign In
+										Sign Up
 									</Nav.Link>
 									<Nav.Link as={NavLink} to='/login'>
 										Log In

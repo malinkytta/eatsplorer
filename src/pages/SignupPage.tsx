@@ -29,11 +29,6 @@ const SignupPage = () => {
 			setLoading(true)
 			await signup(data.email, data.password, data.name, data.photoFile)
 			navigate('/')
-
-			// HÄR SKA VI HA addDoc för användare också
-			//await addDoc(usersCol, {
-			//	...data,
-			//})
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				setErrorMessage(error.message)

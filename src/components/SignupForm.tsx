@@ -55,6 +55,7 @@ const SignupForm: React.FC<IProps> = ({ onSignup, loading }) => {
 					type='file'
 					accept='image/gif,image/jpeg,image/png,image/webp'
 					{...register('photoFile')}
+					required
 				/>
 				{errors.photoFile && (
 					<p className='invalid'>
