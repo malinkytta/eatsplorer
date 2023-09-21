@@ -24,7 +24,7 @@ type AuthContextType = {
 		email: string,
 		password: string,
 		name: string,
-		photo: FileList
+		photoFile: FileList
 	) => Promise<UserCredential>
 	logout: () => Promise<void>
 	resetPassword: (email: string) => Promise<void>
@@ -62,7 +62,6 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		if (!auth.currentUser) {
 			return false
 		}
-
 		setUserName(auth.currentUser.displayName)
 		setUserEmail(auth.currentUser.email)
 		setUserPhotoUrl(auth.currentUser.photoURL)
@@ -73,7 +72,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		email: string,
 		password: string,
 		name: string,
-		photo: FileList
+		photoFile: FileList
 	) => {
 		const userCredentials = await createUserWithEmailAndPassword(
 			auth,
@@ -81,7 +80,9 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			password
 		)
 		await setDisplayName(userCredentials.user, name)
-		await setPhotoUrl(userCredentials.user, photo)
+		if (photoFile.length !== 0) {
+			await setPhotoUrl(userCredentials.user, photoFile)
+		}
 
 		const docRef = doc(usersCol, userCredentials.user.uid)
 		await setDoc(docRef, {
@@ -91,6 +92,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			isAdmin: false,
 			photoFile: userCredentials.user.photoURL,
 		})
+		reloadUser()
 		return userCredentials
 	}
 
