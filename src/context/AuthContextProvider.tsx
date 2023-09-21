@@ -6,25 +6,32 @@ import {
 	User,
 	signOut,
 	sendPasswordResetEmail,
-	updateEmail,
-	updatePassword,
 	updateProfile,
+	updatePassword,
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
-import { auth } from '../services/firebase'
+import { auth, storage, usersCol } from '../services/firebase'
 import { ScaleLoader } from 'react-spinners'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 type AuthContextType = {
 	currentUser: User | null
 	login: (email: string, password: string) => Promise<UserCredential>
-	signup: (email: string, password: string) => Promise<UserCredential>
+	admin: boolean
+
+	signup: (
+		email: string,
+		password: string,
+		name: string,
+		photo: FileList
+	) => Promise<UserCredential>
 	logout: () => Promise<void>
 	resetPassword: (email: string) => Promise<void>
 	reloadUser: () => Promise<boolean>
-	setEmail: (email: string) => Promise<void>
-	setDisplayName: (displayName: string) => Promise<void>
+	setDisplayName: (user: User, displayName: string) => Promise<void>
 	setPassword: (password: string) => Promise<void>
-	setPhotoUrl: (photoURL: string) => Promise<void>
+	setPhotoUrl: (user: User, photoURL: FileList) => Promise<void>
 	userName: string | null
 	userPhotoUrl: string | null
 	userEmail: string | null
@@ -39,6 +46,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState<User | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [userEmail, setUserEmail] = useState<string | null>(null)
+	const [admin, setAdmin] = useState<boolean>(false)
 	const [userName, setUserName] = useState<string | null>(null)
 	const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null)
 
@@ -48,10 +56,6 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 	const logout = () => {
 		return signOut(auth)
-	}
-
-	const signup = (email: string, password: string) => {
-		return createUserWithEmailAndPassword(auth, email, password)
 	}
 
 	const reloadUser = async () => {
@@ -65,18 +69,35 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		console.log('Reloaded user', auth.currentUser)
 		return true
 	}
+	const signup = async (
+		email: string,
+		password: string,
+		name: string,
+		photo: FileList
+	) => {
+		const userCredentials = await createUserWithEmailAndPassword(
+			auth,
+			email,
+			password
+		)
+		await setDisplayName(userCredentials.user, name)
+		await setPhotoUrl(userCredentials.user, photo)
+
+		const docRef = doc(usersCol, userCredentials.user.uid)
+		await setDoc(docRef, {
+			_uid: userCredentials.user.uid,
+			name,
+			email,
+			isAdmin: false,
+			photoFile: userCredentials.user.photoURL,
+		})
+		return userCredentials
+	}
 
 	const resetPassword = (email: string) => {
 		return sendPasswordResetEmail(auth, email, {
 			url: window.location.origin + '/login',
 		})
-	}
-
-	const setEmail = (email: string) => {
-		if (!currentUser) {
-			throw new Error('Current User is null!')
-		}
-		return updateEmail(currentUser, email)
 	}
 
 	const setPassword = (password: string) => {
@@ -86,31 +107,48 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return updatePassword(currentUser, password)
 	}
 
-	const setDisplayName = (displayName: string) => {
-		if (!currentUser) {
-			throw new Error('Current User is null!')
-		}
-		return updateProfile(currentUser, { displayName })
+	const setDisplayName = (user: User, displayName: string) => {
+		return updateProfile(user, { displayName })
 	}
 
-	const setPhotoUrl = (photoURL: string) => {
-		if (!currentUser) {
-			throw new Error('Current User is null!')
+	const setPhotoUrl = async (user: User, photo: FileList) => {
+		//if (!currentUser) {
+		//	throw new Error('Current User is null!')
+		//}
+		let photoURL = auth.currentUser?.photoURL
+
+		if (photo) {
+			const fileRef = ref(storage, `photos/${user.uid}/${photo[0].name}`)
+			const uploadResult = await uploadBytes(fileRef, photo[0])
+
+			photoURL = await getDownloadURL(uploadResult.ref)
+			setUserPhotoUrl(photoURL)
 		}
-		setUserPhotoUrl(photoURL)
-		return updateProfile(currentUser, { photoURL })
+		return updateProfile(user, {
+			photoURL,
+		})
+
+		//return updateProfile(user, { photoURL })
 	}
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
+		const unsubscribe = onAuthStateChanged(auth, async (user) => {
 			setCurrentUser(user)
 
 			if (user) {
-				setUserEmail(user.email)
 				setUserName(user.displayName)
 				setUserPhotoUrl(user.photoURL)
+				setUserEmail(user.email)
+
+				const docRef = doc(usersCol, user.uid)
+				const docSnap = await getDoc(docRef)
+				if (docSnap.exists()) {
+					const isAdminValue = docSnap.data().isAdmin
+					setAdmin(isAdminValue)
+				}
 			} else {
 				setUserEmail(null)
+				setAdmin(false)
 				setUserName(null)
 				setUserPhotoUrl(null)
 			}
@@ -124,12 +162,12 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		<AuthContext.Provider
 			value={{
 				currentUser,
+				admin,
 				login,
 				logout,
 				resetPassword,
 				reloadUser,
 				setDisplayName,
-				setEmail,
 				setPassword,
 				setPhotoUrl,
 				signup,

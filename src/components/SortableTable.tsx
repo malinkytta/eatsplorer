@@ -33,7 +33,7 @@ const UsersTable = <TData, TValue>({
 	})
 
 	return (
-		<Table>
+		<Table responsive>
 			<thead>
 				{table.getHeaderGroups().map((headerGroup) => (
 					<tr key={headerGroup.id}>

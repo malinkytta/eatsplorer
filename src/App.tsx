@@ -9,6 +9,8 @@ import './assets/scss/App.scss'
 import LogoutPage from './pages/LogoutPage'
 import RequireAuth from './components/RequireAuth'
 import NotFoundPage from './pages/NotFoundPage'
+import RequireAdmin from './components/RequireAdmin'
+import CreateRestaurantPage from './pages/CreateRestaurantPage'
 import EditProfilePage from './pages/EditProfilePage'
 
 const App = () => {
@@ -16,16 +18,26 @@ const App = () => {
 		<>
 			<Navigation />
 			<Routes>
+				{/* Guest Routes */}
 				<Route path='*' element={<NotFoundPage />} />
 				<Route path='/' element={<HomePage />} />
-				<Route path='/admin' element={<AdminPage />} />
 				<Route path='/signup' element={<SignupPage />} />
 				<Route path='/login' element={<LoginPage />} />
+
+				{/* Auth Routes */}
 				<Route
 					path='/logout'
 					element={
 						<RequireAuth>
 							<LogoutPage />
+						</RequireAuth>
+					}
+				/>
+				<Route
+					path='/create-restaurant'
+					element={
+						<RequireAuth>
+							<CreateRestaurantPage />
 						</RequireAuth>
 					}
 				/>
@@ -40,6 +52,16 @@ const App = () => {
 				<Route
 					path='/forgot-password'
 					element={<ForgotPasswordPage />}
+				/>
+
+				{/* Admin Routes */}
+				<Route
+					path='/admin'
+					element={
+						<RequireAdmin>
+							<AdminPage />
+						</RequireAdmin>
+					}
 				/>
 			</Routes>
 		</>

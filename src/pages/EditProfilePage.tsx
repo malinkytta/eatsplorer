@@ -9,7 +9,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { UpdateProfileFormData } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
 import { storage } from '../services/firebase'
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import { ref, uploadBytesResumable } from 'firebase/storage'
 import { Alert, Button, Container } from 'react-bootstrap'
 import useAuth from '../hooks/useAuth'
 
@@ -21,7 +21,6 @@ const EditProfilePage = () => {
 		currentUser,
 		reloadUser,
 		setDisplayName,
-		setEmail,
 		setPassword,
 		setPhotoUrl,
 		userPhotoUrl,
@@ -49,11 +48,11 @@ const EditProfilePage = () => {
 		return <p>Error, error, error!</p>
 	}
 
-	const handleDeletePhoto = async () => {
-		await setPhotoUrl('')
-		await reloadUser()
-		console.log('Photo deleted successfully')
-	}
+	//const handleDeletePhoto = async () => {
+	//	// Ta bort på något sätt med refFromUrl eller deleteDoc
+	//	await reloadUser()
+	//	console.log('Photo deleted successfully')
+	//}
 
 	const onUpdateProfile: SubmitHandler<UpdateProfileFormData> = async (
 		data
@@ -63,7 +62,7 @@ const EditProfilePage = () => {
 			setLoading(true)
 			if (data.name !== (currentUser.displayName ?? '')) {
 				console.log('Updating displayname...')
-				await setDisplayName(data.name)
+				await setDisplayName(currentUser, data.name)
 			}
 			if (data.photoFile.length) {
 				const photo = data.photoFile[0]
@@ -92,8 +91,11 @@ const EditProfilePage = () => {
 					async () => {
 						console.log('Upload completed')
 
-						const photoURL = await getDownloadURL(fileRef)
-						await setPhotoUrl(photoURL)
+						//const photoURL = await getDownloadURL(fileRef)
+						if (photoFileRef.current === null) {
+							return
+						}
+						await setPhotoUrl(currentUser, photoFileRef.current)
 						setUploadProgress(null)
 						setLoading(false)
 						reset()
@@ -101,14 +103,6 @@ const EditProfilePage = () => {
 				)
 			}
 
-			if (data.email !== (currentUser.email ?? '')) {
-				console.log('Updating email..')
-				console.log(currentUser)
-				await setEmail(data.email)
-			}
-			console.log(currentUser)
-			console.log('Currentuser email:', currentUser.email)
-			console.log('data emaiL: ', data.email)
 			if (data.password) {
 				console.log('Updating password')
 				await setPassword(data.password)
@@ -147,19 +141,19 @@ const EditProfilePage = () => {
 												'https://via.placeholder.com/225'
 											}
 											fluid
-											//roundedCircle
-											className='img-square updateProfileImage w-50'
+											roundedCircle
+											className='img-square profileImage w-50'
 										/>
 									</div>
 
-									<Button
+									{/*<Button
 										className='mt-3 border-white'
 										onClick={handleDeletePhoto}
 										size='sm'
 										variant='dark'
 									>
 										Delete Photo
-									</Button>
+									</Button>*/}
 								</div>
 								<Form.Group
 									controlId='displayName'
@@ -236,6 +230,7 @@ const EditProfilePage = () => {
 											required:
 												'You have to enter an email',
 										})}
+										disabled
 									/>
 									{errors.email && (
 										<p className='invalid'>

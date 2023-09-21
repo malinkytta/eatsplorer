@@ -1,16 +1,16 @@
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-//import NavDropdown from 'react-bootstrap/NavDropdown'
+import Image from 'react-bootstrap/Image'
+import NavDropdown from 'react-bootstrap/NavDropdown'
 import { Link, NavLink } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
-import { NavDropdown } from 'react-bootstrap'
 
 const Navigation = () => {
-	const { currentUser, userEmail } = useAuth()
+	const { currentUser, userEmail, userName, userPhotoUrl, admin } = useAuth()
 	return (
 		<Navbar
-			expand='lg'
+			expand='md'
 			bg='dark'
 			data-bs-theme='dark'
 			className='bg-body-tertiary'
@@ -22,35 +22,69 @@ const Navigation = () => {
 				<Navbar.Toggle aria-controls='basic-navbar-nav' />
 				<Navbar.Collapse id='basic-navbar-nav'>
 					<Nav className='ms-auto'>
-						{currentUser ? (
-							<>
-								<NavDropdown title={userEmail}>
-									<NavDropdown.Item>
-										Placeholder
-									</NavDropdown.Item>
-									<NavDropdown.Divider />
-									<NavDropdown.Item
+						<>
+							{currentUser ? (
+								<>
+									<Nav.Link
 										as={NavLink}
-										to='/edit-profile'
+										to='/create-restaurant'
 									>
-										Edit profile
-									</NavDropdown.Item>
-									<NavDropdown.Divider />
-									<NavDropdown.Item as={NavLink} to='/logout'>
-										Logout
-									</NavDropdown.Item>
-								</NavDropdown>
-							</>
-						) : (
-							<>
-								<Nav.Link as={NavLink} to='/signup'>
-									Sign up
-								</Nav.Link>
-								<Nav.Link as={NavLink} to='/login'>
-									Log in
-								</Nav.Link>
-							</>
-						)}
+										Create Restaurant
+									</Nav.Link>
+									<NavDropdown
+										title={
+											userPhotoUrl ? (
+												<Image
+													src={userPhotoUrl}
+													height={30}
+													width={30}
+													title={
+														(userName ||
+															userEmail) ??
+														''
+													}
+													className='img-square profileImage'
+													roundedCircle
+													fluid
+												/>
+											) : (
+												userName || userEmail
+											)
+										}
+									>
+										{admin && (
+											<NavDropdown.Item
+												as={NavLink}
+												to='/admin'
+											>
+												Admin
+											</NavDropdown.Item>
+										)}
+										<NavDropdown.Item
+											as={NavLink}
+											to='/edit-profile'
+										>
+											Edit profile
+										</NavDropdown.Item>
+										<NavDropdown.Item
+											as={NavLink}
+											to='/logout'
+										>
+											Logout
+										</NavDropdown.Item>
+									</NavDropdown>
+								</>
+							) : (
+								<>
+									<Nav.Link as={NavLink} to='/signup'>
+										Sign In
+									</Nav.Link>
+									<Nav.Link as={NavLink} to='/login'>
+										Log In
+									</Nav.Link>
+								</>
+							)}
+						</>
 					</Nav>
 				</Navbar.Collapse>
 			</Container>
