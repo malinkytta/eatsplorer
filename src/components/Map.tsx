@@ -15,6 +15,8 @@ import { UserLocation } from '../types/User.types'
 import { Places } from '../../googleMapsConfig'
 import { useSearchParams } from 'react-router-dom'
 import OffcanvasComponent from './OffcanvasComponent'
+
+import BeerIcon from '../assets/images/beer-27-128.png'
 interface Iprops {
 	restaurants: Restaurant[]
 }
@@ -145,9 +147,31 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 								lat: restaurant.lat,
 								lng: restaurant.lng,
 							}}
+							icon={
+								restaurant.category === 'Pub'
+									? {
+											url: BeerIcon,
+											scaledSize:
+												new window.google.maps.Size(
+													50,
+													50
+												),
+									  }
+									: undefined
+							}
 							title={restaurant.name}
 							onClick={() => onMarkerClick(restaurant)}
 						/>
+						{/* 						
+						<MarkerF
+							key={restaurant.lat}
+							position={{
+								lat: restaurant.lat,
+								lng: restaurant.lng,
+							}}
+							title={restaurant.name}
+							onClick={() => onMarkerClick(restaurant)}
+						/> */}
 						{/* {console.log(restaurant.lat, restaurant.lng)} */}
 					</Fragment>
 				))}
