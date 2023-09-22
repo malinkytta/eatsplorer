@@ -4,9 +4,9 @@ import Map from '../components/Map'
 const HomePage = () => {
 	const { data: restaurants } = useGetRestaurants()
 
-	if (!restaurants) return <p>No restaurants for u m8</p>
+	if (!restaurants.data) return <p>No restaurants for u m8</p>
 
-	return <Map restaurants={restaurants} />
+	return <Map restaurants={restaurants.data} />
 }
 
 export default HomePage

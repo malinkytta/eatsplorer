@@ -25,12 +25,6 @@ const UsersPage = () => {
 	const columnHelper = createColumnHelper<UsersData>()
 
 	const columns = [
-		// columnHelper.accessor('_uid', {
-		// 	header: 'ID',
-		// }),
-		// columnHelper.group({
-		// 	header: 'Users',
-		// columns: [
 		columnHelper.display({
 			id: 'photoFile',
 			header: 'Profile Image',
@@ -76,8 +70,6 @@ const UsersPage = () => {
 				</Form.Select>
 			),
 		}),
-		// ],
-		// }),
 	]
 	return (
 		<>
