@@ -3,7 +3,7 @@ export type NewUserCredentials = {
 	email: string
 	password: string
 	confirmPassword: string
-	photoFile: FileList | null
+	photoFile: string | null
 }
 
 export type LoginCredentials = {
@@ -19,7 +19,8 @@ export type NewUser = {
 	_uid: string
 	name: string
 	email: string
-	isAdmin: false
+	isAdmin: boolean
+	// photoFile: string | null
 	photoFile: FileList | null
 }
 
@@ -37,8 +38,10 @@ export type UserLocation = {
 }
 
 export type UpdateProfileFormData = {
+	_uid: string
 	name: string
 	photoFile: FileList
+	isAdmin: boolean
 	email: string
 	password: string
 	passwordConfirm: string

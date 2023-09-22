@@ -29,7 +29,7 @@ const SignupPage = () => {
 		setErrorMessage(null)
 
 		if (!data.photoFile) {
-			return null
+			return
 		}
 
 		try {

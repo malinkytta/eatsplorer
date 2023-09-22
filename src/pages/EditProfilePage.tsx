@@ -6,12 +6,13 @@ import Form from 'react-bootstrap/Form'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import Row from 'react-bootstrap/Row'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { UpdateProfileFormData } from '../types/User.types'
+import { UpdateProfileFormData, UsersData } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
-import { storage } from '../services/firebase'
-import { ref, uploadBytesResumable } from 'firebase/storage'
+import { storage, usersCol } from '../services/firebase'
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { Alert, Button, Container } from 'react-bootstrap'
 import useAuth from '../hooks/useAuth'
+import { doc, setDoc } from 'firebase/firestore'
 
 const EditProfilePage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -24,12 +25,12 @@ const EditProfilePage = () => {
 		setPassword,
 		setPhotoUrl,
 		userPhotoUrl,
+		admin,
 	} = useAuth()
 	const {
 		handleSubmit,
 		register,
 		watch,
-		reset,
 		formState: { errors },
 	} = useForm<UpdateProfileFormData>({
 		defaultValues: {
@@ -64,6 +65,7 @@ const EditProfilePage = () => {
 				console.log('Updating displayname...')
 				await setDisplayName(currentUser, data.name)
 			}
+
 			if (data.photoFile.length) {
 				const photo = data.photoFile[0]
 				const fileRef = ref(
@@ -91,14 +93,24 @@ const EditProfilePage = () => {
 					async () => {
 						console.log('Upload completed')
 
-						//const photoURL = await getDownloadURL(fileRef)
+						const photoURL = await getDownloadURL(fileRef)
 						if (photoFileRef.current === null) {
 							return
 						}
-						await setPhotoUrl(currentUser, photoFileRef.current)
+
+						await setPhotoUrl(currentUser, photoURL)
 						setUploadProgress(null)
 						setLoading(false)
-						reset()
+
+						const docRef = doc(usersCol, currentUser.uid)
+
+						await setDoc(docRef, {
+							_uid: currentUser.uid,
+							name: data.name,
+							photoFile: photoURL,
+							email: data.email,
+							isAdmin: admin,
+						})
 					}
 				)
 			}
@@ -107,8 +119,21 @@ const EditProfilePage = () => {
 				console.log('Updating password')
 				await setPassword(data.password)
 			}
-			await reloadUser()
+
+			const firestoreData: UsersData = {
+				_uid: currentUser.uid,
+				name: data.name,
+				photoFile: currentUser.photoURL,
+				email: data.email,
+				isAdmin: admin,
+			}
+
+			const docRef = doc(usersCol, currentUser.uid)
+
+			await setDoc(docRef, firestoreData)
 			console.log('Profile updated, yaaaay!')
+
+			reloadUser()
 			setLoading(false)
 		} catch (error) {
 			if (error instanceof FirebaseError) {
