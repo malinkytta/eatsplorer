@@ -9,18 +9,36 @@ import { useEffect } from 'react'
 
 interface IProps {
 	onCreate: (data: Restaurant) => void
+	initialValues?: Restaurant
 }
 
-const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
+const CreateRestaurantForm: React.FC<IProps> = ({
+	onCreate,
+	initialValues,
+}) => {
 	const {
 		handleSubmit,
 		register,
 		reset,
+		setValue,
 		formState: { errors, isSubmitSuccessful },
-	} = useForm<Restaurant>()
+	} = useForm<Restaurant>({
+		defaultValues: {
+			...initialValues,
+		},
+	})
 
 	const onFormSubmit: SubmitHandler<Restaurant> = (data: Restaurant) => {
 		onCreate(data)
+	}
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const capitalize = (text: string) => {
+			return text.charAt(0).toUpperCase() + text.slice(1)
+		}
+		const fieldName = e.target.name as keyof Restaurant
+		const capitalizedValue = capitalize(e.target.value)
+		setValue(fieldName, capitalizedValue)
 	}
 
 	useEffect(() => {
@@ -42,6 +60,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 								'The restaurant must contain at least 2 characters',
 						},
 					})}
+					onChange={handleInputChange}
 				/>
 				{errors.name && (
 					<p className='invalid'>
@@ -108,6 +127,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 										'The adress must contain at least 2 characters',
 								},
 							})}
+							onChange={handleInputChange}
 						/>
 						{errors.address && (
 							<p className='invalid'>
@@ -130,6 +150,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 										'The city must contain at least 2 characters',
 								},
 							})}
+							onChange={handleInputChange}
 						/>
 						{errors.city && (
 							<p className='invalid'>
@@ -144,7 +165,17 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 				<Col className='mb-2'>
 					<Form.Group controlId='phone' className='mb-2'>
 						<Form.Label>Phone Number</Form.Label>
-						<Form.Control type='phone' {...register('phone')} />
+						<Form.Control
+							type='tel'
+							{...register('phone', {
+								pattern: {
+									value: /^(?:(?:\+|00)46|0)[\s-]?[1-9]\d{1,2}[\s-]?\d{2}[\s-]?\d{2}[\s-]?\d{2}$/,
+									message:
+										'Invalid phone number, please enter 10 digits',
+								},
+							})}
+							placeholder='Phone Number'
+						/>
 						{errors.phone && (
 							<p className='invalid'>
 								{errors.phone.message ?? 'Invalid value'}
@@ -155,7 +186,11 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 				<Col>
 					<Form.Group controlId='email' className='mb-2'>
 						<Form.Label>Email</Form.Label>
-						<Form.Control type='email' {...register('email')} />
+						<Form.Control
+							type='email'
+							{...register('email')}
+							placeholder='example@email.com'
+						/>
 						{errors.email && (
 							<p className='invalid'>
 								{errors.email.message ?? 'Invalid value'}
@@ -192,6 +227,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 								'The description must contain at least 2 characters',
 						},
 					})}
+					onChange={handleInputChange}
 				/>
 				{errors.description && (
 					<p className='invalid'>
@@ -202,7 +238,11 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 
 			<Form.Group controlId='website' className='mb-2'>
 				<Form.Label>Website</Form.Label>
-				<Form.Control type='url' {...register('website')} />
+				<Form.Control
+					type='url'
+					{...register('website')}
+					placeholder='https://www.example.com'
+				/>
 				{errors.website && (
 					<p className='invalid'>
 						{errors.website.message ?? 'Invalid value'}
@@ -213,7 +253,11 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 				<Col className='mb-2'>
 					<Form.Group controlId='instagram'>
 						<Form.Label>Instagram</Form.Label>
-						<Form.Control type='url' {...register('instagram')} />
+						<Form.Control
+							type='url'
+							{...register('instagram')}
+							placeholder='https://www.instagram.com/example'
+						/>
 						{errors.instagram && (
 							<p className='invalid'>
 								{errors.instagram.message ?? 'Invalid value'}
@@ -224,7 +268,11 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 				<Col>
 					<Form.Group controlId='facebook'>
 						<Form.Label>Facebook</Form.Label>
-						<Form.Control type='url' {...register('facebook')} />
+						<Form.Control
+							type='url'
+							{...register('facebook')}
+							placeholder='https://www.facebook.com/example/'
+						/>
 						{errors.facebook && (
 							<p className='invalid'>
 								{errors.facebook.message ?? 'Invalid value'}
@@ -239,7 +287,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 				variant='dark'
 				type='submit'
 			>
-				Create
+				{initialValues ? 'Update' : 'Create'}
 			</Button>
 		</Form>
 	)

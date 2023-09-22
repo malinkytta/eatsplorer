@@ -14,6 +14,7 @@ export type Restaurant = {
 	lat: number
 	lng: number
 	isConfirmedByAdmin: boolean
+	distance?: number
 	// photo: File
 }
 

@@ -15,6 +15,7 @@ import { FirebaseError } from 'firebase/app'
 
 const CreateRestaurantPage = () => {
 	const [success, setSuccess] = useState<boolean | null>(null)
+
 	const navigate = useNavigate()
 
 	const onCreate = async (data: Restaurant) => {
@@ -26,25 +27,25 @@ const CreateRestaurantPage = () => {
 			console.log(data)
 			setSuccess(true)
 
-			// Create a document in Firestore with restaurant details, including the photo URL
 			await addDoc(restaurantCol, {
 				...data,
 				lat,
 				lng,
 				isConfirmedByAdmin: false,
 			})
+
+			navigate('/')
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				console.error(error.message)
 			}
 			setSuccess(false)
 			console.log(error)
-			throw new Error('OOPS! Sorry')
 		}
 	}
 
 	return (
-		<Container>
+		<Container className='mb-2'>
 			<Row>
 				<Col md={{ span: 8, offset: 2 }}>
 					<Card className='mt-3' bg='dark' text='white'>
