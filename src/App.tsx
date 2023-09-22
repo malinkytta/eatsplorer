@@ -12,6 +12,8 @@ import NotFoundPage from './pages/NotFoundPage'
 import RequireAdmin from './components/RequireAdmin'
 import CreateRestaurantPage from './pages/CreateRestaurantPage'
 import EditProfilePage from './pages/EditProfilePage'
+import SingleRestaurantPage from './pages/SingleRestaurantPage'
+import EditRestaurant from './components/EditRestaurant'
 
 const App = () => {
 	return (
@@ -23,6 +25,7 @@ const App = () => {
 				<Route path='/' element={<HomePage />} />
 				<Route path='/signup' element={<SignupPage />} />
 				<Route path='/login' element={<LoginPage />} />
+				<Route path='/:id' element={<SingleRestaurantPage />} />
 
 				{/* Auth Routes */}
 				<Route
@@ -60,6 +63,14 @@ const App = () => {
 					element={
 						<RequireAdmin>
 							<AdminPage />
+						</RequireAdmin>
+					}
+				/>
+				<Route
+					path='edit-restaurant/:id'
+					element={
+						<RequireAdmin>
+							<EditRestaurant />
 						</RequireAdmin>
 					}
 				/>
