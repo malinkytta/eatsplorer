@@ -24,14 +24,14 @@ type AuthContextType = {
 		email: string,
 		password: string,
 		name: string,
-		photo: FileList
+		photoFile: string | null
 	) => Promise<UserCredential>
 	logout: () => Promise<void>
 	resetPassword: (email: string) => Promise<void>
 	reloadUser: () => Promise<boolean>
 	setDisplayName: (user: User, displayName: string) => Promise<void>
 	setPassword: (password: string) => Promise<void>
-	setPhotoUrl: (user: User, photoURL: FileList) => Promise<void>
+	setPhotoUrl: (user: User, photoURL: string | FileList) => Promise<string>
 	userName: string | null
 	userPhotoUrl: string | null
 	userEmail: string | null
@@ -73,7 +73,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		email: string,
 		password: string,
 		name: string,
-		photo: FileList
+		photoFile: string | null
 	) => {
 		const userCredentials = await createUserWithEmailAndPassword(
 			auth,
@@ -81,7 +81,10 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			password
 		)
 		await setDisplayName(userCredentials.user, name)
-		await setPhotoUrl(userCredentials.user, photo)
+
+		if (photoFile?.length === 1) {
+			await setPhotoUrl(userCredentials.user, photoFile)
+		}
 
 		const docRef = doc(usersCol, userCredentials.user.uid)
 		await setDoc(docRef, {
@@ -91,6 +94,9 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			isAdmin: false,
 			photoFile: userCredentials.user.photoURL,
 		})
+
+		reloadUser()
+
 		return userCredentials
 	}
 
@@ -111,24 +117,29 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return updateProfile(user, { displayName })
 	}
 
-	const setPhotoUrl = async (user: User, photo: FileList) => {
-		//if (!currentUser) {
-		//	throw new Error('Current User is null!')
-		//}
-		let photoURL = auth.currentUser?.photoURL
+	const setPhotoUrl = async (user: User, photoURL: string | FileList) => {
+		let updatedPhotoURL = ''
 
-		if (photo) {
-			const fileRef = ref(storage, `photos/${user.uid}/${photo[0].name}`)
-			const uploadResult = await uploadBytes(fileRef, photo[0])
+		if (typeof photoURL === 'string') {
+			updatedPhotoURL = photoURL
+		} else if (photoURL instanceof FileList && photoURL.length > 0) {
+			const photoFile = photoURL[0]
 
-			photoURL = await getDownloadURL(uploadResult.ref)
-			setUserPhotoUrl(photoURL)
+			const fileRef = ref(storage, `photos/${user.uid}/${photoFile.name}`)
+			const uploadResult = await uploadBytes(fileRef, photoFile)
+
+			updatedPhotoURL = await getDownloadURL(uploadResult.ref)
+		} else {
+			throw new Error('Ogiltig photoURL.')
 		}
-		return updateProfile(user, {
-			photoURL,
+
+		await updateProfile(user, {
+			photoURL: updatedPhotoURL,
 		})
 
-		//return updateProfile(user, { photoURL })
+		setUserPhotoUrl(updatedPhotoURL)
+
+		return updatedPhotoURL
 	}
 
 	useEffect(() => {
@@ -154,7 +165,6 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			}
 			setLoading(false)
 		})
-
 		return unsubscribe
 	}, [])
 
