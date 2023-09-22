@@ -1,8 +1,9 @@
 import React from 'react'
 import Offcanvas from 'react-bootstrap/Offcanvas'
-import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
 import RestaurantsList from './RestaurantsList'
 import { Restaurant } from '../types/Restaurant.types'
+import MobileCarousel from './MobileCarousel'
 
 interface IProps {
 	handleShow: () => void
@@ -19,20 +20,13 @@ const OffcanvasComponent: React.FC<IProps> = ({
 }) => {
 	return (
 		<>
-			{/* <Button
-				variant='transparent'
-				onClick={handleShow}
-				className='map-btn'
-			>
-				🔍
-			</Button> */}
 			<Offcanvas
 				data-bs-theme='dark'
 				show={show}
 				onHide={handleClose}
 				scroll
 				backdrop={false}
-				className='offcanvas-custom'
+				className='custom-offcanvas d-none d-sm-flex'
 			>
 				<Offcanvas.Header closeButton>
 					<Offcanvas.Title className='mt-3'>
@@ -40,9 +34,12 @@ const OffcanvasComponent: React.FC<IProps> = ({
 					</Offcanvas.Title>
 				</Offcanvas.Header>
 				<Offcanvas.Body>
-					<RestaurantsList data={restaurants} />
+					<Row xs={1} className='g-2'>
+						<RestaurantsList data={restaurants} />
+					</Row>
 				</Offcanvas.Body>
 			</Offcanvas>
+			<MobileCarousel data={restaurants} />
 		</>
 	)
 }
