@@ -1,50 +1,147 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import SortableTable from '../components/SortableTable'
-import useGetRestaurants from '../hooks/useGetRestaurants'
+import Button from 'react-bootstrap/Button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+	faEdit,
+	faTrashCan,
+	faToggleOff,
+	faToggleOn,
+} from '@fortawesome/free-solid-svg-icons'
+
 import { Restaurant } from '../types/Restaurant.types'
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore'
+import { restaurantCol } from '../services/firebase'
 
-const columnHelper = createColumnHelper<Restaurant>()
+interface IProps {
+	data: Restaurant[]
+}
 
-const columns = [
-	// columnHelper.accessor('_id', {
-	// 	header: 'ID',
-	// }),
-	// columnHelper.group({
-	// 	header: 'Restaurants',
-	// 	columns: [
-	columnHelper.accessor('name', {
-		header: 'Name',
-		cell: (props) => <span>{props.getValue()}</span>,
-	}),
-	columnHelper.accessor('address', {
-		header: 'Adress',
-		cell: (props) => <span> {props.getValue()}</span>,
-	}),
-	columnHelper.accessor('city', {
-		header: 'City',
-	}),
-	columnHelper.accessor('category', {
-		header: 'Category',
-	}),
+const SortedRestaurants: React.FC<IProps> = ({ data }) => {
+	const columnHelper = createColumnHelper<Restaurant>()
 
-	// ],
-	// }),
-]
+	const handleApprove = async (id: string, isConfirmedByAdmin: boolean) => {
+		try {
+			const docRef = doc(restaurantCol, id)
 
-const SortedRestaurants = () => {
-	const { data, loading } = useGetRestaurants()
+			await updateDoc(docRef, {
+				isConfirmedByAdmin: !isConfirmedByAdmin,
+			})
+		} catch (error) {
+			console.error('Error updating isConfirmedByAdmin:', error)
+		}
+	}
 
-	return (
-		<>
-			{/* <h1 className='my-5'>Users</h1> */}
+	const handleDelete = async (id: string) => {
+		try {
+			const docRef = doc(restaurantCol, id)
+			await deleteDoc(docRef)
+		} catch (error) {
+			console.error('Something went wrong when deleting the restaurant')
+		}
+	}
 
-			{/* {isError && <p>Oops, an error occurred!</p>} */}
+	const columns = [
+		columnHelper.accessor('name', {
+			header: 'Name',
+			cell: (props) => <span>{props.getValue()}</span>,
+		}),
+		columnHelper.accessor('address', {
+			header: 'Adress',
+			cell: (props) => <span> {props.getValue()}</span>,
+		}),
+		columnHelper.accessor('city', {
+			header: 'City',
+		}),
+		columnHelper.accessor('category', {
+			header: 'Category',
+		}),
+		columnHelper.group({
+			id: 'confirmedGroup',
+			header: () => null,
+			columns: [
+				columnHelper.accessor('isConfirmedByAdmin', {
+					header: 'Approved',
 
-			{loading && <p>Loading restaurants...</p>}
+					cell: (props) => (
+						<>
+							<span
+								className={
+									props.row.original.isConfirmedByAdmin
+										? 'valid'
+										: 'invalid'
+								}
+							>
+								{props.row.original.isConfirmedByAdmin
+									? 'True'
+									: 'False'}
+							</span>
+						</>
+					),
+				}),
+				columnHelper.display({
+					id: 'toggleConfirm',
+					header: 'Toggle',
+					cell: (props) => (
+						<>
+							{props.row.original.isConfirmedByAdmin ? (
+								<FontAwesomeIcon
+									className='ms-2 cursor-pointer'
+									onClick={() =>
+										handleApprove(
+											props.row.original._id,
+											props.row.original
+												.isConfirmedByAdmin
+										)
+									}
+									icon={faToggleOn}
+								/>
+							) : (
+								<FontAwesomeIcon
+									className='ms-2 cursor-pointer'
+									onClick={() =>
+										handleApprove(
+											props.row.original._id,
+											props.row.original
+												.isConfirmedByAdmin
+										)
+									}
+									icon={faToggleOff}
+								/>
+							)}
+						</>
+					),
+					// ),
+				}),
+				columnHelper.display({
+					id: 'editButton',
+					header: 'Edit',
+					cell: (props) => (
+						<Button
+							href={`/edit-restaurant/${props.row.original._id}`}
+							variant='transparent'
+						>
+							<FontAwesomeIcon icon={faEdit} />
+						</Button>
+					),
+				}),
+				columnHelper.display({
+					id: 'removeButton',
+					header: 'Delete',
 
-			{data && <SortableTable columns={columns} data={data} />}
-		</>
-	)
+					cell: (props) => (
+						<Button
+							variant='transparent'
+							onClick={() => handleDelete(props.row.original._id)}
+						>
+							<FontAwesomeIcon icon={faTrashCan} />
+						</Button>
+					),
+				}),
+			],
+		}),
+	]
+	return <>{data && <SortableTable columns={columns} data={data} />}</>
 }
 
 export default SortedRestaurants

@@ -5,6 +5,10 @@
 	color: red;
 }
 
+.valid {
+	color: green;
+}
+
 // .map-btn {
 // 	position: absolute;
 // 	top: 50vh;
@@ -50,18 +54,8 @@
 	top: 11px;
 	margin-left: -120px;
 
-	// input {
-	// 	background: rgba(255, 255, 255, 0.09);
-	// 	border-radius: 4px;
-	// 	/* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
-	// 	color: black;
-	// 	/* backdrop-filter: blur(12.7px); */
-	// 	-webkit-backdrop-filter: blur(12.7px);
-	// 	border: none;
-	// }
-
 	input[type='text'] {
-		color: #fff;
+		color: #000;
 	}
 }
 
@@ -71,6 +65,17 @@
 	border-radius: 5px 0px 0px 5px;
 }
 
+.mobile-carousel {
+	position: fixed;
+	right: 0px;
+	margin: 20px 0;
+	bottom: 0;
+	left: 0;
+	z-index: 2;
+	color: white;
+	overflow-x: scroll;
+}
+
 .restaurants-card {
-	// box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+	margin: 13px;
 }
