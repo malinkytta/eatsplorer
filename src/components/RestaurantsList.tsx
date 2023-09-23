@@ -60,7 +60,9 @@ const RestaurantsList: React.FC<IProps> = ({ data }) => {
 							{restaurant.address}, {restaurant.city}
 						</Card.Text>
 						<Card.Text>
-							{restaurant.distance ? restaurant.distance : ''}
+							{restaurant.distance
+								? restaurant.distance.toFixed(2) + 'km'
+								: ''}
 						</Card.Text>
 						<Button variant='dark' href={`/${restaurant._id}`}>
 							More Information
