@@ -2,10 +2,18 @@ import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
 import RestaurantImg from '../assets/images/jason-leung-poI7DelFiVA-unsplash.jpg'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+	faLocationArrow,
+	faCircleInfo,
+	faRoute,
+} from '@fortawesome/free-solid-svg-icons'
+import { FaFacebook, FaInstagram } from 'react-icons/fa'
 
 import { Restaurant } from '../types/Restaurant.types'
 import { UserLocation } from '../types/User.types'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 interface IProps {
 	data: Restaurant[]
@@ -47,32 +55,56 @@ const RestaurantsList: React.FC<IProps> = ({ data }) => {
 			{data.map((restaurant) => (
 				<Card
 					key={restaurant.name}
-					className='d-flex flex-row restaurants-card'
+					className='d-flex flex-row single-restaurant-card'
 				>
-					<Image
-						fluid
-						className='restaurant-img w-50'
-						src={RestaurantImg}
-					/>
+					<Image className='restaurant-img' src={RestaurantImg} />
+
 					<Card.Body>
 						<Card.Title>{restaurant.name}</Card.Title>
 						<Card.Text>
-							{restaurant.address}, {restaurant.city}
-						</Card.Text>
-						<Card.Text>
+							<FontAwesomeIcon icon={faRoute} />{' '}
 							{restaurant.distance
-								? restaurant.distance.toFixed(2) + 'km'
+								? restaurant.distance.toFixed(2) + ' km away'
 								: ''}
 						</Card.Text>
-						<Button variant='dark' href={`/${restaurant._id}`}>
-							More Information
-						</Button>
-						<Button
-							variant='outline-light'
-							onClick={() => onMarkerClick(restaurant)}
-						>
-							Get Directions
-						</Button>
+
+						<Card.Text>
+							{restaurant.address}, {restaurant.city}
+						</Card.Text>
+
+						<div className='restaurant-icons'>
+							<Link to={`/${restaurant._id}`}>
+								<Button variant='transparent'>
+									<FontAwesomeIcon icon={faCircleInfo} />{' '}
+								</Button>
+							</Link>
+							<Button
+								variant='transparent'
+								onClick={() => onMarkerClick(restaurant)}
+							>
+								<FontAwesomeIcon icon={faLocationArrow} />
+							</Button>
+							{restaurant.facebook && (
+								<Link to={`/${restaurant.facebook}`}>
+									<Button variant='transparent'>
+										<FaFacebook />
+									</Button>
+								</Link>
+							)}
+							{restaurant.instagram && (
+								<Link to={`/${restaurant.instagram}`}>
+									<Button variant='transparent'>
+										<FaInstagram />
+									</Button>
+								</Link>
+							)}
+						</div>
+						{/* {restaurant.website && (
+								<Link to={`/${restaurant.website}`}>
+									<Button variant='transparent'>
+									</Button>
+								</Link>
+							)} */}
 					</Card.Body>
 				</Card>
 			))}

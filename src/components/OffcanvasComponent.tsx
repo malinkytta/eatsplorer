@@ -29,9 +29,7 @@ const OffcanvasComponent: React.FC<IProps> = ({
 				className='custom-offcanvas d-none d-sm-flex'
 			>
 				<Offcanvas.Header closeButton>
-					<Offcanvas.Title className='mt-3'>
-						Restaurants
-					</Offcanvas.Title>
+					<Offcanvas.Title>Restaurants</Offcanvas.Title>
 				</Offcanvas.Header>
 				<Offcanvas.Body>
 					<Row xs={1} className='g-2'>

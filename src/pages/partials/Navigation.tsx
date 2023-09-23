@@ -3,18 +3,22 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import Image from 'react-bootstrap/Image'
 import NavDropdown from 'react-bootstrap/NavDropdown'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
 
 const Navigation = () => {
 	const { currentUser, userEmail, userName, userPhotoUrl, admin } = useAuth()
+	const location = useLocation()
+
+	let navbarClass = ''
+	if (location.pathname === '/signup' || location.pathname === '/login') {
+		navbarClass = 'transparent-navbar'
+	} else if (location.pathname === '/') {
+		navbarClass = 'standard-navbar'
+	}
+
 	return (
-		<Navbar
-			expand='md'
-			bg='dark'
-			data-bs-theme='dark'
-			className='bg-body-tertiary'
-		>
+		<Navbar expand='sm' data-bs-theme='dark' className={navbarClass}>
 			<Container>
 				<Navbar.Brand as={Link} to='/'>
 					React-Bootstrap
@@ -29,7 +33,7 @@ const Navigation = () => {
 										as={NavLink}
 										to='/create-restaurant'
 									>
-										Create Restaurant
+										Add Restaurant
 									</Nav.Link>
 									<NavDropdown
 										title={
@@ -77,7 +81,7 @@ const Navigation = () => {
 							) : (
 								<>
 									<Nav.Link as={NavLink} to='/signup'>
-										Sign In
+										Sign Up
 									</Nav.Link>
 									<Nav.Link as={NavLink} to='/login'>
 										Log In
