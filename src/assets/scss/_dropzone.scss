@@ -1,0 +1,12 @@
+#dropzone-wrapper {
+	width: 30%;
+	border: 2px dashed #cccccc;
+	background-color: #f2f2f2;
+	padding: 20px;
+	text-align: center;
+	cursor: pointer;
+}
+
+#dropzone-wrapper:hover {
+	border-color: #666666;
+}

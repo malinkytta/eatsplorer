@@ -24,6 +24,8 @@ export type RestaurantImage = {
 	path: string
 	size: number
 	type: string
+	restaurant: string
+	approved: boolean
 	uid: string
 	url: string
 }
