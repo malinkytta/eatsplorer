@@ -43,7 +43,7 @@ export const usersCol = createCollection<UsersData>('users')
 
 export const restaurantCol = createCollection<Restaurant>('restaurants')
 export const restaurantImageCol =
-	createCollection<RestaurantImage>('restaurants')
+	createCollection<RestaurantImage>('restaurant-images')
 export const newUsersCol = createCollection<NewUser>('users')
 
 export default app

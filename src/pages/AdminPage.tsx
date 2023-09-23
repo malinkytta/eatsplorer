@@ -5,12 +5,15 @@ import Container from 'react-bootstrap/Container'
 import UsersPage from './UsersPage'
 import SortedRestaurants from './SortedRestaurants'
 import useGetRestaurants from '../hooks/useGetRestaurants'
+import ApproveImages from './ApproveImages'
+import useGetImages from '../hooks/useGetImages'
 
 function AdminPage() {
 	const { confirmedByAdminTrue, confirmedByAdminFalse } = useGetRestaurants()
+	const { data } = useGetImages()
 
 	if (!confirmedByAdminFalse.data || !confirmedByAdminTrue.data) {
-		return
+		return <p> No data exists</p>
 	}
 
 	return (
@@ -22,6 +25,8 @@ function AdminPage() {
 				className='mb-3 admin-page '
 			>
 				<Tab eventKey='users' title='Users'>
+					<h2>Users</h2>
+
 					<UsersPage />
 				</Tab>
 				<Tab eventKey='restaurants' title='Restaurants'>
@@ -39,7 +44,14 @@ function AdminPage() {
 					)}
 				</Tab>
 				<Tab eventKey='requests' title='Requests'>
-					<h3>Photos</h3>
+					{!data || data.length === 0 ? (
+						<h2>No data</h2>
+					) : (
+						<>
+							<h2>Photos</h2>
+							<ApproveImages />
+						</>
+					)}
 				</Tab>
 			</Tabs>
 		</Container>
