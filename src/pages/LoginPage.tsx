@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
-import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import { Link, useNavigate } from 'react-router-dom'
@@ -40,18 +39,27 @@ const LoginPage = () => {
 	}
 
 	return (
-		<Container>
-			<Row>
-				<Col md={{ span: 6, offset: 3 }}>
-					<Card className='mt-3' bg='dark' text='white'>
-						<Card.Body>
-							<Card.Title>Log in</Card.Title>
+		<div className='login-page'>
+			<Row className='d-flex justify-content-center align-items-center '>
+				<Col md={6} className='d-none d-md-flex'></Col>
+				<Col md={6}>
+					<Card className='login-card' text='white'>
+						<Card.Body className='form-card'>
+							<Card.Title className='mb-4'>Log In</Card.Title>
 							{errorMessage && (
 								<Alert variant='danger'>{errorMessage}</Alert>
 							)}
-							<Form onSubmit={handleSubmit(onLogin)}>
-								<Form.Group controlId='email' className='mb-2'>
-									<Form.Label>Email:</Form.Label>
+							<Form
+								onSubmit={handleSubmit(onLogin)}
+								className='form'
+							>
+								<Form.Group
+									controlId='email'
+									className='mt-3 mb-4'
+								>
+									<Form.Label className='mb-0'>
+										Email:
+									</Form.Label>
 									<Form.Control
 										placeholder='user@email.com'
 										type='email'
@@ -71,7 +79,9 @@ const LoginPage = () => {
 									controlId='password'
 									className='mb-2'
 								>
-									<Form.Label>Password:</Form.Label>
+									<Form.Label className='mb-0'>
+										Password:
+									</Form.Label>
 									<Form.Control
 										type='password'
 										autoComplete='new-password'
@@ -94,7 +104,7 @@ const LoginPage = () => {
 								</Form.Group>
 								<Button
 									disabled={loading}
-									className='mt-3 border-white'
+									className='mt-3'
 									variant='dark'
 									type='submit'
 								>
@@ -106,13 +116,14 @@ const LoginPage = () => {
 							Forgot Password?{' '}
 							<Link to='/forgot-password'>Reset Password</Link>
 						</div>
+						<div className='text-center mt-3'>
+							Need an account?{' '}
+							<Link to='/signup'>Sign Up here</Link>
+						</div>
 					</Card>
-					<div className='text-center mt-3'>
-						Need an account? <Link to='/signup'>Sign Up here</Link>
-					</div>
 				</Col>
 			</Row>
-		</Container>
+		</div>
 	)
 }
 

@@ -47,16 +47,19 @@ const SignupPage = () => {
 		}
 	}
 	return (
-		<Container>
-			<Row>
-				<Col md={{ span: 6, offset: 3 }}>
-					<Card className='mt-3' bg='dark' text='white'>
-						<Card.Body>
-							<Card.Title>Sign Up</Card.Title>
+		<div className='login-page'>
+			<Row className='d-flex justify-content-center align-items-center '>
+				<Col md={6}>
+					<Card className='signup-card' text='white'>
+						<Card.Title className='mb-3'>Sign Up</Card.Title>
+						<Card.Body className='form-card'>
 							{errorMessage && (
 								<Alert variant='warning'>{errorMessage}</Alert>
 							)}
-							<Form onSubmit={handleSubmit(onSignup)}>
+							<Form
+								onSubmit={handleSubmit(onSignup)}
+								className='form'
+							>
 								<Form.Group controlId='name' className='mb-2'>
 									<Form.Label>Name:</Form.Label>
 									<Form.Control
@@ -78,7 +81,6 @@ const SignupPage = () => {
 										</p>
 									)}
 								</Form.Group>
-
 								<Form.Group controlId='photo' className='mb-2'>
 									<Form.Label>Photo</Form.Label>
 									<Form.Control
@@ -93,7 +95,6 @@ const SignupPage = () => {
 										</p>
 									)}
 								</Form.Group>
-
 								<Form.Group controlId='email' className='mb-2'>
 									<Form.Label>Email:</Form.Label>
 									<Form.Control
@@ -182,8 +183,9 @@ const SignupPage = () => {
 						</div>
 					</Card>
 				</Col>
+				<Col md={6} className='d-none d-md-flex'></Col>
 			</Row>
-		</Container>
+		</div>
 	)
 }
 

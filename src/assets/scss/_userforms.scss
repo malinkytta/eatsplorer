@@ -1,0 +1,62 @@
+.login-page {
+	background: url('../images/ikhsan-baihaqi-4QXE7YQy7eo-unsplash\ \(1\).jpg');
+	background-size: cover;
+	margin-top: -56px;
+	min-height: 100vh;
+}
+
+//denna raden kanske pajjar annan css senare??
+.card {
+	backdrop-filter: blur(11.2px);
+	background-color: transparent;
+	-webkit-backdrop-filter: blur(11.2px);
+	border: none;
+	height: 100vh;
+}
+.login-card {
+	padding: 200px 57px 0;
+}
+
+.signup-card {
+	padding: 100px 57px 0;
+}
+
+.transparent-navbar {
+	z-index: 2;
+	backdrop-filter: none;
+}
+
+.form-card {
+	flex: 0;
+}
+
+.form {
+	input {
+		border: none;
+		background-color: rgba(255, 255, 255, 0.4);
+		// border: 1px solid white;
+		border-radius: 10px;
+	}
+	input[type='email'],
+	input[type='password'],
+	input[type='text'],
+	input[type='password'] {
+		color: black;
+		&::placeholder {
+			color: #494949;
+		}
+		&:active,
+		&:focus {
+			background: r;
+			border: none;
+			box-shadow: none;
+			border-bottom: 1px solid white;
+			// color: white;
+		}
+	}
+
+	.btn {
+		background: #913728;
+		border: none;
+	}
+}
