@@ -15,13 +15,21 @@ import { useSearchParams } from 'react-router-dom'
 import OffcanvasComponent from './OffcanvasComponent'
 
 import BeerIcon from '../assets/images/beer-27-128.png'
+import RestaurantImg from '../assets/images/restaurant-building.png'
+import Bakery from '../assets/images/muffin.png'
+
+import Cafe from '../assets/images/coffee-cup.png'
+import FastfoodIcon from '../assets/images/burger.png'
 import { calculateDistance } from '../helpers/calulateDistance'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUtensils } from '@fortawesome/free-solid-svg-icons'
 
 interface Iprops {
 	restaurants: Restaurant[]
 }
+
 const Map: React.FC<Iprops> = ({ restaurants }) => {
-	const [show, setShow] = useState(true)
+	const [show, setShow] = useState(false)
 	const handleClose = () => setShow(false)
 	const handleShow = () => setShow(true)
 	const toggleShow = () => setShow(!show)
@@ -128,8 +136,9 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 				show={show}
 				handleClose={handleClose}
 				handleShow={handleShow}
-				restaurants={restaurants}
+				restaurants={updatedRestaurants}
 			/>
+
 			<GoogleMap
 				mapContainerStyle={containerStyle}
 				options={options}
@@ -163,7 +172,7 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 							onClick={toggleShow}
 							className='map-btn'
 						>
-							🍔
+							<FontAwesomeIcon icon={faUtensils} />
 						</Button>
 						<input
 							type='text'
@@ -174,7 +183,7 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 				</Autocomplete>
 				{updatedRestaurants.map((restaurant) => (
 					<MarkerF
-						key={restaurant.lat}
+						key={restaurant._id}
 						title={restaurant.name}
 						position={{
 							lat: restaurant.lat,
@@ -187,6 +196,38 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 										scaledSize: new window.google.maps.Size(
 											50,
 											50
+										),
+								  }
+								: restaurant.category === 'Fast-food'
+								? {
+										url: FastfoodIcon,
+										scaledSize: new window.google.maps.Size(
+											30,
+											30
+										),
+								  }
+								: restaurant.category === 'Café'
+								? {
+										url: Cafe,
+										scaledSize: new window.google.maps.Size(
+											40,
+											40
+										),
+								  }
+								: restaurant.category === 'Restaurant'
+								? {
+										url: RestaurantImg,
+										scaledSize: new window.google.maps.Size(
+											40,
+											40
+										),
+								  }
+								: restaurant.category === 'Bakery'
+								? {
+										url: Bakery,
+										scaledSize: new window.google.maps.Size(
+											40,
+											40
 										),
 								  }
 								: undefined
