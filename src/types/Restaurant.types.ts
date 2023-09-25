@@ -15,7 +15,7 @@ export type Restaurant = {
 	lng: number
 	isConfirmedByAdmin: boolean
 	distance?: number
-	// photo: File
+	photo: string
 }
 
 export type RestaurantImage = {
