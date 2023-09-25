@@ -6,7 +6,8 @@ import useStreamCollection from './useStreamCollection'
 const useGetImages = () => {
 	return useStreamCollection<RestaurantImage>(
 		restaurantImageCol,
-		orderBy('approved')
+		orderBy('approved'),
+		orderBy('restaurant')
 	)
 }
 
