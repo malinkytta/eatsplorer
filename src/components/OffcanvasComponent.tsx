@@ -6,14 +6,12 @@ import { Restaurant } from '../types/Restaurant.types'
 import MobileCarousel from './MobileCarousel'
 
 interface IProps {
-	handleShow: () => void
 	handleClose: () => void
 	show: boolean
 	restaurants: Restaurant[]
 }
 
 const OffcanvasComponent: React.FC<IProps> = ({
-	handleShow,
 	show,
 	handleClose,
 	restaurants,

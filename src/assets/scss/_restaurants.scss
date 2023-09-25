@@ -1,0 +1,45 @@
+.restaurant-page {
+	background: url('../images/joseph-gonzalez-fdlZBWIP0aM-unsplash.jpg');
+	background-size: cover;
+	background-position: center;
+	min-height: 100vh;
+	margin-top: -58px;
+}
+
+.restaurant-card {
+	height: auto;
+	margin: 10px 5%;
+	color: white;
+}
+
+.restaurant-card-body {
+	display: flex;
+	color: white;
+	flex-direction: column;
+	justify-content: center;
+}
+.distance-text {
+	font-size: 0.8rem;
+}
+
+.restaurant-img-slider {
+	overflow-x: scroll;
+}
+.single-restaurant-card {
+	margin: 10px 0;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.5);
+	height: 300px;
+}
+@media (min-width: 769px) {
+	.restaurant-card {
+		height: 60vh;
+		margin: 20px 5%;
+	}
+}
+
+@media (min-width: 993px) {
+	.restaurant-card {
+		margin: 100px 5%;
+	}
+}

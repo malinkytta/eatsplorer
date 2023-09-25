@@ -1,15 +1,12 @@
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
-import RestaurantImg from '../assets/images/jason-leung-poI7DelFiVA-unsplash.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faLocationArrow,
 	faCircleInfo,
 	faRoute,
 } from '@fortawesome/free-solid-svg-icons'
-import { FaFacebook, FaInstagram } from 'react-icons/fa'
-
 import { Restaurant } from '../types/Restaurant.types'
 import { UserLocation } from '../types/User.types'
 import { useEffect, useState } from 'react'
@@ -54,14 +51,21 @@ const RestaurantsList: React.FC<IProps> = ({ data }) => {
 		<>
 			{data.map((restaurant) => (
 				<Card
-					key={restaurant.name}
-					className='d-flex flex-row single-restaurant-card'
+					key={restaurant._id}
+					className='d-flex flex-row slider-restaurant-card'
 				>
-					<Image className='restaurant-img' src={RestaurantImg} />
+					<Image
+						className='restaurant-img'
+						src={
+							restaurant.photo ||
+							'https://placehold.co/100x100?text=Restaurant+Image'
+						}
+						alt='Restaurant'
+					/>
 
-					<Card.Body>
+					<Card.Body className='restaurant-card-body'>
 						<Card.Title>{restaurant.name}</Card.Title>
-						<Card.Text>
+						<Card.Text className='distance-text'>
 							<FontAwesomeIcon icon={faRoute} />{' '}
 							{restaurant.distance
 								? restaurant.distance.toFixed(2) + ' km away'
@@ -75,7 +79,7 @@ const RestaurantsList: React.FC<IProps> = ({ data }) => {
 						<div className='restaurant-icons'>
 							<Link to={`/${restaurant._id}`}>
 								<Button variant='transparent'>
-									<FontAwesomeIcon icon={faCircleInfo} />{' '}
+									<FontAwesomeIcon icon={faCircleInfo} />
 								</Button>
 							</Link>
 							<Button
@@ -84,7 +88,7 @@ const RestaurantsList: React.FC<IProps> = ({ data }) => {
 							>
 								<FontAwesomeIcon icon={faLocationArrow} />
 							</Button>
-							{restaurant.facebook && (
+							{/* {restaurant.facebook && (
 								<Link to={`/${restaurant.facebook}`}>
 									<Button variant='transparent'>
 										<FaFacebook />
@@ -97,14 +101,8 @@ const RestaurantsList: React.FC<IProps> = ({ data }) => {
 										<FaInstagram />
 									</Button>
 								</Link>
-							)}
-						</div>
-						{/* {restaurant.website && (
-								<Link to={`/${restaurant.website}`}>
-									<Button variant='transparent'>
-									</Button>
-								</Link>
 							)} */}
+						</div>
 					</Card.Body>
 				</Card>
 			))}

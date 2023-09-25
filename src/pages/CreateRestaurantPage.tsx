@@ -1,6 +1,4 @@
 import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card'
 import Alert from 'react-bootstrap/Alert'
 
@@ -12,9 +10,11 @@ import CreateRestaurantForm from '../components/CreateRestaurantForm'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FirebaseError } from 'firebase/app'
+import useAuth from '../hooks/useAuth'
 
 const CreateRestaurantPage = () => {
 	const [success, setSuccess] = useState<boolean | null>(null)
+	const { admin } = useAuth()
 
 	const navigate = useNavigate()
 
@@ -24,14 +24,13 @@ const CreateRestaurantPage = () => {
 				data.address,
 				data.city
 			)
-			console.log(data)
 			setSuccess(true)
 
 			await addDoc(restaurantCol, {
 				...data,
 				lat,
 				lng,
-				isConfirmedByAdmin: false,
+				isConfirmedByAdmin: admin,
 			})
 
 			navigate('/')
@@ -45,23 +44,14 @@ const CreateRestaurantPage = () => {
 	}
 
 	return (
-		<Container className='mb-2'>
+		<div className='restaurant-page'>
 			<Row>
-				<Col md={{ span: 8, offset: 2 }}>
-					<Card className='mt-3' bg='dark' text='white'>
-						<Card.Body>
-							{success && (
-								<Alert variant='success'>
-									New restaurant created!
-								</Alert>
-							)}
-							<Card.Title>Create Restaurant</Card.Title>
-							<CreateRestaurantForm onCreate={onCreate} />
-						</Card.Body>
-					</Card>
-				</Col>
+				{success && (
+					<Alert variant='success'>New restaurant created!</Alert>
+				)}
+				<CreateRestaurantForm onCreate={onCreate} />
 			</Row>
-		</Container>
+		</div>
 	)
 }
 
