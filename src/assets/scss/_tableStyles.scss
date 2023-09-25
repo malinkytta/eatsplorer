@@ -29,3 +29,68 @@
 		min-width: auto;
 	}
 }
+
+.admin-page {
+	min-height: 100vh;
+	background: url('../images/shawnanggg-nmpW_WwwVSc-unsplash.jpg');
+	margin-top: -58px;
+	background-size: cover;
+	color: white;
+
+	.nav-tabs {
+		border: none;
+		color: white;
+	}
+
+	.nav-link.active {
+		background: rgba(0, 0, 0, 0.7);
+		backdrop-filter: blur(11.2px);
+		color: white;
+		border: none;
+	}
+	.nav-link {
+		color: white;
+		background: rgba(0, 0, 0, 0.3);
+		&:hover,
+		:active {
+			border: transparent;
+			background: 0, 0, 0, 0.7;
+		}
+	}
+}
+
+.tab-content {
+	background: rgba(0, 0, 0, 0.7);
+	backdrop-filter: blur(11.2px);
+	color: white;
+	padding: 33px 30px;
+	margin: -1px 0;
+	border-radius: 5px;
+
+	select {
+		border: none;
+		background-color: rgba(255, 255, 255, 0.8);
+		border-radius: 10px;
+	}
+}
+
+.table > :not(caption) > * > * {
+	background: transparent;
+	color: white;
+	border: none;
+}
+
+thead tr,
+thead th {
+	font-weight: 300;
+	border-bottom: 1px solid grey;
+}
+
+tbody tr,
+tbody td,
+tbody th,
+td {
+	background: transparent;
+	font-weight: 100;
+	border-bottom: 1px solid grey;
+}

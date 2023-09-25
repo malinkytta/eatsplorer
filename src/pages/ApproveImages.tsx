@@ -49,7 +49,7 @@ const ApproveImages = () => {
 			const docRef = doc(restaurantImageCol, id)
 			await deleteDoc(docRef)
 		} catch (error) {
-			console.error('Something went wrong when deleting the restaurant')
+			console.error('Something went wrong when deleting the photo')
 		}
 	}
 
