@@ -4,16 +4,21 @@ import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
+import Alert from 'react-bootstrap/Alert'
+import Modal from 'react-bootstrap/Modal'
+
 import { Link, useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { LoginCredentials } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
-import { Alert } from 'react-bootstrap'
+import ForgotPasswordPage from './ForgotPasswordPage'
 
 const LoginPage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
+	const [showModal, setShowModal] = useState(false)
+
 	const {
 		handleSubmit,
 		register,
@@ -21,7 +26,13 @@ const LoginPage = () => {
 	} = useForm<LoginCredentials>()
 	const { login } = useAuth()
 	const navigate = useNavigate()
+	const openModal = () => {
+		setShowModal(true)
+	}
 
+	const closeModal = () => {
+		setShowModal(false)
+	}
 	const onLogin: SubmitHandler<LoginCredentials> = async (data) => {
 		setErrorMessage(null)
 		try {
@@ -40,7 +51,7 @@ const LoginPage = () => {
 
 	return (
 		<div className='login-page'>
-			<Row className='d-flex justify-content-center align-items-center '>
+			<Row className='d-flex justify-content-center align-items-center'>
 				<Col md={6} className='d-none d-md-flex'></Col>
 				<Col md={6}>
 					<Card className='login-card' text='white'>
@@ -101,10 +112,17 @@ const LoginPage = () => {
 												'Invalid value'}
 										</p>
 									)}
+									<div
+										className='mb-3 reset-btn'
+										onClick={openModal}
+									>
+										Forgot Password?
+										{/* <Button onClick={openModal}></Button> */}
+									</div>
 								</Form.Group>
 								<Button
 									disabled={loading}
-									className='mt-3'
+									className='mt-3 '
 									variant='dark'
 									type='submit'
 								>
@@ -112,10 +130,11 @@ const LoginPage = () => {
 								</Button>
 							</Form>
 						</Card.Body>
-						<div className='text-center mb-3'>
-							Forgot Password?{' '}
-							<Link to='/forgot-password'>Reset Password</Link>
-						</div>
+
+						<Modal show={showModal} onHide={closeModal}>
+							<ForgotPasswordPage />
+						</Modal>
+
 						<div className='text-center mt-3'>
 							Need an account?{' '}
 							<Link to='/signup'>Sign Up here</Link>

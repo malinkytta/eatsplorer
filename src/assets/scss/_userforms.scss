@@ -1,11 +1,10 @@
 .login-page {
 	background: url('../images/ikhsan-baihaqi-4QXE7YQy7eo-unsplash\ \(1\).jpg');
 	background-size: cover;
-	margin-top: -56px;
+	margin-top: -58px;
 	min-height: 100vh;
 }
 
-//denna raden kanske pajjar annan css senare??
 .card {
 	backdrop-filter: blur(11.2px);
 	background-color: transparent;
@@ -17,8 +16,24 @@
 	padding: 200px 57px 0;
 }
 
+.reset-card {
+	height: auto;
+	padding: auto;
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.reset-btn {
+	cursor: pointer;
+	font-style: italic;
+	color: #afaeae;
+}
+.modal-content {
+	background: transparent;
+}
+
 .signup-card {
 	padding: 100px 57px 0;
+	height: 100vh;
 }
 
 .transparent-navbar {
@@ -31,12 +46,20 @@
 }
 
 .form {
-	input {
+	input,
+	select,
+	textarea {
 		border: none;
 		background-color: rgba(255, 255, 255, 0.4);
 		// border: 1px solid white;
 		border-radius: 10px;
 	}
+
+	input::file-selector-button {
+		font-weight: 600;
+		background-color: rgba(255, 255, 255, 0.4);
+	}
+
 	input[type='email'],
 	input[type='password'],
 	input[type='text'],
@@ -47,7 +70,7 @@
 		}
 		&:active,
 		&:focus {
-			background: r;
+			// background:
 			border: none;
 			box-shadow: none;
 			border-bottom: 1px solid white;
@@ -58,5 +81,21 @@
 	.btn {
 		background: #913728;
 		border: none;
+		padding: 0.376rem 0.75rem;
 	}
+}
+
+.forgot-password-page {
+	background-color: transparent;
+}
+
+.edit-profile {
+	background: url('../images/monika-grabkowska-P1aohbiT-EY-unsplash\ \(1\).jpg');
+	background-size: cover;
+	margin-top: -58px;
+	min-height: 100vh;
+}
+
+.edit-card {
+	padding: 100px 57px 0;
 }

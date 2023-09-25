@@ -42,62 +42,46 @@ const ForgotPasswordPage = () => {
 	}
 
 	return (
-		<Container>
-			<Row>
-				<Col md={{ span: 6, offset: 3 }}>
-					<Card className='mt-3' bg='dark' text='white'>
-						<Card.Body>
-							<Card.Title className='mb-3'>
-								Forgot Password?
-							</Card.Title>
+		<Card className='mt-3 reset-card' text='white'>
+			<Card.Body>
+				<Card.Title className='mb-3'>Forgot Password?</Card.Title>
 
-							{errorMessage && (
-								<Alert variant='danger'>{errorMessage}</Alert>
-							)}
-							{successMessage && (
-								<Alert variant='success'>
-									{successMessage}
-								</Alert>
-							)}
-							<p>
-								Enter your email below to reset your password.
+				{errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
+				{successMessage && (
+					<Alert variant='success'>{successMessage}</Alert>
+				)}
+				<p>Enter your email below to reset your password.</p>
+
+				<Form onSubmit={handleSubmit(onForgotPassword)}>
+					<Form.Group controlId='email' className='mb-3'>
+						<Form.Label>Email:</Form.Label>
+						<Form.Control
+							placeholder='user@email.com'
+							type='email'
+							{...register('email', {
+								required: 'You have to enter your email',
+							})}
+						/>
+						{errors.email && (
+							<p className='invalid'>
+								{errors.email.message ?? 'Invalid value'}
 							</p>
+						)}
+					</Form.Group>
 
-							<Form onSubmit={handleSubmit(onForgotPassword)}>
-								<Form.Group controlId='email' className='mb-3'>
-									<Form.Label>Email:</Form.Label>
-									<Form.Control
-										placeholder='user@email.com'
-										type='email'
-										{...register('email', {
-											required:
-												'You have to enter your email',
-										})}
-									/>
-									{errors.email && (
-										<p className='invalid'>
-											{errors.email.message ??
-												'Invalid value'}
-										</p>
-									)}
-								</Form.Group>
-
-								<Button
-									disabled={loading}
-									className='mt-3 border-white'
-									variant='dark'
-									type='submit'
-								>
-									{loading
-										? 'Sending email...'
-										: 'Send password reset email'}
-								</Button>
-							</Form>
-						</Card.Body>
-					</Card>
-				</Col>
-			</Row>
-		</Container>
+					<Button
+						disabled={loading}
+						className='mt-3 border-white'
+						variant='dark'
+						type='submit'
+					>
+						{loading
+							? 'Sending email...'
+							: 'Send password reset email'}
+					</Button>
+				</Form>
+			</Card.Body>
+		</Card>
 	)
 }
 

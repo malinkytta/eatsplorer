@@ -148,38 +148,44 @@ const EditProfilePage = () => {
 	}
 
 	return (
-		<Container>
-			<Row>
-				<Col md={{ span: 6, offset: 3 }}>
-					<Card className='mt-3' bg='dark' text='white'>
-						<Card.Body>
+		<div className='edit-profile'>
+			<Row className='d-flex justify-content-center align-items-center'>
+				<Col md={4} sm={8}>
+					<Card className='edit-card'>
+						<Card.Body
+							style={{ paddingTop: '100px' }}
+							className='form-card d-flex flex-column align-items-center justify-content-center'
+						>
+							<Image
+								src={
+									userPhotoUrl ||
+									'https://via.placeholder.com/225'
+								}
+								fluid
+								// roundedCircle
+								className='img-square profileImage'
+							/>
+							<Button
+								className='mt-3 border-white'
+								// onClick={handleDeletePhoto}
+								size='sm'
+								variant='dark'
+							>
+								Delete Photo
+							</Button>
+						</Card.Body>
+					</Card>
+				</Col>
+
+				<Col md={4} sm={8}>
+					<Card text='white' className='edit-card'>
+						<Card.Body className='form-card'>
 							<Card.Title>Update profile</Card.Title>
 							{errorMessage && (
 								<Alert variant='danger'>{errorMessage}</Alert>
 							)}
 							<Form onSubmit={handleSubmit(onUpdateProfile)}>
-								<div className='profile-photo-wrapper text-center my-3'>
-									<div className='d-flex justify-content-center mb-2'>
-										<Image
-											src={
-												userPhotoUrl ||
-												'https://via.placeholder.com/225'
-											}
-											fluid
-											roundedCircle
-											className='img-square profileImage w-50'
-										/>
-									</div>
-
-									{/*<Button
-										className='mt-3 border-white'
-										onClick={handleDeletePhoto}
-										size='sm'
-										variant='dark'
-									>
-										Delete Photo
-									</Button>*/}
-								</div>
+								<div className='profile-photo-wrapper text-center my-3'></div>
 								<Form.Group
 									controlId='displayName'
 									className='mb-2'
@@ -255,7 +261,7 @@ const EditProfilePage = () => {
 											required:
 												'You have to enter an email',
 										})}
-										disabled
+										// disabled
 									/>
 									{errors.email && (
 										<p className='invalid'>
@@ -331,7 +337,7 @@ const EditProfilePage = () => {
 					</Card>
 				</Col>
 			</Row>
-		</Container>
+		</div>
 	)
 }
 

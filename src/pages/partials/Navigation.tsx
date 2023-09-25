@@ -11,9 +11,13 @@ const Navigation = () => {
 	const location = useLocation()
 
 	let navbarClass = ''
-	if (location.pathname === '/signup' || location.pathname === '/login') {
+	if (
+		location.pathname === '/signup' ||
+		location.pathname === '/login' ||
+		location.pathname === '/edit-profile'
+	) {
 		navbarClass = 'transparent-navbar'
-	} else if (location.pathname === '/') {
+	} else {
 		navbarClass = 'standard-navbar'
 	}
 
@@ -21,7 +25,7 @@ const Navigation = () => {
 		<Navbar expand='sm' data-bs-theme='dark' className={navbarClass}>
 			<Container>
 				<Navbar.Brand as={Link} to='/'>
-					React-Bootstrap
+					Eatsplorer
 				</Navbar.Brand>
 				<Navbar.Toggle aria-controls='basic-navbar-nav' />
 				<Navbar.Collapse id='basic-navbar-nav'>
