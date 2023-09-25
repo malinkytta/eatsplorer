@@ -16,8 +16,6 @@ import OffcanvasComponent from './OffcanvasComponent'
 
 import BeerIcon from '../assets/images/beer-27-128.png'
 import RestaurantImg from '../assets/images/restaurant-building.png'
-import Bakery from '../assets/images/muffin.png'
-
 import Cafe from '../assets/images/coffee-cup.png'
 import FastfoodIcon from '../assets/images/burger.png'
 import { calculateDistance } from '../helpers/calulateDistance'
@@ -31,7 +29,6 @@ interface Iprops {
 const Map: React.FC<Iprops> = ({ restaurants }) => {
 	const [show, setShow] = useState(false)
 	const handleClose = () => setShow(false)
-	const handleShow = () => setShow(true)
 	const toggleShow = () => setShow(!show)
 
 	const { isLoaded } = useLoadScript({
@@ -51,6 +48,7 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 	const onUnMount = () => {
 		mapRef.current = null
 	}
+
 	const onMarkerClick = (restaurant: Restaurant) => {
 		if (userLocation) {
 			const userLatLng = `${userLocation.lat},${userLocation.lng}`
@@ -135,7 +133,6 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 			<OffcanvasComponent
 				show={show}
 				handleClose={handleClose}
-				handleShow={handleShow}
 				restaurants={updatedRestaurants}
 			/>
 
@@ -222,9 +219,9 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 											40
 										),
 								  }
-								: restaurant.category === 'Bakery'
+								: restaurant.category === 'Restaurant'
 								? {
-										url: Bakery,
+										url: RestaurantImg,
 										scaledSize: new window.google.maps.Size(
 											40,
 											40
