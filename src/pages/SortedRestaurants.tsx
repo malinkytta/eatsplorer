@@ -1,6 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import SortableTable from '../components/SortableTable'
 import Button from 'react-bootstrap/Button'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faEdit,
@@ -42,24 +43,26 @@ const SortedRestaurants: React.FC<IProps> = ({ data }) => {
 	}
 
 	const columns = [
-		columnHelper.accessor('name', {
-			header: 'Name',
-			cell: (props) => <span>{props.getValue()}</span>,
-		}),
-		columnHelper.accessor('address', {
-			header: 'Adress',
-			cell: (props) => <span> {props.getValue()}</span>,
-		}),
-		columnHelper.accessor('city', {
-			header: 'City',
-		}),
-		columnHelper.accessor('category', {
-			header: 'Category',
-		}),
 		columnHelper.group({
 			id: 'confirmedGroup',
 			header: () => null,
+
 			columns: [
+				columnHelper.accessor('name', {
+					header: 'Name',
+					cell: (props) => <span>{props.getValue()}</span>,
+				}),
+				columnHelper.accessor('address', {
+					header: 'Adress',
+					cell: (props) => <span> {props.getValue()}</span>,
+				}),
+				columnHelper.accessor('city', {
+					header: 'City',
+				}),
+				columnHelper.accessor('category', {
+					header: 'Category',
+				}),
+
 				columnHelper.accessor('isConfirmedByAdmin', {
 					header: 'Approved',
 
@@ -111,14 +114,13 @@ const SortedRestaurants: React.FC<IProps> = ({ data }) => {
 							)}
 						</>
 					),
-					// ),
 				}),
 				columnHelper.display({
 					id: 'editButton',
 					header: 'Edit',
 					cell: (props) => (
 						<Button
-							href={`/edit-restaurant/${props.row.original._id}`}
+							href={`/${props.row.original._id}?openModal=true`}
 							variant='transparent'
 						>
 							<FontAwesomeIcon icon={faEdit} />
@@ -143,5 +145,4 @@ const SortedRestaurants: React.FC<IProps> = ({ data }) => {
 	]
 	return <>{data && <SortableTable columns={columns} data={data} />}</>
 }
-
 export default SortedRestaurants
