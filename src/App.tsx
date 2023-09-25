@@ -31,14 +31,7 @@ const App = () => {
 				<Route path='/signup' element={<SignupPage />} />
 				<Route path='/login' element={<LoginPage />} />
 				{!openModal && (
-					<Route
-						path='/:id'
-						element={
-							<RequireAdmin>
-								<SingleRestaurantPage />
-							</RequireAdmin>
-						}
-					/>
+					<Route path='/:id' element={<SingleRestaurantPage />} />
 				)}
 				{/* Auth Routes */}
 				<Route
