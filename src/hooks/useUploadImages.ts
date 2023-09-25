@@ -1,8 +1,12 @@
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { useState } from 'react'
 import { v4 } from 'uuid'
-import { restaurantImageCol, storage } from '../services/firebase'
-import { addDoc } from 'firebase/firestore'
+import {
+	restaurantCol,
+	restaurantImageCol,
+	storage,
+} from '../services/firebase'
+import { addDoc, doc, updateDoc } from 'firebase/firestore'
 import useAuth from './useAuth'
 
 const useUploadImages = () => {
@@ -48,11 +52,7 @@ const useUploadImages = () => {
 
 			const url = await getDownloadURL(storageRef)
 
-			const colRef = restaurantImageCol
-
-			console.log('restaurant id for image id in doc', restaurantId)
-
-			await addDoc(colRef, {
+			await addDoc(restaurantImageCol, {
 				_id: restaurantId,
 				name: image.name,
 				path: storageRef.fullPath,
@@ -63,8 +63,12 @@ const useUploadImages = () => {
 				uid: currentUser?.uid,
 				url: url,
 			})
+			const docRef = doc(restaurantCol, restaurantId)
 
-			console.log(' får jag namnet på restaurangen?', restaurant)
+			await updateDoc(docRef, {
+				photo: url,
+			})
+
 			setIsSuccess(true)
 			setProgress(null)
 		} catch (error) {
