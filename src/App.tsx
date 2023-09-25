@@ -1,11 +1,10 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import Navigation from './pages/partials/Navigation'
 import AdminPage from './pages/AdminPage'
 import SignupPage from './pages/SignupPage'
 import LoginPage from './pages/LoginPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
-import './assets/scss/App.scss'
 import LogoutPage from './pages/LogoutPage'
 import RequireAuth from './components/RequireAuth'
 import NotFoundPage from './pages/NotFoundPage'
@@ -13,9 +12,15 @@ import RequireAdmin from './components/RequireAdmin'
 import CreateRestaurantPage from './pages/CreateRestaurantPage'
 import EditProfilePage from './pages/EditProfilePage'
 import SingleRestaurantPage from './pages/SingleRestaurantPage'
-import EditRestaurant from './components/EditRestaurant'
+
+import './assets/scss/App.scss'
 
 const App = () => {
+	const location = useLocation()
+
+	const queryParams = new URLSearchParams(location.search)
+	const openModal = queryParams.get('openModal')
+
 	return (
 		<>
 			<Navigation />
@@ -25,8 +30,16 @@ const App = () => {
 				<Route path='/' element={<HomePage />} />
 				<Route path='/signup' element={<SignupPage />} />
 				<Route path='/login' element={<LoginPage />} />
-				<Route path='/:id' element={<SingleRestaurantPage />} />
-
+				{!openModal && (
+					<Route
+						path='/:id'
+						element={
+							<RequireAdmin>
+								<SingleRestaurantPage />
+							</RequireAdmin>
+						}
+					/>
+				)}
 				{/* Auth Routes */}
 				<Route
 					path='/logout'
@@ -66,14 +79,16 @@ const App = () => {
 						</RequireAdmin>
 					}
 				/>
-				<Route
-					path='edit-restaurant/:id'
-					element={
-						<RequireAdmin>
-							<EditRestaurant />
-						</RequireAdmin>
-					}
-				/>
+				{openModal && (
+					<Route
+						path='/:id'
+						element={
+							<RequireAdmin>
+								<SingleRestaurantPage />
+							</RequireAdmin>
+						}
+					/>
+				)}
 			</Routes>
 		</>
 	)
