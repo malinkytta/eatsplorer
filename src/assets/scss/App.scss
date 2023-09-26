@@ -42,6 +42,7 @@ body {
 .btn {
 	color: white;
 }
+
 .search {
 	position: absolute;
 	width: 350px;
@@ -104,12 +105,14 @@ body {
 	overflow-x: scroll;
 }
 
-.restaurant-icons a .svg-inline--fa,
-.restaurant-icons button .svg-inline--fa,
-.btn {
-	// width: 16px;
-	// height: 16px;
-	padding: 0 6px 0 0;
+.restaurant-icons {
+	a .svg-inline--fa,
+	button .svg-inline--fa,
+	.btn {
+		// width: 16px;
+		// height: 16px;
+		padding: 0 6px 0 0;
+	}
 }
 .card-text {
 	margin: 5px 0px 5px 0px;

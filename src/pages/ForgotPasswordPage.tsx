@@ -71,7 +71,7 @@ const ForgotPasswordPage = () => {
 
 					<Button
 						disabled={loading}
-						className='mt-3 border-white'
+						className='mt-3 form-btn'
 						variant='dark'
 						type='submit'
 					>

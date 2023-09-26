@@ -166,7 +166,7 @@ const EditProfilePage = () => {
 								className='img-square profileImage'
 							/>
 							<Button
-								className='mt-3 border-white'
+								className='mt-3 form-btn'
 								// onClick={handleDeletePhoto}
 								size='sm'
 								variant='dark'
@@ -325,7 +325,7 @@ const EditProfilePage = () => {
 								</Form.Group>
 
 								<Button
-									className='mt-3 border-white'
+									className='mt-3 form-btn'
 									disabled={loading}
 									variant='dark'
 									type='submit'

@@ -31,6 +31,20 @@
 	background-color: rgba(0, 0, 0, 0.5);
 	height: 300px;
 }
+
+.edit-restaurant-card {
+	backdrop-filter: blur(11.2px);
+	color: white;
+	height: auto;
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.go-back-btn {
+	background: $dark;
+	border: none;
+	padding: 0.376rem 0.75rem;
+}
+
 @media (min-width: 769px) {
 	.restaurant-card {
 		height: 60vh;

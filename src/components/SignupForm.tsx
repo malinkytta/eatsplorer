@@ -122,7 +122,7 @@ const SignupForm: React.FC<IProps> = ({ onSignup, loading }) => {
 			</Form.Group>
 			<Button
 				disabled={loading}
-				className='mt-3 border-white'
+				className='mt-3 form-btn'
 				variant='dark'
 				type='submit'
 			>
