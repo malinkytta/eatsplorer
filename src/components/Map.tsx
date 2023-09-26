@@ -1,15 +1,13 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { GoogleMap, MarkerF } from '@react-google-maps/api'
-import { center, containerStyle, options } from '../MapSettings'
+import { containerStyle, options } from '../MapSettings'
 import { Restaurant } from '../types/Restaurant.types'
 import OffcanvasComponent from './OffcanvasComponent'
 import BeerIcon from '../assets/images/beer-27-128.png'
 import useGetUserLocation from '../hooks/useGetUserLocation'
 import { getDirections } from '../services/googleMapsAPI'
 import { LatLngCity } from '../types/Location.types'
-import useGetRestaurants from '../hooks/useGetRestaurants'
 import { useSearchParams } from 'react-router-dom'
 import usePlacesAutocomplete, {
 	getGeocode,
@@ -24,6 +22,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { restaurantCol } from '../services/firebase'
 import { onSnapshot, query, where } from 'firebase/firestore'
+import { calculateDistance } from '../helpers/calulateDistance'
+import { ScaleLoader } from 'react-spinners'
+import { Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 
 const Map: React.FC = () => {
@@ -31,10 +32,12 @@ const Map: React.FC = () => {
 	const city = searchParams.get('city')
 	const lat = searchParams.get('lat')
 	const lng = searchParams.get('lng')
+	const { userLocation } = useGetUserLocation()
 	const position = {
 		latitude: lat ? Number(lat) : 55.60700496304167,
 		longitude: lng ? Number(lng) : 13.021011006455181,
 	}
+	console.log(city)
 	const {
 		ready,
 		value,
@@ -45,14 +48,12 @@ const Map: React.FC = () => {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_location, setLocation] = useState<LatLngCity | null>(null)
-	const { data: confirmedRestaurants, loading: confirmedLoading } =
-		useGetRestaurants()
-	// const { data: restaurantsCity, loading: cityLoading } =
-	// 	useGetRestaurantsByCity(city ?? '')
-	const [show, setShow] = useState(true)
+	// const { data: confirmedRestaurants, loading: confirmedLoading } =
+	// 	useGetRestaurants()
+	const [category, setCategory] = useState<string>('')
+	const [show, setShow] = useState(false)
 	const handleClose = () => setShow(false)
 	const toggleClose = () => setShow(!show)
-	const { userLocation } = useGetUserLocation()
 	const [restaurants, setRestaurants] = useState<Restaurant[]>()
 	const mapRef = useRef<google.maps.Map | null>(null)
 	const onLoad = (map: google.maps.Map) => {
@@ -63,17 +64,37 @@ const Map: React.FC = () => {
 	}
 
 	useEffect(() => {
-		if (!city && confirmedRestaurants) {
-			setRestaurants(confirmedRestaurants)
+		let queryRef
+		if (city && category) {
+			queryRef = query(
+				restaurantCol,
+				where('isConfirmedByAdmin', '==', true),
+				where('city', '==', city),
+				where('category', '==', category)
+			)
+			setShow(true)
+		} else if (city) {
+			queryRef = query(
+				restaurantCol,
+				where('isConfirmedByAdmin', '==', true),
+				where('city', '==', city)
+			)
+			setShow(true)
+		} else if (category) {
+			queryRef = query(
+				restaurantCol,
+				where('isConfirmedByAdmin', '==', true),
+				where('category', '==', category)
+			)
+			setShow(true)
+		} else {
+			console.log('hamnar vi här?')
+			queryRef = query(
+				restaurantCol,
+				where('isConfirmedByAdmin', '==', true)
+			)
+			setShow(true)
 		}
-	}, [confirmedRestaurants])
-
-	useEffect(() => {
-		const queryRef = query(
-			restaurantCol,
-			where('isConfirmedByAdmin', '==', true),
-			where('city', '==', city)
-		)
 		const unsubscribe = onSnapshot(
 			queryRef,
 			(snapshot) => {
@@ -83,18 +104,36 @@ const Map: React.FC = () => {
 						_id: doc.id,
 					}
 				})
-				setRestaurants(data)
+				if (data.length === 0) {
+					setRestaurants([])
+					setShow(false)
+				}
+				if (userLocation && data.length > 0) {
+					const updatedRestaurants = data.map((restaurant) => {
+						const distance = calculateDistance(
+							userLocation.lat,
+							userLocation.lng,
+							restaurant.lat,
+							restaurant.lng
+						)
+						return {
+							...restaurant,
+							distance: distance,
+						}
+					})
+					setRestaurants(updatedRestaurants)
+				}
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			(error) => {
 				console.log('ERROR ERROR', error)
 			}
 		)
+
 		return unsubscribe
-	}, [city])
+	}, [city, userLocation, category])
 
 	const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-		console.log(value)
 		setValue(e.target.value)
 	}
 
@@ -128,9 +167,29 @@ const Map: React.FC = () => {
 				</li>
 			)
 		})
-
+	if (!userLocation) {
+		return <ScaleLoader color={'#888'} speedMultiplier={1.1} />
+	}
 	return (
 		<>
+			<div className='d-flex flex-column justify-content-center align-items-start p-3 restaurant-category'>
+				<Form.Group controlId='category' className='mb-2'>
+					<Form.Label>Category:</Form.Label>
+					<Form.Select
+						value={category}
+						onChange={(e) => setCategory(e.target.value)}
+					>
+						<option value='Café'>Café</option>
+						<option value='Restaurant'>Restaurant</option>
+						<option value='Pub'>Pub</option>
+						<option value='Fine-dining'>Fine Dining</option>
+						<option value='Fast-food'>Fast Food</option>
+						<option value='Bakery'>Bakery</option>
+						<option value='Deli'>Deli</option>
+					</Form.Select>
+				</Form.Group>
+			</div>
+
 			{restaurants && (
 				<OffcanvasComponent
 					show={show}
@@ -141,21 +200,17 @@ const Map: React.FC = () => {
 			<GoogleMap
 				mapContainerStyle={containerStyle}
 				options={options}
-				center={
-					position
-						? {
-								lat: position.latitude,
-								lng: position.longitude,
-						  }
-						: center
-				}
+				center={{
+					lat: position.latitude,
+					lng: position.longitude,
+				}}
 				zoom={12}
 				onLoad={onLoad}
 				onUnmount={onUnMount}
 			>
-				{/* känns som magi 🪄*/}
 				<div>
 					{/* {userLocation && (
+					{/*{userLocation && (
 						<Button
 							className='my-position-btn'
 							variant='light'
@@ -205,6 +260,13 @@ const Map: React.FC = () => {
 							<FontAwesomeIcon icon={faSearch} />
 						</Button>
 					</div>
+					{/* <input
+						value={value}
+						onChange={handleInput}
+						disabled={!ready}
+						placeholder='Where are you going?'
+						className='search-input'
+					/> */}
 					{status === 'OK' && (
 						<ul className='suggestions'>{renderSuggestions()}</ul>
 					)}
@@ -231,7 +293,7 @@ const Map: React.FC = () => {
 									: undefined
 							}
 							onClick={() =>
-								getDirections(restaurant, userLocation!)
+								getDirections(restaurant, userLocation)
 							}
 						/>
 					))}
