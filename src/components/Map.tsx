@@ -43,7 +43,7 @@ const Map: React.FC = () => {
 	// const { data: confirmedRestaurants, loading: confirmedLoading } =
 	// 	useGetRestaurants()
 	const [category, setCategory] = useState<string>('')
-	const [show, setShow] = useState(true)
+	const [show, setShow] = useState(false)
 	const handleClose = () => setShow(false)
 	const [restaurants, setRestaurants] = useState<Restaurant[]>()
 	const mapRef = useRef<google.maps.Map | null>(null)
@@ -69,6 +69,13 @@ const Map: React.FC = () => {
 				restaurantCol,
 				where('isConfirmedByAdmin', '==', true),
 				where('city', '==', city)
+			)
+			setShow(true)
+		} else if (category) {
+			queryRef = query(
+				restaurantCol,
+				where('isConfirmedByAdmin', '==', true),
+				where('category', '==', category)
 			)
 			setShow(true)
 		} else {
