@@ -123,14 +123,14 @@ const CreateRestaurantForm: React.FC<IProps> = ({
 									<Form.Group controlId='offer'>
 										<Form.Label>Offer:</Form.Label>
 										<Form.Select {...register('offer')}>
-											<option value='brunch'>
+											<option value='Brunch'>
 												Brunch
 											</option>
-											<option value='lunch'>Lunch</option>
-											<option value='dinner'>
+											<option value='Lunch'>Lunch</option>
+											<option value='Dinner'>
 												Dinner
 											</option>
-											<option value='after-work'>
+											<option value='After-work'>
 												After Work
 											</option>
 										</Form.Select>
