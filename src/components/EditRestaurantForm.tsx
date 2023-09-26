@@ -3,27 +3,33 @@ import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Card from 'react-bootstrap/Card'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons'
 
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Restaurant } from '../types/Restaurant.types'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface IProps {
 	onCreate: (data: Restaurant) => void
 	initialValues?: Restaurant
 }
 
-const CreateRestaurantForm: React.FC<IProps> = ({
-	onCreate,
-	initialValues,
-}) => {
+const EditRestaurantForm: React.FC<IProps> = ({ onCreate, initialValues }) => {
 	const {
 		handleSubmit,
 		register,
 		reset,
 		setValue,
 		formState: { errors, isSubmitSuccessful },
-	} = useForm<Restaurant>()
+	} = useForm<Restaurant>({
+		defaultValues: {
+			...initialValues,
+		},
+	})
+
+	const navigate = useNavigate()
 
 	const onFormSubmit: SubmitHandler<Restaurant> = (data: Restaurant) => {
 		onCreate(data)
@@ -45,20 +51,16 @@ const CreateRestaurantForm: React.FC<IProps> = ({
 	return (
 		<Form onSubmit={handleSubmit(onFormSubmit)} className='mt-4 form'>
 			<Row className='justify-content-center'>
-				<Col sm={10} md={6} lg={4}>
-					<Card className='restaurant-card'>
-						<Card.Body className='restaurant-card-body'>
-							<Card.Title>Add a Restaurant</Card.Title>
-							<Card.Text>
-								Share your culinary discoveries and contribute
-								to our growing restaurant guide.
-							</Card.Text>
-						</Card.Body>
-					</Card>
-				</Col>
-				<Col sm={10} md={6} lg={4}>
-					<Card className='restaurant-card'>
+				<Col xs={10}>
+					<Card className='edit-restaurant-card'>
 						<Card.Body>
+							<Button
+								// disabled={loading}
+								className='mb-3 go-back-btn'
+								onClick={() => navigate(-1)}
+							>
+								<FontAwesomeIcon icon={faAnglesLeft} /> Go back
+							</Button>
 							<Form.Group controlId='name' className='mb-2'>
 								<Form.Label>Name:</Form.Label>
 								<Form.Control
@@ -220,14 +222,10 @@ const CreateRestaurantForm: React.FC<IProps> = ({
 									)}
 								</Form.Group>
 							</Row>
-						</Card.Body>
-					</Card>
-				</Col>
+							{/* </Card.Body> */}
+							{/* </Card> */}
+							{/* </Col> */}
 
-				{/* Second card */}
-				<Col sm={10} md={6} lg={4}>
-					<Card className='restaurant-card'>
-						<Card.Body>
 							<Row>
 								<Col>
 									<Form.Group
@@ -239,7 +237,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({
 											type='tel'
 											{...register('phone', {
 												pattern: {
-													value: /^(?:(?:\+|00)46|0)[\s-]?[1-9]\d{1,2}[\s-]?\d{2}[\s-]?\d{2}[\s-]?\d{2}$/,
+													value: /^(?:(?:\+|00)46|0)?[1-9][0-9]{1,2}[-\s]?[0-9]{2}([- ]?[0-9]{2}){2}$/,
 													message:
 														'Invalid phone number, please enter 10 digits',
 												},
@@ -323,14 +321,16 @@ const CreateRestaurantForm: React.FC<IProps> = ({
 									</Form.Group>
 								</Col>
 							</Row>
-							<Button
-								// disabled={loading}
-								className='mt-3 border-white'
-								variant='dark'
-								type='submit'
-							>
-								Create
-							</Button>
+							<div className='d-flex align-items-center justify-content-end'>
+								<Button
+									// disabled={loading}
+									className='mt-3 form-btn'
+									variant='dark'
+									type='submit'
+								>
+									Update
+								</Button>
+							</div>
 						</Card.Body>
 					</Card>
 				</Col>
@@ -339,4 +339,4 @@ const CreateRestaurantForm: React.FC<IProps> = ({
 	)
 }
 
-export default CreateRestaurantForm
+export default EditRestaurantForm

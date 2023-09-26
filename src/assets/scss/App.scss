@@ -42,6 +42,7 @@ body {
 .btn {
 	color: white;
 }
+
 .search {
 	position: absolute;
 	width: 350px;
@@ -84,6 +85,19 @@ body {
 	}
 }
 
+//.my-position-btn{
+//	z-index: 9999;
+//	top: 67px;
+//	right: 30%;
+//	height: 38px;
+//	position: absolute;
+//	background: rgba(255, 255, 255, 0.09);
+//	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+//	backdrop-filter: blur(12.7px);
+//	-webkit-backdrop-filter: blur(12.7px);
+//	border: 1px solid rgba(255, 255, 255, 0.3);
+//}
+
 .restaurant-img {
 	object-fit: cover;
 	padding: 10px;
@@ -104,12 +118,14 @@ body {
 	overflow-x: scroll;
 }
 
-.restaurant-icons a .svg-inline--fa,
-.restaurant-icons button .svg-inline--fa,
-.btn {
-	// width: 16px;
-	// height: 16px;
-	padding: 0 6px 0 0;
+.restaurant-icons {
+	a .svg-inline--fa,
+	button .svg-inline--fa,
+	.btn {
+		// width: 16px;
+		// height: 16px;
+		padding: 0 6px 0 0;
+	}
 }
 .card-text {
 	margin: 5px 0px 5px 0px;

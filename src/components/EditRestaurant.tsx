@@ -13,6 +13,7 @@ import { doc, updateDoc } from 'firebase/firestore'
 import { restaurantCol } from '../services/firebase'
 import CreateRestaurantForm from './CreateRestaurantForm'
 import { useState } from 'react'
+import EditRestaurantForm from './EditRestaurantForm'
 
 interface IProps {
 	show: boolean
@@ -46,29 +47,17 @@ const EditRestaurant: React.FC<IProps> = ({ show, onHide }) => {
 	}
 
 	return (
-		<Modal show={show} onHide={onHide}>
-			<Container className='mb-2'>
-				<Row>
-					<Col md={{ span: 8, offset: 2 }}>
-						<Card className='mt-3' bg='dark' text='white'>
-							<Card.Body>
-								{success && (
-									<Alert variant='success'>
-										New restaurant created!
-									</Alert>
-								)}
-								<Card.Title>
-									Edit restaurant: {restaurant.name}
-								</Card.Title>
-								<CreateRestaurantForm
-									onCreate={onFormSubmit}
-									initialValues={restaurant}
-								/>
-							</Card.Body>
-						</Card>
-					</Col>
-				</Row>
-			</Container>
+		<Modal className='edit-restaurant-modal' show={show} onHide={onHide}>
+			{success && (
+				<Alert variant='success'>
+					Restaurant is successfully updated!
+				</Alert>
+			)}
+			<Card.Title>Edit restaurant: {restaurant.name}</Card.Title>
+			<EditRestaurantForm
+				onCreate={onFormSubmit}
+				initialValues={restaurant}
+			/>
 		</Modal>
 	)
 }

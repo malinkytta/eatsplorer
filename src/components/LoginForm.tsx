@@ -72,7 +72,6 @@ const LoginForm: React.FC<IProps> = ({ onLogin, loading }) => {
 					)}
 					<div className='mb-3 reset-btn' onClick={openModal}>
 						Forgot Password?
-						{/* <Button onClick={openModal}></Button> */}
 					</div>
 				</Form.Group>
 				<Button

@@ -193,6 +193,22 @@ const Map: React.FC = () => {
 				onUnmount={onUnMount}
 			>
 				<div>
+					{/*{userLocation && (
+						<Button
+							className='my-position-btn'
+							variant='light'
+							onClick={() => {
+								if (mapRef.current) {
+									mapRef.current.panTo({
+										lat: userLocation.lat,
+										lng: userLocation.lng,
+									})
+								}
+							}}
+						>
+							Go to my position
+						</Button>
+					)}*/}
 					<input
 						value={value}
 						onChange={handleInput}
