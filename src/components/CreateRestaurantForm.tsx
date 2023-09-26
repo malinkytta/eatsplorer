@@ -58,7 +58,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({
 				</Col>
 				<Col sm={10} md={6} lg={4}>
 					<Card className='restaurant-card'>
-						<Card.Body>
+						<Card.Body className='restaurant-card-body'>
 							<Form.Group controlId='name' className='mb-2'>
 								<Form.Label>Name:</Form.Label>
 								<Form.Control
@@ -227,7 +227,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({
 				{/* Second card */}
 				<Col sm={10} md={6} lg={4}>
 					<Card className='restaurant-card'>
-						<Card.Body>
+						<Card.Body className='restaurant-card-body'>
 							<Row>
 								<Col>
 									<Form.Group
@@ -323,14 +323,16 @@ const CreateRestaurantForm: React.FC<IProps> = ({
 									</Form.Group>
 								</Col>
 							</Row>
-							<Button
-								// disabled={loading}
-								className='mt-3 border-white'
-								variant='dark'
-								type='submit'
-							>
-								Create
-							</Button>
+							<div>
+								<Button
+									// disabled={loading}
+									className='mt-3 form-btn'
+									variant='dark'
+									type='submit'
+								>
+									Create
+								</Button>
+							</div>
 						</Card.Body>
 					</Card>
 				</Col>

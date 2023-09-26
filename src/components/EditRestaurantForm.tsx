@@ -55,8 +55,8 @@ const EditRestaurantForm: React.FC<IProps> = ({ onCreate, initialValues }) => {
 					<Card className='edit-restaurant-card'>
 						<Card.Body>
 							<Button
-								// disabled={loading}
-								className='mb-3 go-back-btn'
+								variant='dark'
+								className='mb-3'
 								onClick={() => navigate(-1)}
 							>
 								<FontAwesomeIcon icon={faAnglesLeft} /> Go back
