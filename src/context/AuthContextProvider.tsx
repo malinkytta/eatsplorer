@@ -62,7 +62,6 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		if (!auth.currentUser) {
 			return false
 		}
-
 		setUserName(auth.currentUser.displayName)
 		setUserEmail(auth.currentUser.email)
 		setUserPhotoUrl(auth.currentUser.photoURL)
