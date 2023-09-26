@@ -6,6 +6,11 @@ export const containerStyle = {
 	marginTop: '-58px',
 }
 
+export const center = {
+	lat: 55.60700496304167,
+	lng: 13.021011006455181,
+}
+
 export const options = {
 	styles: MapStyles,
 	disableDefaultUI: true,

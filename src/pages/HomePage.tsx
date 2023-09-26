@@ -1,12 +1,19 @@
-import useGetRestaurants from '../hooks/useGetRestaurants'
 import Map from '../components/Map'
+import { Places } from '../../googleMapsConfig'
+import { useLoadScript } from '@react-google-maps/api'
 
 const HomePage = () => {
-	const { data: restaurants } = useGetRestaurants()
+	const { isLoaded } = useLoadScript({
+		googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+		libraries: Places,
+	})
 
-	if (!restaurants.data) return <p>No restaurants for u m8</p>
-
-	return <Map restaurants={restaurants.data} />
+	if (!isLoaded) return <div>loading..</div>
+	return (
+		<>
+			<Map />
+		</>
+	)
 }
 
 export default HomePage

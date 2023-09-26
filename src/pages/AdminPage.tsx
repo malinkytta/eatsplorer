@@ -4,12 +4,13 @@ import Container from 'react-bootstrap/Container'
 
 import UsersPage from './UsersPage'
 import SortedRestaurants from './SortedRestaurants'
-import useGetRestaurants from '../hooks/useGetRestaurants'
+import useGetConfirmStatus from '../hooks/useGetConfirmStatus'
 import ApproveImages from './ApproveImages'
 import useGetImages from '../hooks/useGetImages'
 
 const AdminPage = () => {
-	const { confirmedByAdminTrue, confirmedByAdminFalse } = useGetRestaurants()
+	const { confirmedByAdminTrue, confirmedByAdminFalse } =
+		useGetConfirmStatus()
 	const { data } = useGetImages()
 
 	if (!confirmedByAdminFalse.data || !confirmedByAdminTrue.data) {
