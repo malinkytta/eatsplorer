@@ -85,6 +85,19 @@ body {
 	}
 }
 
+.my-position-btn{
+	z-index: 9999;
+	top: 67px;
+	right: 30%;
+	height: 38px;
+	position: absolute;
+	background: rgba(255, 255, 255, 0.09);
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(12.7px);
+	-webkit-backdrop-filter: blur(12.7px);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
 .restaurant-img {
 	object-fit: cover;
 	padding: 10px;

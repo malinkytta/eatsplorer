@@ -17,6 +17,7 @@ import usePlacesAutocomplete, {
 } from 'use-places-autocomplete'
 import { restaurantCol } from '../services/firebase'
 import { onSnapshot, query, where } from 'firebase/firestore'
+import Button from 'react-bootstrap/Button'
 
 const Map: React.FC = () => {
 	const [searchParams, setSearchParams] = useSearchParams()
@@ -146,6 +147,22 @@ const Map: React.FC = () => {
 			>
 				{/* känns som magi 🪄*/}
 				<div>
+					{userLocation && (
+						<Button
+							className='my-position-btn'
+							variant='light'
+							onClick={() => {
+								if (mapRef.current) {
+									mapRef.current.panTo({
+										lat: userLocation.lat,
+										lng: userLocation.lng,
+									})
+								}
+							}}
+						>
+							Go to my position
+						</Button>
+					)}
 					<input
 						value={value}
 						onChange={handleInput}
