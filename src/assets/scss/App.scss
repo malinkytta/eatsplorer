@@ -59,16 +59,17 @@ body {
 }
 
 .search-input {
+	display: flex;
+	align-items: center;
 	background: rgba(255, 255, 255, 0.09);
-	// border-radius: 16px;
-	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(12.7px);
 	-webkit-backdrop-filter: blur(12.7px);
 	border: 1px solid rgba(255, 255, 255, 0.3);
 	box-sizing: border-box;
 	border: 1px solid transparent;
-	width: 240px;
-	height: 38px;
+	width: 351px;
+	// height: 38px;
 	padding: 0 12px;
 	border-radius: 3px;
 	// box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
@@ -78,14 +79,41 @@ body {
 	position: absolute;
 	right: 8%;
 	top: 67px;
-	margin-left: -120px;
+	// margin-left: -120px;
 
-	input[type='text'] {
-		color: #000;
+	// input[type='text'] {
+	// 	color: #fff;
+	// }
+
+	.search-btn {
+		background: rgba(255, 255, 255, 0.09);
+		border-radius: 0;
+		position: absolute;
+		padding: 1px 5px 0;
+		right: 11px;
 	}
+
+	input {
+		background: transparent;
+		backdrop-filter: blur(12.7px);
+		text-align: center;
+		width: 178px;
+		padding: 3px;
+		border-radius: 0;
+		// border: 1px solid grey;
+		border: none;
+
+		&::placeholder {
+			color: #fff;
+		}
+	}
+
+	// .btn {
+	// 	padding: 0.375rem 0.5rem;
+	// }
 }
 
-.my-position-btn{
+.my-position-btn {
 	z-index: 9999;
 	top: 67px;
 	right: 30%;
@@ -139,6 +167,10 @@ body {
 	-webkit-backdrop-filter: blur(12.7px);
 	border: none;
 	margin: 10px 10px;
+
+	::before {
+		box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	}
 }
 .card-title {
 	font-size: 1.3rem;

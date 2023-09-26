@@ -15,6 +15,13 @@ import usePlacesAutocomplete, {
 	getGeocode,
 	getLatLng,
 } from 'use-places-autocomplete'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+	faUtensils,
+	faBars,
+	faSearch,
+	faLocationArrow,
+} from '@fortawesome/free-solid-svg-icons'
 import { restaurantCol } from '../services/firebase'
 import { onSnapshot, query, where } from 'firebase/firestore'
 import Button from 'react-bootstrap/Button'
@@ -44,6 +51,7 @@ const Map: React.FC = () => {
 	// 	useGetRestaurantsByCity(city ?? '')
 	const [show, setShow] = useState(true)
 	const handleClose = () => setShow(false)
+	const toggleClose = () => setShow(!show)
 	const { userLocation } = useGetUserLocation()
 	const [restaurants, setRestaurants] = useState<Restaurant[]>()
 	const mapRef = useRef<google.maps.Map | null>(null)
@@ -147,7 +155,7 @@ const Map: React.FC = () => {
 			>
 				{/* känns som magi 🪄*/}
 				<div>
-					{userLocation && (
+					{/* {userLocation && (
 						<Button
 							className='my-position-btn'
 							variant='light'
@@ -162,14 +170,41 @@ const Map: React.FC = () => {
 						>
 							Go to my position
 						</Button>
-					)}
-					<input
-						value={value}
-						onChange={handleInput}
-						disabled={!ready}
-						placeholder='Where are you going?'
-						className='search-input'
-					/>
+					)} */}
+
+					<div className='search-input'>
+						<Button variant='transparent'>
+							<FontAwesomeIcon icon={faBars} />
+						</Button>
+
+						<Button
+							variant='transparent'
+							onClick={() => {
+								if (userLocation && mapRef.current) {
+									mapRef.current.panTo({
+										lat: userLocation.lat,
+										lng: userLocation.lng,
+									})
+								}
+							}}
+						>
+							<FontAwesomeIcon icon={faLocationArrow} />
+						</Button>
+
+						<Button onClick={toggleClose} variant='transparent'>
+							<FontAwesomeIcon icon={faUtensils} />
+						</Button>
+						<input
+							value={value}
+							onChange={handleInput}
+							disabled={!ready}
+							placeholder='Where are you going?'
+							// className='search-input'
+						/>
+						<Button variant='transparent' className='search-btn'>
+							<FontAwesomeIcon icon={faSearch} />
+						</Button>
+					</div>
 					{status === 'OK' && (
 						<ul className='suggestions'>{renderSuggestions()}</ul>
 					)}
