@@ -27,11 +27,6 @@ const LoginForm: React.FC<IProps> = ({ onLogin, loading }) => {
 	const closeModal = () => {
 		setShowModal(false)
 	}
-	const onFormSubmit: SubmitHandler<LoginCredentials> = (
-		data: LoginCredentials
-	) => {
-		onLogin(data)
-	}
 
 	return (
 		<>
@@ -76,7 +71,7 @@ const LoginForm: React.FC<IProps> = ({ onLogin, loading }) => {
 				</Form.Group>
 				<Button
 					disabled={loading}
-					className='mt-3 '
+					className='mt-3 form-btn'
 					variant='dark'
 					type='submit'
 				>
