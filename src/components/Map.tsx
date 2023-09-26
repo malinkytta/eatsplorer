@@ -17,6 +17,7 @@ import usePlacesAutocomplete, {
 } from 'use-places-autocomplete'
 import { restaurantCol } from '../services/firebase'
 import { onSnapshot, query, where } from 'firebase/firestore'
+import { calculateDistance } from '../helpers/calulateDistance'
 
 const Map: React.FC = () => {
 	const [searchParams, setSearchParams] = useSearchParams()
@@ -55,7 +56,21 @@ const Map: React.FC = () => {
 
 	useEffect(() => {
 		if (!city && confirmedRestaurants) {
-			setRestaurants(confirmedRestaurants)
+			const updatedRestaurants = userLocation
+				? confirmedRestaurants.map((restaurant) => {
+						const distance = calculateDistance(
+							userLocation.lat,
+							userLocation.lng,
+							restaurant.lat,
+							restaurant.lng
+						)
+						return {
+							...restaurant,
+							distance: distance,
+						}
+				  })
+				: confirmedRestaurants
+			setRestaurants(updatedRestaurants)
 		}
 	}, [confirmedRestaurants])
 
@@ -65,6 +80,7 @@ const Map: React.FC = () => {
 			where('isConfirmedByAdmin', '==', true),
 			where('city', '==', city)
 		)
+
 		const unsubscribe = onSnapshot(
 			queryRef,
 			(snapshot) => {
@@ -74,15 +90,31 @@ const Map: React.FC = () => {
 						_id: doc.id,
 					}
 				})
-				setRestaurants(data)
+
+				if (userLocation && data.length > 0) {
+					const updatedRestaurants = data.map((restaurant) => {
+						const distance = calculateDistance(
+							userLocation.lat,
+							userLocation.lng,
+							restaurant.lat,
+							restaurant.lng
+						)
+						return {
+							...restaurant,
+							distance: distance,
+						}
+					})
+					setRestaurants(updatedRestaurants)
+				}
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			(error) => {
 				console.log('ERROR ERROR', error)
 			}
 		)
+
 		return unsubscribe
-	}, [city])
+	}, [city, userLocation])
 
 	const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
 		console.log(value)
