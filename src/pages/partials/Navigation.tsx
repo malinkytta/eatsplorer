@@ -10,16 +10,10 @@ const Navigation = () => {
 	const { currentUser, userEmail, userName, userPhotoUrl, admin } = useAuth()
 	const location = useLocation()
 
-	let navbarClass = ''
-	if (
-		location.pathname === '/signup' ||
-		location.pathname === '/login' ||
-		location.pathname === '/edit-profile'
-	) {
-		navbarClass = 'transparent-navbar'
-	} else {
-		navbarClass = 'standard-navbar'
-	}
+	const navbarClass =
+		location.pathname === '/signup' || location.pathname === '/login'
+			? 'transparent-navbar'
+			: 'standard-navbar'
 
 	return (
 		<Navbar expand='sm' data-bs-theme='dark' className={navbarClass}>
