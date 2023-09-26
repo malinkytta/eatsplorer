@@ -25,11 +25,18 @@
 .restaurant-img-slider {
 	overflow-x: auto;
 }
+
+::-webkit-scrollbar {
+	display: none;
+}
 .single-restaurant-card {
+	display: flex;
+	justify-content: center;
 	margin: 10px 0;
+	padding: 20px;
 	color: white;
 	background-color: rgba(0, 0, 0, 0.5);
-	height: 300px;
+	height: auto;
 }
 
 .edit-restaurant-card {
@@ -39,10 +46,10 @@
 	background: rgba(255, 255, 255, 0.2);
 }
 
-.go-back-btn {
-	background: $dark;
-	border: none;
-	padding: 0.376rem 0.75rem;
+.restaurant-subtitle {
+	// font-size: 1.2rem;
+	font-weight: 600;
+	margin-right: 5px;
 }
 
 @media (min-width: 769px) {
@@ -50,10 +57,19 @@
 		height: 60vh;
 		margin: 20px 5%;
 	}
+	.single-restaurant-card {
+		height: 50vh;
+		margin: 20px 5%;
+	}
 }
 
 @media (min-width: 993px) {
 	.restaurant-card {
 		margin: 100px 5%;
+	}
+
+	.single-restaurant-card {
+		margin: 100px 5%;
+		height: 400px;
 	}
 }

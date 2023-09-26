@@ -1,6 +1,6 @@
 import UploadImages from '../components/UploadImages'
 import useGetRestaurant from '../hooks/useGetRestaurant'
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import Col from 'react-bootstrap/Col'
 
 import useGetImage from '../hooks/useGetImage'
@@ -42,7 +42,7 @@ const SingleRestaurantPage = () => {
 			<EditRestaurant show={show} onHide={handleHide} />
 			<SingleRestaurantComponent data={data} image={image} />
 
-			<Col sm={10}>
+			<Col sm={10} className='mx-auto'>
 				<UploadImages
 					restaurantId={documentId}
 					restaurant={data.name}

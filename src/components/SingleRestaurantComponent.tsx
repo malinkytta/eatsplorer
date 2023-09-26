@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGlobe, faRoute } from '@fortawesome/free-solid-svg-icons'
 import { FaFacebook, FaInstagram } from 'react-icons/fa'
 import { Restaurant, RestaurantImage } from '../types/Restaurant.types'
-import { Link } from 'react-router-dom'
 
 interface IProps {
 	data: Restaurant
@@ -20,57 +19,80 @@ export const SingleRestaurantComponent: React.FC<IProps> = ({
 	image,
 }) => {
 	return (
-		<Row className='d-flex align-items-center justify-content-center'>
-			<Col sm={10} md={5}>
-				<Card className='single-restaurant-card'>
-					<Card.Body>
-						<Card.Title>{data.name}</Card.Title>
-						<Card.Text>
-							<span>Adress:</span> {data.address}, {data.city}
-						</Card.Text>
-						<Card.Text>
-							<span>Description</span> {data.description}
-						</Card.Text>
-						<Card.Text>
-							<span>Category</span> {data.category}
-						</Card.Text>
-						<Card.Text>
-							<span>Offer</span> {data.offer}
-						</Card.Text>
-						<Card.Text className='distance-text'>
-							{data.distance && (
+		<Row
+			className='d-flex align-items-center justify-content-center'
+			style={{ width: '100%' }}
+		>
+			<Col xs={10} md={6}>
+				<Card className='single-restaurant-card '>
+					<Card.Body className='d-flex flex-column  justify-content-center'>
+						<h2>{data.name}</h2>
+
+						<Row>
+							<Col xs={4}>
+								<p>Address:</p>
+								<p>Description:</p>
+								<p>Category:</p>
+								<p>Offer:</p>
+								<p>Phone:</p>
+								<p>Email:</p>
+							</Col>
+							<Col xs={8}>
+								<p>
+									{data.address}, {data.city}
+								</p>
+								<p>{data.description}</p>
+								<p>{data.category}</p>
+								<p>{data.offer}</p>
+								<p>{data.phone}</p>
+								<p>{data.email}</p>
+							</Col>
+						</Row>
+						{data.distance && (
+							<Card.Text className='distance-text'>
 								<>
 									<FontAwesomeIcon icon={faRoute} />
 									data.distance.toFixed(2) + ' km away'
 								</>
-							)}
-						</Card.Text>
-
+							</Card.Text>
+						)}
 						{data.website && (
-							<Link to={`/${data.website}`}>
+							<a
+								href={data.website}
+								target='_blank'
+								rel='noopener noreferrer'
+							>
 								<Button variant='transparent'>
 									<FaFacebook />
 								</Button>
-							</Link>
+							</a>
 						)}
 						{data.facebook && (
-							<Link to={`/${data.facebook}`}>
+							<a
+								href={data.facebook}
+								target='_blank'
+								rel='noopener noreferrer'
+							>
 								<Button variant='transparent'>
 									<FontAwesomeIcon icon={faGlobe} />{' '}
 								</Button>
-							</Link>
+							</a>
 						)}
 						{data.instagram && (
-							<Link to={`/${data.instagram}`}>
+							<a
+								href={data.instagram}
+								target='_blank'
+								rel='noopener noreferrer'
+							>
 								<Button variant='transparent'>
 									<FaInstagram />
 								</Button>
-							</Link>
+							</a>
 						)}
 					</Card.Body>
 				</Card>
 			</Col>
-			<Col sm={10} md={5}>
+			<Col xs={10} md={6}>
 				<Card className='single-restaurant-card'>
 					{image.length ? (
 						<Image className='restaurant-img' src={image[0].url} />
@@ -83,7 +105,10 @@ export const SingleRestaurantComponent: React.FC<IProps> = ({
 				</Card>
 			</Col>
 			{image.length > 0 && (
-				<Col sm={12} className='d-flex restaurant-img-slider'>
+				<Col
+					xs={12}
+					className='d-flex restaurant-img-slider justify-content-center'
+				>
 					{image.map((image) => (
 						<Col key={image._id} xs={12} sm={6} md={4} lg={3}>
 							<img
