@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { useEffect, useRef, useState } from 'react'
 import {
 	GoogleMap,
@@ -5,19 +6,26 @@ import {
 	useLoadScript,
 	Autocomplete,
 } from '@react-google-maps/api'
-import { Container } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
 import { containerStyle, options } from '../MapSettings'
 import { Restaurant } from '../types/Restaurant.types'
-// import { getGeocode, getLatLng } from 'use-places-autocomplete'
-// import { getLatLngFromAddress } from '../services/googleMapsAPI'
 import { UserLocation } from '../types/User.types'
 import { Places } from '../../googleMapsConfig'
 import { useSearchParams } from 'react-router-dom'
+import OffcanvasComponent from './OffcanvasComponent'
+
+import BeerIcon from '../assets/images/beer-27-128.png'
+import { calculateDistance } from '../helpers/calulateDistance'
+
 interface Iprops {
 	restaurants: Restaurant[]
 }
-
 const Map: React.FC<Iprops> = ({ restaurants }) => {
+	const [show, setShow] = useState(true)
+	const handleClose = () => setShow(false)
+	const handleShow = () => setShow(true)
+	const toggleShow = () => setShow(!show)
+
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
 		libraries: Places,
@@ -27,7 +35,6 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 	const [searchedLocation, setSearchedLocation] =
 		useState<UserLocation | null>(null)
 	const [searchParams, setSearchParams] = useSearchParams()
-
 	const mapRef = useRef<google.maps.Map | null>(null)
 	const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null)
 	const onLoad = (map: google.maps.Map) => {
@@ -36,8 +43,18 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 	const onUnMount = () => {
 		mapRef.current = null
 	}
-	const onMarkerClick = (marker: Restaurant) => {
-		console.log(marker)
+	const onMarkerClick = (restaurant: Restaurant) => {
+		if (userLocation) {
+			const userLatLng = `${userLocation.lat},${userLocation.lng}`
+			const restaurantLatLng = `${restaurant.lat},${restaurant.lng}`
+
+			// Skapa Google Maps URL för vägbeskrivning
+			const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLatLng}&destination=${restaurantLatLng}`
+
+			// Öppna Google Maps i en ny flik
+			window.open(mapsUrl, '_blank')
+		}
+		console.log(restaurant)
 	}
 
 	const onLoadAutoComplete = (
@@ -57,18 +74,24 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 				lng: String(geometry?.location?.lng()),
 				q: name ? name : '',
 			})
-			// const bounds = new window.google.maps.LatLngBounds()
-
-			// if (geometry?.viewport) {
-			// 	bounds.union(geometry.viewport)
-			// } else {
-			// 	bounds.extend(geometry?.location ?? { lat: 0, lng: 0 })
-			// }
-
-			// mapRef.current?.fitBounds(bounds)
 		}
 	}
 
+	// Beräkna avstånden och uppdatera restaurangobjekten med avstånd om userLocation finns
+	const updatedRestaurants = userLocation
+		? restaurants.map((restaurant) => {
+				const distance = calculateDistance(
+					userLocation.lat,
+					userLocation.lng,
+					restaurant.lat,
+					restaurant.lng
+				)
+				return {
+					...restaurant,
+					distance: distance,
+				}
+		  })
+		: restaurants
 	useEffect(() => {
 		const getUserLocation = () => {
 			navigator.geolocation.getCurrentPosition(
@@ -92,15 +115,40 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 		}
 	}, [searchParams])
 
-	if (!isLoaded || !userLocation || restaurants.length === 0)
-		return <p>Loading....</p>
+	const defaultLatitude = 55.60704137913798
+	const defaultLongitude = 13.02105927994256
+
+	if (!isLoaded || restaurants.length === 0) return <p>Loading....</p>
+
+	if (!updatedRestaurants) return <p>waiting for distance</p>
 
 	return (
-		<Container>
+		<>
+			<OffcanvasComponent
+				show={show}
+				handleClose={handleClose}
+				handleShow={handleShow}
+				restaurants={restaurants}
+			/>
 			<GoogleMap
 				mapContainerStyle={containerStyle}
 				options={options}
-				center={searchedLocation ? searchedLocation : userLocation}
+				center={
+					searchedLocation
+						? {
+								lat: searchedLocation.lat,
+								lng: searchedLocation.lng,
+						  }
+						: userLocation
+						? {
+								lat: userLocation.lat,
+								lng: userLocation.lng,
+						  }
+						: {
+								lat: defaultLatitude,
+								lng: defaultLongitude,
+						  }
+				}
 				zoom={12}
 				onLoad={onLoad}
 				onUnmount={onUnMount}
@@ -109,26 +157,44 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 					onLoad={onLoadAutoComplete}
 					onPlaceChanged={handlePlaceChanged}
 				>
-					<input
-						type='text'
-						placeholder='Search Location'
-						className='search-input'
-					/>
-				</Autocomplete>
-				{restaurants.map((restaurant) => (
-					<>
-						<MarkerF
-							key={restaurant.lat}
-							position={{
-								lat: restaurant.lat,
-								lng: restaurant.lng,
-							}}
-							title={restaurant.name}
-							onClick={() => onMarkerClick(restaurant)}
+					<div className='search-input'>
+						<Button
+							variant='transparent'
+							onClick={toggleShow}
+							className='map-btn'
+						>
+							🍔
+						</Button>
+						<input
+							type='text'
+							placeholder='Search Location'
+							// className='search-input'
 						/>
-						{console.log(restaurant.lat, restaurant.lng)}
-					</>
+					</div>
+				</Autocomplete>
+				{updatedRestaurants.map((restaurant) => (
+					<MarkerF
+						key={restaurant.lat}
+						title={restaurant.name}
+						position={{
+							lat: restaurant.lat,
+							lng: restaurant.lng,
+						}}
+						icon={
+							restaurant.category === 'Pub'
+								? {
+										url: BeerIcon,
+										scaledSize: new window.google.maps.Size(
+											50,
+											50
+										),
+								  }
+								: undefined
+						}
+						onClick={() => onMarkerClick(restaurant)}
+					/>
 				))}
+
 				{userLocation && (
 					<MarkerF
 						key={userLocation.lng}
@@ -146,7 +212,7 @@ const Map: React.FC<Iprops> = ({ restaurants }) => {
 					/>
 				)}
 			</GoogleMap>
-		</Container>
+		</>
 	)
 }
 
