@@ -147,7 +147,7 @@ const Map: React.FC = () => {
 			>
 				{/* känns som magi 🪄*/}
 				<div>
-					{userLocation && (
+					{/*{userLocation && (
 						<Button
 							className='my-position-btn'
 							variant='light'
@@ -162,7 +162,7 @@ const Map: React.FC = () => {
 						>
 							Go to my position
 						</Button>
-					)}
+					)}*/}
 					<input
 						value={value}
 						onChange={handleInput}
