@@ -10,13 +10,9 @@ import { useEffect } from 'react'
 
 interface IProps {
 	onCreate: (data: Restaurant) => void
-	initialValues?: Restaurant
 }
 
-const CreateRestaurantForm: React.FC<IProps> = ({
-	onCreate,
-	initialValues,
-}) => {
+const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 	const {
 		handleSubmit,
 		register,
