@@ -12,6 +12,7 @@ import RequireAdmin from './components/RequireAdmin'
 import CreateRestaurantPage from './pages/CreateRestaurantPage'
 import EditProfilePage from './pages/EditProfilePage'
 import SingleRestaurantPage from './pages/SingleRestaurantPage'
+import { ToastContainer } from 'react-toastify'
 
 import './assets/scss/App.scss'
 
@@ -83,6 +84,8 @@ const App = () => {
 					/>
 				)}
 			</Routes>
+
+			<ToastContainer />
 		</>
 	)
 }
