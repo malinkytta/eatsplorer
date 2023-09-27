@@ -40,8 +40,6 @@ const Map: React.FC = () => {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_location, setLocation] = useState<LatLngCity | null>(null)
-	// const { data: confirmedRestaurants, loading: confirmedLoading } =
-	// 	useGetRestaurants()
 	const [category, setCategory] = useState<string>('')
 	const [show, setShow] = useState(false)
 	const handleClose = () => setShow(false)
@@ -56,6 +54,7 @@ const Map: React.FC = () => {
 
 	useEffect(() => {
 		let queryRef
+
 		if (city && category) {
 			queryRef = query(
 				restaurantCol,
@@ -97,7 +96,6 @@ const Map: React.FC = () => {
 				})
 				if (data.length === 0) {
 					setRestaurants([])
-					setShow(false)
 				}
 				if (userLocation && data.length > 0) {
 					const updatedRestaurants = data.map((restaurant) => {
@@ -170,6 +168,7 @@ const Map: React.FC = () => {
 						value={category}
 						onChange={(e) => setCategory(e.target.value)}
 					>
+						<option value=''>All</option>
 						<option value='Café'>Café</option>
 						<option value='Restaurant'>Restaurant</option>
 						<option value='Pub'>Pub</option>
@@ -200,22 +199,6 @@ const Map: React.FC = () => {
 				onUnmount={onUnMount}
 			>
 				<div>
-					{/*{userLocation && (
-						<Button
-							className='my-position-btn'
-							variant='light'
-							onClick={() => {
-								if (mapRef.current) {
-									mapRef.current.panTo({
-										lat: userLocation.lat,
-										lng: userLocation.lng,
-									})
-								}
-							}}
-						>
-							Go to my position
-						</Button>
-					)}*/}
 					<input
 						value={value}
 						onChange={handleInput}
