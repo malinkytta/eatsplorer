@@ -1,12 +1,10 @@
 import Card from 'react-bootstrap/Card'
 import Modal from 'react-bootstrap/Modal'
 import Alert from 'react-bootstrap/Alert'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import useGetRestaurant from '../hooks/useGetRestaurant'
 import { SubmitHandler } from 'react-hook-form'
 import { Restaurant } from '../types/Restaurant.types'
-import { doc, updateDoc } from 'firebase/firestore'
-import { restaurantCol } from '../services/firebase'
 import { useState } from 'react'
 import EditRestaurantForm from './EditRestaurantForm'
 import useUpdateRestaurant from '../hooks/useUpdateRestaurant'
@@ -18,7 +16,6 @@ interface IProps {
 
 const EditRestaurant: React.FC<IProps> = ({ show, onHide }) => {
 	const [success, setSuccess] = useState<boolean | null>(null)
-	const navigate = useNavigate()
 
 	const { id } = useParams()
 	const documentId = id as string
@@ -33,11 +30,8 @@ const EditRestaurant: React.FC<IProps> = ({ show, onHide }) => {
 		data: Restaurant
 	) => {
 		try {
-			// const docRef = doc(restaurantCol, restaurant._id)
-			// await updateDoc(docRef, { ...data })
 			updateRestaurant(data)
 			setSuccess(true)
-			navigate('/admin-page#restaurants')
 		} catch (error) {
 			console.error(error)
 			setSuccess(false)
