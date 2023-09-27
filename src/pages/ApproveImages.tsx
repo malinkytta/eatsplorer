@@ -8,17 +8,16 @@ import {
 	faToggleOn,
 	faTrashCan,
 } from '@fortawesome/free-solid-svg-icons'
-import { restaurantImageCol } from '../services/firebase'
-import { doc, updateDoc } from 'firebase/firestore'
 import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import { useState } from 'react'
 import useDeleteImage from '../hooks/useDeleteImage'
+import useAdmin from '../hooks/useAdmin'
 
 const ApproveImages = () => {
 	const { removeDoc } = useDeleteImage()
-
+	const { approvedByAdmin } = useAdmin()
 	const [show, setShow] = useState(false)
 	const [selectedImage, setSelectedImage] = useState('')
 
@@ -37,11 +36,7 @@ const ApproveImages = () => {
 
 	const handleApprove = async (id: string, approved: boolean) => {
 		try {
-			const docRef = doc(restaurantImageCol, id)
-
-			await updateDoc(docRef, {
-				approved: !approved,
-			})
+			approvedByAdmin(id, approved)
 		} catch (error) {
 			console.error('Error updating approved status:', error)
 		}

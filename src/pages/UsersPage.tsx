@@ -4,19 +4,15 @@ import { UsersData } from '../types/User.types'
 import useGetUsers from '../hooks/useGetUsers'
 import Image from 'react-bootstrap/Image'
 import Form from 'react-bootstrap/Form'
-import { usersCol } from '../services/firebase'
-import { doc, updateDoc } from 'firebase/firestore'
+import useAdmin from '../hooks/useAdmin'
 
 const UsersPage = () => {
 	const { data, loading } = useGetUsers()
+	const { updateAdmin } = useAdmin()
 
-	const handleIsAdminToggle = async (userId: string, isAdmin: boolean) => {
+	const handleIsAdminToggle = async (id: string, isAdmin: boolean) => {
 		try {
-			const docRef = doc(usersCol, userId)
-
-			await updateDoc(docRef, {
-				isAdmin: !isAdmin,
-			})
+			updateAdmin(id, isAdmin)
 		} catch (error) {
 			console.error('Error updating isAdmin:', error)
 		}

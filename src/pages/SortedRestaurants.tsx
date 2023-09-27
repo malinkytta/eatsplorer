@@ -11,9 +11,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { Restaurant } from '../types/Restaurant.types'
-import { doc, updateDoc } from 'firebase/firestore'
-import { restaurantCol } from '../services/firebase'
+
 import useDeleteRestaurant from '../hooks/useDeleteRestaurant'
+import useAdmin from '../hooks/useAdmin'
 
 interface IProps {
 	data: Restaurant[]
@@ -22,14 +22,11 @@ interface IProps {
 const SortedRestaurants: React.FC<IProps> = ({ data }) => {
 	const { removeDoc } = useDeleteRestaurant()
 	const columnHelper = createColumnHelper<Restaurant>()
+	const { confirmedByAdmin } = useAdmin()
 
-	const handleApprove = async (id: string, isConfirmedByAdmin: boolean) => {
+	const handleApprove = (id: string, isConfirmedByAdmin: boolean) => {
 		try {
-			const docRef = doc(restaurantCol, id)
-
-			await updateDoc(docRef, {
-				isConfirmedByAdmin: !isConfirmedByAdmin,
-			})
+			confirmedByAdmin(id, isConfirmedByAdmin)
 		} catch (error) {
 			console.error('Error updating isConfirmedByAdmin:', error)
 		}
