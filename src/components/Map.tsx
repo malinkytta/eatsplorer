@@ -8,7 +8,7 @@ import BeerIcon from '../assets/images/beer-27-128.png'
 import useGetUserLocation from '../hooks/useGetUserLocation'
 import { getDirections } from '../services/googleMapsAPI'
 import { LatLngCity } from '../types/Location.types'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import usePlacesAutocomplete, {
 	getGeocode,
 	getLatLng,
@@ -17,7 +17,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faUtensils,
 	faBars,
-	faSearch,
 	faLocationArrow,
 } from '@fortawesome/free-solid-svg-icons'
 import { restaurantCol } from '../services/firebase'
@@ -30,6 +29,7 @@ import Button from 'react-bootstrap/Button'
 const Map: React.FC = () => {
 	const [showHeader, setShowHeader] = useState(false)
 	const [showSuggestions, setShowSuggestions] = useState(true)
+
 	const [searchParams, setSearchParams] = useSearchParams()
 	const city = searchParams.get('city')
 	const lat = searchParams.get('lat')
@@ -41,11 +41,15 @@ const Map: React.FC = () => {
 	}
 
 	console.log(city)
+	const navigate = useNavigate()
 
 	const toggleHeader = () => {
+		if (!show) {
+			setShow(true)
+			setShowHeader(true)
+		}
 		setShowHeader(!showHeader)
 	}
-
 	const {
 		ready,
 		value,
@@ -245,9 +249,6 @@ const Map: React.FC = () => {
 							placeholder='Where are you going?'
 							// className='search-input'
 						/>
-						<Button variant='transparent' className='search-btn'>
-							<FontAwesomeIcon icon={faSearch} />
-						</Button>
 					</div>
 
 					{showSuggestions && status === 'OK' && (
@@ -275,9 +276,7 @@ const Map: React.FC = () => {
 									  }
 									: undefined
 							}
-							onClick={() =>
-								getDirections(restaurant, userLocation)
-							}
+							onClick={() => navigate(`/${restaurant._id}`)}
 						/>
 					))}
 
