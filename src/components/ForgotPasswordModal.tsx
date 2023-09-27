@@ -9,7 +9,7 @@ import useAuth from '../hooks/useAuth'
 import { ForgotPasswordType } from '../types/User.types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-
+import { toast } from 'react-toastify'
 interface IProps {
 	onCloseModal?: () => void
 }
@@ -36,9 +36,10 @@ const ForgotPasswordModal: React.FC<IProps> = ({ onCloseModal }) => {
 			setLoading(false)
 		} catch (error) {
 			if (error instanceof FirebaseError) {
-				setErrorMessage(error.message)
+				toast(error.message)
 			} else {
 				setErrorMessage("Something went wrong and it wasn't Firebase.")
+				toast("Something went wrong and it wasn't Firebase.")
 			}
 			setLoading(false)
 		}

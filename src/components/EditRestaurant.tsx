@@ -1,13 +1,13 @@
-import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import Alert from 'react-bootstrap/Alert'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import useGetRestaurant from '../hooks/useGetRestaurant'
 import { SubmitHandler } from 'react-hook-form'
 import { Restaurant } from '../types/Restaurant.types'
 import EditRestaurantForm from './EditRestaurantForm'
 import useUpdateRestaurant from '../hooks/useUpdateRestaurant'
 import { toast } from 'react-toastify'
+import { ErrorModal } from './ErrorModal'
+import { ScaleLoader } from 'react-spinners'
 
 interface IProps {
 	show: boolean
@@ -22,23 +22,9 @@ const EditRestaurant: React.FC<IProps> = ({ show, onHide }) => {
 
 	if (!restaurant) {
 		return (
-			<Modal show={show}>
-				<Alert
-					variant='warning'
-					className='d-flex flex-column py-4 px-4 align-items-center'
-				>
-					<h2>Restaurant Not Found</h2>
-					We're sorry, but we couldn't find the restaurant with ID{' '}
-					{documentId}.
-					<div>
-						<Link to={'/'}>
-							<Button className='mt-3' variant='dark'>
-								Go Back Home
-							</Button>
-						</Link>
-					</div>
-				</Alert>
-			</Modal>
+			<div className='loader'>
+				<ScaleLoader color={'#888'} speedMultiplier={1.1} />
+			</div>
 		)
 	}
 

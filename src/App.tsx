@@ -4,7 +4,6 @@ import Navigation from './pages/partials/Navigation'
 import AdminPage from './pages/AdminPage'
 import SignupPage from './pages/SignupPage'
 import LoginPage from './pages/LoginPage'
-// import ForgotPassWordModal from './pages/ForgotPassWordModal'
 import LogoutPage from './pages/LogoutPage'
 import RequireAuth from './components/RequireAuth'
 import NotFoundPage from './pages/NotFoundPage'
@@ -32,7 +31,10 @@ const App = () => {
 				<Route path='/signup' element={<SignupPage />} />
 				<Route path='/login' element={<LoginPage />} />
 				{!openModal && (
-					<Route path='/:id' element={<SingleRestaurantPage />} />
+					<Route
+						path='restaurant/:id'
+						element={<SingleRestaurantPage />}
+					/>
 				)}
 				{/* Auth Routes */}
 				<Route
@@ -59,10 +61,6 @@ const App = () => {
 						</RequireAuth>
 					}
 				/>
-				{/* <Route
-					path='/forgot-password'
-					element={<ForgotPassWordModal />}
-				/> */}
 
 				{/* Admin Routes */}
 				<Route
@@ -75,7 +73,7 @@ const App = () => {
 				/>
 				{openModal && (
 					<Route
-						path='/:id'
+						path='restaurant/:id'
 						element={
 							<RequireAdmin>
 								<SingleRestaurantPage />

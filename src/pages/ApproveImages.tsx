@@ -14,6 +14,8 @@ import Modal from 'react-bootstrap/Modal'
 import { useState } from 'react'
 import useDeleteImage from '../hooks/useDeleteImage'
 import useAdmin from '../hooks/useAdmin'
+import { ScaleLoader } from 'react-spinners'
+import { toast } from 'react-toastify'
 
 const ApproveImages = () => {
 	const { removeDoc, removeFromRestaurantDoc } = useDeleteImage()
@@ -32,20 +34,37 @@ const ApproveImages = () => {
 	}
 
 	const { data, loading } = useGetImages()
-	if (!data) return <p>No photos</p>
+
+	if (!data) {
+		return (
+			<div className='loader'>
+				<ScaleLoader color={'#888'} speedMultiplier={1.1} />
+			</div>
+		)
+	}
 
 	const handleApprove = async (id: string, approved: boolean) => {
 		try {
 			approvedByAdmin(id, approved)
 		} catch (error) {
-			console.error('Error updating approved status:', error)
+			toast.error(
+				'An error occurred while updating the approval status',
+				{
+					className: 'custom-toast',
+				}
+			)
 		}
 	}
 
 	const handleDelete = (restaurantId: string, path: string, id: string) => {
-		removeFromRestaurantDoc(restaurantId)
-		console.log(id, restaurantId, path)
-		removeDoc(id, path)
+		try {
+			removeFromRestaurantDoc(restaurantId)
+			removeDoc(id, path)
+		} catch (error) {
+			toast.error('An error occurred while removing images', {
+				className: 'custom-toast',
+			})
+		}
 	}
 
 	const columnHelper = createColumnHelper<RestaurantImage>()
@@ -155,7 +174,11 @@ const ApproveImages = () => {
 	]
 	return (
 		<>
-			{loading && <p>Loading photos...</p>}
+			{loading && (
+				<div className='loader'>
+					<ScaleLoader color={'#888'} speedMultiplier={1.1} />
+				</div>
+			)}
 			{data && <SortableTable columns={columns} data={data} />}
 		</>
 	)

@@ -17,7 +17,6 @@ interface IProps {
 
 const OffcanvasComponent: React.FC<IProps> = ({
 	show,
-	// handleClose,
 	restaurants,
 	showHeader,
 	category,
@@ -57,7 +56,6 @@ const OffcanvasComponent: React.FC<IProps> = ({
 			<Offcanvas
 				data-bs-theme='dark'
 				show={show}
-				// onHide={handleClose}
 				scroll
 				backdrop={false}
 				className='custom-offcanvas d-none d-sm-flex'

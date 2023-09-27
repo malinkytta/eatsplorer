@@ -19,7 +19,6 @@ const RestaurantsList: React.FC<IProps> = ({ data }) => {
 	const [userLocation, setUserLocation] = useState<UserLocation | null>(null)
 
 	const onMarkerClick = (restaurant: Restaurant) => {
-		console.log(restaurant)
 		if (userLocation) {
 			const userLatLng = `${userLocation.lat},${userLocation.lng}`
 			const restaurantLatLng = `${restaurant.lat},${restaurant.lng}`
@@ -27,8 +26,6 @@ const RestaurantsList: React.FC<IProps> = ({ data }) => {
 			const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLatLng}&destination=${restaurantLatLng}`
 
 			window.open(mapsUrl, '_blank')
-		} else {
-			alert('Where are you?')
 		}
 	}
 
@@ -88,20 +85,6 @@ const RestaurantsList: React.FC<IProps> = ({ data }) => {
 							>
 								<FontAwesomeIcon icon={faLocationArrow} />
 							</Button>
-							{/* {restaurant.facebook && (
-								<Link to={`/${restaurant.facebook}`}>
-									<Button variant='transparent'>
-										<FaFacebook />
-									</Button>
-								</Link>
-							)}
-							{restaurant.instagram && (
-								<Link to={`/${restaurant.instagram}`}>
-									<Button variant='transparent'>
-										<FaInstagram />
-									</Button>
-								</Link>
-							)} */}
 						</div>
 					</Card.Body>
 				</Card>

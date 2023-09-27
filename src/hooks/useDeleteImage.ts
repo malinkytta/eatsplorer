@@ -1,5 +1,4 @@
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore'
-import { useState } from 'react'
 import {
 	restaurantCol,
 	restaurantImageCol,
@@ -8,24 +7,14 @@ import {
 import { deleteObject, ref } from 'firebase/storage'
 
 export const useDeleteImage = () => {
-	const [error, setError] = useState(false)
-
 	const removeDoc = async (id: string, photoPath: string) => {
-		setError(false)
-
 		try {
-			// const docImgRef = doc(restaurantCol, id)
-			// await updateDoc(docImgRef, {
-			// 	photo: null,
-			// })
-
 			const docRef = doc(restaurantImageCol, id)
 			await deleteDoc(docRef)
 
 			const storageRef = ref(storage, photoPath)
 			await deleteObject(storageRef)
 		} catch (err) {
-			setError(true)
 			console.error(
 				'Something went wrong when deleting the document',
 				err

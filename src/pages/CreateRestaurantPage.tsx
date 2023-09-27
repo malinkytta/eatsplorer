@@ -23,10 +23,16 @@ const CreateRestaurantPage = () => {
 			{
 				!admin
 					? toast(
-							'Success! The restaurant has been submitted for admin review and will be visible once approved.'
+							'Success! The restaurant has been submitted for admin review and will be visible once approved.',
+							{
+								className: 'custom-toast',
+							}
 					  )
 					: toast(
-							'Hooray! The restaurant has been created and is available for all to discover.'
+							'Hooray! The restaurant has been created and is available for all to discover.',
+							{
+								className: 'custom-toast',
+							}
 					  )
 			}
 
@@ -41,11 +47,16 @@ const CreateRestaurantPage = () => {
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				console.error(error.message)
-				toast(error.message)
+				toast.error(error.message, {
+					className: 'custom-toast',
+				})
 			}
 			console.log(error)
-			toast(
-				'Oops! Something went wrong while trying to create the restaurant. Please try again later.'
+			toast.error(
+				'Oops! Something went wrong while trying to create the restaurant. Please try again later.',
+				{
+					className: 'custom-toast',
+				}
 			)
 		}
 	}

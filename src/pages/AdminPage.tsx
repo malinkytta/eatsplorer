@@ -1,12 +1,12 @@
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import Container from 'react-bootstrap/Container'
-
 import UsersPage from './UsersPage'
 import SortedRestaurants from './SortedRestaurants'
 import useGetConfirmStatus from '../hooks/useGetConfirmStatus'
 import ApproveImages from './ApproveImages'
 import useGetImages from '../hooks/useGetImages'
+import { ScaleLoader } from 'react-spinners'
 
 const AdminPage = () => {
 	const { confirmedByAdminTrue, confirmedByAdminFalse } =
@@ -14,7 +14,11 @@ const AdminPage = () => {
 	const { data } = useGetImages()
 
 	if (!confirmedByAdminFalse.data || !confirmedByAdminTrue.data) {
-		return <p> No data exists</p>
+		return (
+			<div className='loader'>
+				<ScaleLoader color={'#888'} speedMultiplier={1.1} />
+			</div>
+		)
 	}
 
 	return (
@@ -24,7 +28,6 @@ const AdminPage = () => {
 				<Tabs defaultActiveKey='users' id='uncontrolled-tab-example'>
 					<Tab eventKey='users' title='Users'>
 						<h2>Users</h2>
-
 						<UsersPage />
 					</Tab>
 					<Tab eventKey='restaurants' title='Restaurants'>

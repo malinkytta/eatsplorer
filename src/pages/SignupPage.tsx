@@ -7,9 +7,8 @@ import { NewUserCredentials } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
 import useAuth from '../hooks/useAuth'
 import { useState } from 'react'
-//import { addDoc } from 'firebase/firestore'
-//import { usersCol } from '../services/firebase'
 import SignupForm from '../components/SignupForm'
+import { toast } from 'react-toastify'
 
 const SignupPage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -27,13 +26,17 @@ const SignupPage = () => {
 		try {
 			setLoading(true)
 			await signup(data.email, data.password, data.name, data.photoFile)
+			toast('Registration was successful. Welcome!')
+
 			navigate('/')
 		} catch (error) {
 			if (error instanceof FirebaseError) {
-				setErrorMessage(error.message)
+				toast(error.message)
 			} else {
 				console.error(error)
-				setErrorMessage("Something went wrong and it wasn't Firebase.")
+				toast(
+					'Something went wrong during registration. Please try again.'
+				)
 			}
 			setLoading(false)
 		}

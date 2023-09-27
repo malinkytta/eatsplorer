@@ -10,12 +10,13 @@ import { UpdateProfileFormData } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
 import { storage } from '../services/firebase'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
-import { Alert, Button } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
 import useAuth from '../hooks/useAuth'
 import useUpdateUser from '../hooks/useUpdateUser'
+import { ErrorModal } from '../components/ErrorModal'
+import { toast } from 'react-toastify'
 
 const EditProfilePage = () => {
-	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [uploadProgress, setUploadProgress] = useState<number | null>(null)
 	const [loading, setLoading] = useState(false)
 	const { removeProfilePhoto, updateProfilePhoto, updateProfile } =
@@ -48,7 +49,12 @@ const EditProfilePage = () => {
 	photoFileRef.current = watch('photoFile')
 
 	if (!currentUser) {
-		return <p>Error, error, error!</p>
+		return (
+			<ErrorModal>
+				<h2>Login Required</h2>
+				You need to be logged in to update your profile.
+			</ErrorModal>
+		)
 	}
 
 	const handleDeletePhoto = async () => {
@@ -56,18 +62,18 @@ const EditProfilePage = () => {
 			setPhotoUrl(currentUser, '')
 			removeProfilePhoto(currentUser.uid)
 		} catch (err) {
-			console.error('Something went wrong when deleting the photo')
+			toast.error('An error occurred while deleting the photo', {
+				className: 'custom-toast',
+			})
 		}
 	}
 
 	const onUpdateProfile: SubmitHandler<UpdateProfileFormData> = async (
 		data
 	) => {
-		setErrorMessage(null)
 		try {
 			setLoading(true)
 			if (data.name !== (currentUser.displayName ?? '')) {
-				console.log('Updating displayname...')
 				await setDisplayName(currentUser, data.name)
 			}
 
@@ -92,12 +98,14 @@ const EditProfilePage = () => {
 					},
 
 					(err) => {
-						setErrorMessage('Upload failed.')
-						console.log('Upload failed.', err)
+						toast.error(
+							'An error occurred while uploading the photo',
+							{
+								className: 'custom-toast',
+							}
+						)
 					},
 					async () => {
-						console.log('Upload completed')
-
 						const photoURL = await getDownloadURL(fileRef)
 						if (photoFileRef.current === null) {
 							return
@@ -113,7 +121,6 @@ const EditProfilePage = () => {
 			}
 
 			if (data.password) {
-				console.log('Updating password')
 				await setPassword(data.password)
 			}
 
@@ -123,11 +130,14 @@ const EditProfilePage = () => {
 			setLoading(false)
 		} catch (error) {
 			if (error instanceof FirebaseError) {
-				setErrorMessage(error.message)
-				console.error(error)
+				toast.error(error.message, {
+					className: 'custom-toast',
+				})
 				setLoading(false)
 			} else {
-				setErrorMessage('Something went wrong and it was not firebase')
+				toast.error("Something went wrong and it wasn'tFirebase", {
+					className: 'custom-toast',
+				})
 				setLoading(false)
 			}
 		}
@@ -138,17 +148,13 @@ const EditProfilePage = () => {
 			<Row className='d-flex justify-content-center align-items-center'>
 				<Col md={4} sm={8}>
 					<Card className='edit-card'>
-						<Card.Body
-							style={{ paddingTop: '100px' }}
-							className='form-card d-flex flex-column align-items-center justify-content-center'
-						>
+						<Card.Body className='form-card d-flex flex-column align-items-center justify-content-center'>
 							<Image
 								src={
 									userPhotoUrl ||
 									'https://via.placeholder.com/225'
 								}
 								fluid
-								// roundedCircle
 								className='img-square profileImage'
 							/>
 							<Button
@@ -167,9 +173,9 @@ const EditProfilePage = () => {
 					<Card text='white' className='edit-card'>
 						<Card.Body className='form-card'>
 							<Card.Title>Update profile</Card.Title>
-							{errorMessage && (
+							{/* {errorMessage && (
 								<Alert variant='danger'>{errorMessage}</Alert>
-							)}
+							)} */}
 							<Form onSubmit={handleSubmit(onUpdateProfile)}>
 								<div className='profile-photo-wrapper text-center my-3'></div>
 								<Form.Group

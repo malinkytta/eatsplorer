@@ -7,6 +7,8 @@ import useGetImage from '../hooks/useGetImage'
 import { useEffect, useState } from 'react'
 import EditRestaurant from '../components/EditRestaurant'
 import { SingleRestaurantComponent } from '../components/SingleRestaurantComponent'
+import { ErrorModal } from '../components/ErrorModal'
+import { ScaleLoader } from 'react-spinners'
 
 const SingleRestaurantPage = () => {
 	const [show, setShow] = useState(false)
@@ -33,8 +35,13 @@ const SingleRestaurantPage = () => {
 		setShow(false)
 		navigate(`/${documentId}`)
 	}
+
 	if (!data || !image) {
-		return <p>Loading...</p>
+		return (
+			<div className='loader'>
+				<ScaleLoader color={'#888'} speedMultiplier={1.1} />
+			</div>
+		)
 	}
 
 	return (

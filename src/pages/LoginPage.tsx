@@ -1,35 +1,35 @@
 import { useState } from 'react'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
-
 import Row from 'react-bootstrap/Row'
-import Alert from 'react-bootstrap/Alert'
-
 import { Link, useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 import { SubmitHandler } from 'react-hook-form'
 import { LoginCredentials } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
 import LoginForm from '../components/LoginForm'
+import { toast } from 'react-toastify'
 
 const LoginPage = () => {
-	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
 
 	const { login } = useAuth()
 	const navigate = useNavigate()
 
 	const onLogin: SubmitHandler<LoginCredentials> = async (data) => {
-		setErrorMessage(null)
 		try {
 			setLoading(true)
 			await login(data.email, data.password)
 			navigate('/')
 		} catch (error) {
 			if (error instanceof FirebaseError) {
-				setErrorMessage(error.message)
+				toast.error(error.message, {
+					className: 'custom-toast',
+				})
 			} else {
-				setErrorMessage('Something went wrong and it was not Firebase.')
+				toast.error('Something went wrong and it was not Firebase.', {
+					className: 'custom-toast',
+				})
 			}
 			setLoading(false)
 		}
@@ -43,10 +43,6 @@ const LoginPage = () => {
 					<Card className='login-card' text='white'>
 						<Card.Body className='form-card'>
 							<Card.Title className='mb-4'>Log In</Card.Title>
-							{errorMessage && (
-								<Alert variant='danger'>{errorMessage}</Alert>
-							)}
-
 							<LoginForm loading={loading} onLogin={onLogin} />
 						</Card.Body>
 						<div className='text-center mt-3'>
