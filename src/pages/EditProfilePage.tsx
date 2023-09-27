@@ -6,18 +6,21 @@ import Form from 'react-bootstrap/Form'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import Row from 'react-bootstrap/Row'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { UpdateProfileFormData, UsersData } from '../types/User.types'
+import { UpdateProfileFormData } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
-import { storage, usersCol } from '../services/firebase'
+import { storage } from '../services/firebase'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
-import { Alert, Button, Container } from 'react-bootstrap'
+import { Alert, Button } from 'react-bootstrap'
 import useAuth from '../hooks/useAuth'
-import { doc, setDoc } from 'firebase/firestore'
+import useUpdateUser from '../hooks/useUpdateUser'
 
 const EditProfilePage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [uploadProgress, setUploadProgress] = useState<number | null>(null)
 	const [loading, setLoading] = useState(false)
+	const { removeProfilePhoto, updateProfilePhoto, updateProfile } =
+		useUpdateUser()
+
 	const {
 		currentUser,
 		reloadUser,
@@ -25,7 +28,6 @@ const EditProfilePage = () => {
 		setPassword,
 		setPhotoUrl,
 		userPhotoUrl,
-		admin,
 	} = useAuth()
 	const {
 		handleSubmit,
@@ -49,11 +51,14 @@ const EditProfilePage = () => {
 		return <p>Error, error, error!</p>
 	}
 
-	//const handleDeletePhoto = async () => {
-	//	// Ta bort på något sätt med refFromUrl eller deleteDoc
-	//	await reloadUser()
-	//	console.log('Photo deleted successfully')
-	//}
+	const handleDeletePhoto = async () => {
+		try {
+			setPhotoUrl(currentUser, '')
+			removeProfilePhoto(currentUser.uid)
+		} catch (err) {
+			console.error('Something went wrong when deleting the photo')
+		}
+	}
 
 	const onUpdateProfile: SubmitHandler<UpdateProfileFormData> = async (
 		data
@@ -102,15 +107,7 @@ const EditProfilePage = () => {
 						setUploadProgress(null)
 						setLoading(false)
 
-						const docRef = doc(usersCol, currentUser.uid)
-
-						await setDoc(docRef, {
-							_uid: currentUser.uid,
-							name: data.name,
-							photoFile: photoURL,
-							email: data.email,
-							isAdmin: admin,
-						})
+						updateProfilePhoto(currentUser.uid, photoURL)
 					}
 				)
 			}
@@ -120,18 +117,7 @@ const EditProfilePage = () => {
 				await setPassword(data.password)
 			}
 
-			const firestoreData: UsersData = {
-				_uid: currentUser.uid,
-				name: data.name,
-				photoFile: currentUser.photoURL,
-				email: data.email,
-				isAdmin: admin,
-			}
-
-			const docRef = doc(usersCol, currentUser.uid)
-
-			await setDoc(docRef, firestoreData)
-			console.log('Profile updated, yaaaay!')
+			updateProfile(currentUser.uid, currentUser.photoURL, data)
 
 			reloadUser()
 			setLoading(false)
@@ -167,7 +153,7 @@ const EditProfilePage = () => {
 							/>
 							<Button
 								className='mt-3 form-btn'
-								// onClick={handleDeletePhoto}
+								onClick={handleDeletePhoto}
 								size='sm'
 								variant='dark'
 							>
@@ -261,7 +247,7 @@ const EditProfilePage = () => {
 											required:
 												'You have to enter an email',
 										})}
-										// disabled
+										disabled
 									/>
 									{errors.email && (
 										<p className='invalid'>
