@@ -16,7 +16,7 @@ import useDeleteImage from '../hooks/useDeleteImage'
 import useAdmin from '../hooks/useAdmin'
 
 const ApproveImages = () => {
-	const { removeDoc } = useDeleteImage()
+	const { removeDoc, removeFromRestaurantDoc } = useDeleteImage()
 	const { approvedByAdmin } = useAdmin()
 	const [show, setShow] = useState(false)
 	const [selectedImage, setSelectedImage] = useState('')
@@ -42,8 +42,10 @@ const ApproveImages = () => {
 		}
 	}
 
-	const handleDelete = (id: string) => {
-		removeDoc(id)
+	const handleDelete = (restaurantId: string, path: string, id: string) => {
+		removeFromRestaurantDoc(restaurantId)
+		console.log(id, restaurantId, path)
+		removeDoc(id, path)
 	}
 
 	const columnHelper = createColumnHelper<RestaurantImage>()
@@ -136,7 +138,13 @@ const ApproveImages = () => {
 					cell: (props) => (
 						<Button
 							variant='transparent'
-							onClick={() => handleDelete(props.row.original._id)}
+							onClick={() =>
+								handleDelete(
+									props.row.original.restaurantId,
+									props.row.original.path,
+									props.row.original._id
+								)
+							}
 						>
 							<FontAwesomeIcon icon={faTrashCan} />
 						</Button>

@@ -59,6 +59,7 @@ const useUploadImages = () => {
 				size: image.size,
 				approved: admin,
 				restaurant: restaurant,
+				restaurantId: restaurantId,
 				type: image.type,
 				uid: currentUser?.uid,
 				url: url,

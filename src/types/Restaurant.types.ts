@@ -25,6 +25,7 @@ export type RestaurantImage = {
 	size: number
 	type: string
 	restaurant: string
+	restaurantId: string
 	approved: boolean
 	uid: string
 	url: string
