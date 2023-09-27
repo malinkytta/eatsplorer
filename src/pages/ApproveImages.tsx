@@ -9,13 +9,16 @@ import {
 	faTrashCan,
 } from '@fortawesome/free-solid-svg-icons'
 import { restaurantImageCol } from '../services/firebase'
-import { deleteDoc, doc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import { useState } from 'react'
+import useDeleteImage from '../hooks/useDeleteImage'
 
 const ApproveImages = () => {
+	const { removeDoc } = useDeleteImage()
+
 	const [show, setShow] = useState(false)
 	const [selectedImage, setSelectedImage] = useState('')
 
@@ -44,13 +47,8 @@ const ApproveImages = () => {
 		}
 	}
 
-	const handleDelete = async (id: string) => {
-		try {
-			const docRef = doc(restaurantImageCol, id)
-			await deleteDoc(docRef)
-		} catch (error) {
-			console.error('Something went wrong when deleting the photo')
-		}
+	const handleDelete = (id: string) => {
+		removeDoc(id)
 	}
 
 	const columnHelper = createColumnHelper<RestaurantImage>()

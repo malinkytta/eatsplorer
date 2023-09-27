@@ -11,14 +11,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { Restaurant } from '../types/Restaurant.types'
-import { deleteDoc, doc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 import { restaurantCol } from '../services/firebase'
+import useDeleteRestaurant from '../hooks/useDeleteRestaurant'
 
 interface IProps {
 	data: Restaurant[]
 }
 
 const SortedRestaurants: React.FC<IProps> = ({ data }) => {
+	const { removeDoc } = useDeleteRestaurant()
 	const columnHelper = createColumnHelper<Restaurant>()
 
 	const handleApprove = async (id: string, isConfirmedByAdmin: boolean) => {
@@ -33,13 +35,8 @@ const SortedRestaurants: React.FC<IProps> = ({ data }) => {
 		}
 	}
 
-	const handleDelete = async (id: string) => {
-		try {
-			const docRef = doc(restaurantCol, id)
-			await deleteDoc(docRef)
-		} catch (error) {
-			console.error('Something went wrong when deleting the restaurant')
-		}
+	const handleDelete = (id: string) => {
+		removeDoc(id)
 	}
 
 	const columns = [
