@@ -23,7 +23,6 @@ const UploadImages: React.FC<IProps> = ({ restaurantId, restaurant }) => {
 			acceptedFiles.forEach((file) => {
 				uploadImages.upload(file, restaurantId, restaurant)
 			})
-			// uploadImage.upload(acceptedFiles[0]) (om vi istället bara vill acceptera en fil)
 		},
 		[uploadImages]
 	)
@@ -43,7 +42,6 @@ const UploadImages: React.FC<IProps> = ({ restaurantId, restaurant }) => {
 	return (
 		<div {...getRootProps()} id='dropzone-wrapper'>
 			<input {...getInputProps()} />
-
 			<Button className='mb-2' variant='outline-dark'>
 				Click to choose files
 			</Button>
