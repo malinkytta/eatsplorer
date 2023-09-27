@@ -58,7 +58,7 @@ const RestaurantsList: React.FC<IProps> = ({ data }) => {
 						className='restaurant-img'
 						src={
 							restaurant.photo ||
-							'https://placehold.co/100x100?text=Restaurant+Image'
+							'https://placehold.co/186x186?text=No+Image+Available'
 						}
 						alt='Restaurant'
 					/>

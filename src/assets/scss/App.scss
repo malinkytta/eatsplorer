@@ -81,10 +81,6 @@ body {
 	top: 67px;
 	// margin-left: -120px;
 
-	// input[type='text'] {
-	// 	color: #fff;
-	// }
-
 	input {
 		background: transparent;
 		backdrop-filter: blur(12.7px);
@@ -93,6 +89,7 @@ body {
 		padding: 3px;
 		border-radius: 0;
 		// border: 1px solid grey;
+		color: white;
 		border: none;
 
 		&::placeholder {
