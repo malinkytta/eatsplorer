@@ -60,8 +60,6 @@ const Map: React.FC = () => {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_location, setLocation] = useState<LatLngCity | null>(null)
-	// const { data: confirmedRestaurants, loading: confirmedLoading } =
-	// 	useGetRestaurants()
 	const [category, setCategory] = useState<string>('')
 	const [show, setShow] = useState(false)
 
@@ -93,6 +91,7 @@ const Map: React.FC = () => {
 
 	useEffect(() => {
 		let queryRef
+
 		if (city && category) {
 			queryRef = query(
 				restaurantCol,
@@ -208,6 +207,25 @@ const Map: React.FC = () => {
 	}
 	return (
 		<>
+			{/* <div className='d-flex flex-column justify-content-center align-items-start p-3 restaurant-category'>
+				<Form.Group controlId='category' className='mb-2'>
+					<Form.Label>Category:</Form.Label>
+					<Form.Select
+						value={category}
+						onChange={(e) => setCategory(e.target.value)}
+					>
+						<option value=''>All</option>
+						<option value='Café'>Café</option>
+						<option value='Restaurant'>Restaurant</option>
+						<option value='Pub'>Pub</option>
+						<option value='Fine-dining'>Fine Dining</option>
+						<option value='Fast-food'>Fast Food</option>
+						<option value='Bakery'>Bakery</option>
+						<option value='Deli'>Deli</option>
+					</Form.Select>
+				</Form.Group>
+			</div> */}
+
 			{restaurants && (
 				<OffcanvasComponent
 					show={show}
