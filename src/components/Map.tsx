@@ -7,7 +7,6 @@ import OffcanvasComponent from './OffcanvasComponent'
 import BeerIcon from '../assets/images/beer-27-128.png'
 import RestaurantIcon from '../assets/images/restaurant.png'
 import useGetUserLocation from '../hooks/useGetUserLocation'
-import { getDirections } from '../services/googleMapsAPI'
 import { LatLngCity } from '../types/Location.types'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import usePlacesAutocomplete, {
@@ -24,7 +23,6 @@ import { restaurantCol } from '../services/firebase'
 import { onSnapshot, query, where } from 'firebase/firestore'
 import { calculateDistance } from '../helpers/calulateDistance'
 import { ScaleLoader } from 'react-spinners'
-import { Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 
 const Map: React.FC = () => {
@@ -99,28 +97,24 @@ const Map: React.FC = () => {
 				where('city', '==', city),
 				where('category', '==', category)
 			)
-			// setShow(true)
 		} else if (city) {
 			queryRef = query(
 				restaurantCol,
 				where('isConfirmedByAdmin', '==', true),
 				where('city', '==', city)
 			)
-			// setShow(true)
 		} else if (category) {
 			queryRef = query(
 				restaurantCol,
 				where('isConfirmedByAdmin', '==', true),
 				where('category', '==', category)
 			)
-			// setShow(true)
 		} else {
 			console.log('hamnar vi här?')
 			queryRef = query(
 				restaurantCol,
 				where('isConfirmedByAdmin', '==', true)
 			)
-			// setShow(true)
 		}
 		const unsubscribe = onSnapshot(
 			queryRef,
