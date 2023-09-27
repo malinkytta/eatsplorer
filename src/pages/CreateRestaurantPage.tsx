@@ -1,19 +1,14 @@
-import Row from 'react-bootstrap/Row'
-import Card from 'react-bootstrap/Card'
-import Alert from 'react-bootstrap/Alert'
-
 import { Restaurant } from '../types/Restaurant.types'
 import { restaurantCol } from '../services/firebase'
 import { addDoc } from 'firebase/firestore'
 import CreateRestaurantForm from '../components/CreateRestaurantForm'
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FirebaseError } from 'firebase/app'
 import useAuth from '../hooks/useAuth'
 import { getLatLng, getGeocode } from 'use-places-autocomplete'
+import { toast } from 'react-toastify'
 
 const CreateRestaurantPage = () => {
-	const [success, setSuccess] = useState<boolean | null>(null)
 	const { admin } = useAuth()
 
 	const navigate = useNavigate()
@@ -24,7 +19,16 @@ const CreateRestaurantPage = () => {
 			const query = `${address}, ${city}`
 			const results = await getGeocode({ address: query })
 			const { lat, lng } = getLatLng(results[0])
-			setSuccess(true)
+
+			{
+				!admin
+					? toast(
+							'Success! The restaurant has been submitted for admin review and will be visible once approved.'
+					  )
+					: toast(
+							'Hooray! The restaurant has been created and is available for all to discover.'
+					  )
+			}
 
 			await addDoc(restaurantCol, {
 				...data,
@@ -37,20 +41,18 @@ const CreateRestaurantPage = () => {
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				console.error(error.message)
+				toast(error.message)
 			}
-			setSuccess(false)
 			console.log(error)
+			toast(
+				'Oops! Something went wrong while trying to create the restaurant. Please try again later.'
+			)
 		}
 	}
 
 	return (
 		<div className='restaurant-page'>
-			<Row>
-				{success && (
-					<Alert variant='success'>New restaurant created!</Alert>
-				)}
-				<CreateRestaurantForm onCreate={onCreate} />
-			</Row>
+			<CreateRestaurantForm onCreate={onCreate} />
 		</div>
 	)
 }
