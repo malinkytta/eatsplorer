@@ -28,6 +28,8 @@ import { Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 
 const Map: React.FC = () => {
+	const [showHeader, setShowHeader] = useState(false)
+
 	const [searchParams, setSearchParams] = useSearchParams()
 	const city = searchParams.get('city')
 	const lat = searchParams.get('lat')
@@ -37,7 +39,13 @@ const Map: React.FC = () => {
 		latitude: lat ? Number(lat) : 55.60700496304167,
 		longitude: lng ? Number(lng) : 13.021011006455181,
 	}
+
 	console.log(city)
+
+	const toggleHeader = () => {
+		setShowHeader(!showHeader)
+	}
+
 	const {
 		ready,
 		value,
@@ -52,8 +60,10 @@ const Map: React.FC = () => {
 	// 	useGetRestaurants()
 	const [category, setCategory] = useState<string>('')
 	const [show, setShow] = useState(false)
+
 	const handleClose = () => setShow(false)
 	const toggleClose = () => setShow(!show)
+
 	const [restaurants, setRestaurants] = useState<Restaurant[]>()
 	const mapRef = useRef<google.maps.Map | null>(null)
 	const onLoad = (map: google.maps.Map) => {
@@ -72,28 +82,28 @@ const Map: React.FC = () => {
 				where('city', '==', city),
 				where('category', '==', category)
 			)
-			setShow(true)
+			// setShow(true)
 		} else if (city) {
 			queryRef = query(
 				restaurantCol,
 				where('isConfirmedByAdmin', '==', true),
 				where('city', '==', city)
 			)
-			setShow(true)
+			// setShow(true)
 		} else if (category) {
 			queryRef = query(
 				restaurantCol,
 				where('isConfirmedByAdmin', '==', true),
 				where('category', '==', category)
 			)
-			setShow(true)
+			// setShow(true)
 		} else {
 			console.log('hamnar vi här?')
 			queryRef = query(
 				restaurantCol,
 				where('isConfirmedByAdmin', '==', true)
 			)
-			setShow(true)
+			// setShow(true)
 		}
 		const unsubscribe = onSnapshot(
 			queryRef,
@@ -106,7 +116,7 @@ const Map: React.FC = () => {
 				})
 				if (data.length === 0) {
 					setRestaurants([])
-					setShow(false)
+					// setShow(false)
 				}
 				if (userLocation && data.length > 0) {
 					const updatedRestaurants = data.map((restaurant) => {
@@ -150,6 +160,8 @@ const Map: React.FC = () => {
 			city: searchedLocation,
 		})
 	}
+	console.log('vilket värde har "show" till restaurangerna', show)
+	console.log('vilket värde har showHeader för filtrering?', showHeader)
 
 	const renderSuggestions = () =>
 		data.map((suggestion) => {
@@ -172,29 +184,32 @@ const Map: React.FC = () => {
 	}
 	return (
 		<>
-			<div className='d-flex flex-column justify-content-center align-items-start p-3 restaurant-category'>
-				<Form.Group controlId='category' className='mb-2'>
-					<Form.Label>Category:</Form.Label>
-					<Form.Select
-						value={category}
-						onChange={(e) => setCategory(e.target.value)}
-					>
-						<option value='Café'>Café</option>
-						<option value='Restaurant'>Restaurant</option>
-						<option value='Pub'>Pub</option>
-						<option value='Fine-dining'>Fine Dining</option>
-						<option value='Fast-food'>Fast Food</option>
-						<option value='Bakery'>Bakery</option>
-						<option value='Deli'>Deli</option>
-					</Form.Select>
-				</Form.Group>
-			</div>
+			{/* <div className='d-flex flex-column justify-content-center align-items-start p-3 restaurant-category'>
+					<Form.Group controlId='category' className='mb-2'>
+						<Form.Label>Category:</Form.Label>
+						<Form.Select
+							value={category}
+							onChange={(e) => setCategory(e.target.value)}
+						>
+							<option value='Café'>Café</option>
+							<option value='Restaurant'>Restaurant</option>
+							<option value='Pub'>Pub</option>
+							<option value='Fine-dining'>Fine Dining</option>
+							<option value='Fast-food'>Fast Food</option>
+							<option value='Bakery'>Bakery</option>
+							<option value='Deli'>Deli</option>
+						</Form.Select>
+					</Form.Group>
+				</div> */}
 
 			{restaurants && (
 				<OffcanvasComponent
 					show={show}
-					handleClose={handleClose}
+					// handleClose={handleClose}
 					restaurants={restaurants}
+					showHeader={showHeader}
+					category={category}
+					setCategory={setCategory}
 				/>
 			)}
 			<GoogleMap
@@ -228,7 +243,7 @@ const Map: React.FC = () => {
 					)} */}
 
 					<div className='search-input'>
-						<Button variant='transparent'>
+						<Button variant='transparent' onClick={toggleHeader}>
 							<FontAwesomeIcon icon={faBars} />
 						</Button>
 
