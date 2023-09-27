@@ -68,7 +68,7 @@ body {
 	border: 1px solid rgba(255, 255, 255, 0.3);
 	box-sizing: border-box;
 	border: 1px solid transparent;
-	width: 351px;
+	// width: 351px;
 	// height: 38px;
 	padding: 0 12px;
 	border-radius: 3px;
@@ -84,14 +84,6 @@ body {
 	// input[type='text'] {
 	// 	color: #fff;
 	// }
-
-	.search-btn {
-		background: rgba(255, 255, 255, 0.09);
-		border-radius: 0;
-		position: absolute;
-		padding: 1px 5px 0;
-		right: 11px;
-	}
 
 	input {
 		background: transparent;
