@@ -81,11 +81,11 @@ const Map: React.FC = () => {
 				lat: userLocation.lat,
 				lng: userLocation.lng,
 			})
+
 			setSearchParams({
 				lat: String(userLocation.lat),
 				lng: String(userLocation.lng),
 			})
-			// setRestaurants???
 		}
 	}
 

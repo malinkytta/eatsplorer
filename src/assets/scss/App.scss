@@ -15,7 +15,6 @@ body {
 
 .standard-navbar {
 	backdrop-filter: blur(11.2px);
-	// background: rgba(0, 0, 0, 0.7);
 	background: transparent;
 	-webkit-backdrop-filter: blur(11.2px);
 	box-shadow: 0px 0px 15px 0px rgba(255, 255, 255, 0.29);
@@ -96,10 +95,6 @@ body {
 			color: #fff;
 		}
 	}
-
-	// .btn {
-	// 	padding: 0.375rem 0.5rem;
-	// }
 }
 
 .my-position-btn {
@@ -206,4 +201,12 @@ body {
 	min-height: 100vh;
 	justify-content: center;
 	align-items: center;
+}
+
+.filter-header {
+	backdrop-filter: blur(11.2px);
+	background: transparent;
+	-webkit-backdrop-filter: blur(11.2px);
+	box-shadow: 0px 0px 15px 0px rgba(255, 255, 255, 0.29);
+	margin: 20px 0 0 23px;
 }

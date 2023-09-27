@@ -99,7 +99,8 @@ export const SingleRestaurantComponent: React.FC<IProps> = ({
 					) : (
 						<Image
 							fluid
-							src='https://placehold.co/?text=Restaurant+Image'
+							className='restaurant-img'
+							src='https://placehold.co/600x360?text=No+Image+Available'
 						/>
 					)}
 				</Card>

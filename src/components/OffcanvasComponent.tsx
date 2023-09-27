@@ -63,7 +63,7 @@ const OffcanvasComponent: React.FC<IProps> = ({
 				className='custom-offcanvas d-none d-sm-flex'
 			>
 				{showHeader && (
-					<Offcanvas.Header style={{ display: 'block' }}>
+					<Offcanvas.Header className='justify-content-center flex-column filter-header'>
 						<div className='d-flex '>
 							<Form.Group
 								controlId='category'
@@ -76,6 +76,7 @@ const OffcanvasComponent: React.FC<IProps> = ({
 										setCategory(e.target.value)
 									}
 								>
+									<option value=''>All</option>
 									<option value='Café'>Café</option>
 									<option value='Restaurant'>
 										Restaurant
@@ -104,12 +105,16 @@ const OffcanvasComponent: React.FC<IProps> = ({
 								</Form.Select>
 							</Form.Group>
 						</div>
-						{/* <Offcanvas.Title>Restaurants</Offcanvas.Title> */}
-						<div className='d-flex my-2 mx-2'>
-							{restaurants.length === 0 && (
+						{restaurants.length === 0 && (
+							<div className='my-2 mx-2 flex-column'>
 								<p>No restaurants found</p>
-							)}
-						</div>
+							</div>
+						)}
+						{restaurants.length > 0 && (
+							<div className='my-2 mx-2 flex-column'>
+								<Offcanvas.Title>Restaurants</Offcanvas.Title>
+							</div>
+						)}
 					</Offcanvas.Header>
 				)}
 
