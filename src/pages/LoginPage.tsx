@@ -10,7 +10,6 @@ import useAuth from '../hooks/useAuth'
 import { SubmitHandler } from 'react-hook-form'
 import { LoginCredentials } from '../types/User.types'
 import { FirebaseError } from 'firebase/app'
-import ForgotPasswordPage from './ForgotPasswordPage'
 import LoginForm from '../components/LoginForm'
 
 const LoginPage = () => {

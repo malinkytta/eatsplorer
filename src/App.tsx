@@ -4,7 +4,7 @@ import Navigation from './pages/partials/Navigation'
 import AdminPage from './pages/AdminPage'
 import SignupPage from './pages/SignupPage'
 import LoginPage from './pages/LoginPage'
-import ForgotPasswordPage from './pages/ForgotPasswordPage'
+// import ForgotPassWordModal from './pages/ForgotPassWordModal'
 import LogoutPage from './pages/LogoutPage'
 import RequireAuth from './components/RequireAuth'
 import NotFoundPage from './pages/NotFoundPage'
@@ -59,10 +59,10 @@ const App = () => {
 						</RequireAuth>
 					}
 				/>
-				<Route
+				{/* <Route
 					path='/forgot-password'
-					element={<ForgotPasswordPage />}
-				/>
+					element={<ForgotPassWordModal />}
+				/> */}
 
 				{/* Admin Routes */}
 				<Route

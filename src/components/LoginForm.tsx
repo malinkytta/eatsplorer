@@ -1,10 +1,10 @@
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { LoginCredentials } from '../types/User.types'
 import Modal from 'react-bootstrap/Modal'
 import { useState } from 'react'
-import ForgotPasswordPage from '../pages/ForgotPasswordPage'
+import ForgotPasswordModal from '../components/ForgotPasswordModal'
 
 interface IProps {
 	onLogin: (data: LoginCredentials) => void
@@ -79,7 +79,7 @@ const LoginForm: React.FC<IProps> = ({ onLogin, loading }) => {
 				</Button>
 			</Form>
 			<Modal show={showModal} onHide={closeModal}>
-				<ForgotPasswordPage />
+				<ForgotPasswordModal onCloseModal={closeModal} />
 			</Modal>
 		</>
 	)
