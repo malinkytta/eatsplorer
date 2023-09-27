@@ -9,6 +9,7 @@ import { doc, updateDoc } from 'firebase/firestore'
 import { restaurantCol } from '../services/firebase'
 import { useState } from 'react'
 import EditRestaurantForm from './EditRestaurantForm'
+import useUpdateRestaurant from '../hooks/useUpdateRestaurant'
 
 interface IProps {
 	show: boolean
@@ -22,6 +23,7 @@ const EditRestaurant: React.FC<IProps> = ({ show, onHide }) => {
 	const { id } = useParams()
 	const documentId = id as string
 	const { data: restaurant } = useGetRestaurant(documentId)
+	const { updateRestaurant } = useUpdateRestaurant(documentId)
 
 	if (!restaurant) {
 		return <p>Data do exist, dont be rude!</p>
@@ -31,8 +33,9 @@ const EditRestaurant: React.FC<IProps> = ({ show, onHide }) => {
 		data: Restaurant
 	) => {
 		try {
-			const docRef = doc(restaurantCol, restaurant._id)
-			await updateDoc(docRef, { ...data })
+			// const docRef = doc(restaurantCol, restaurant._id)
+			// await updateDoc(docRef, { ...data })
+			updateRestaurant(data)
 			setSuccess(true)
 			navigate('/admin-page#restaurants')
 		} catch (error) {

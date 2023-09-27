@@ -20,9 +20,8 @@ const EditRestaurantForm: React.FC<IProps> = ({ onCreate, initialValues }) => {
 	const {
 		handleSubmit,
 		register,
-		reset,
 		setValue,
-		formState: { errors, isSubmitSuccessful },
+		formState: { errors },
 	} = useForm<Restaurant>({
 		defaultValues: {
 			...initialValues,
@@ -43,10 +42,6 @@ const EditRestaurantForm: React.FC<IProps> = ({ onCreate, initialValues }) => {
 		const capitalizedValue = capitalize(e.target.value)
 		setValue(fieldName, capitalizedValue)
 	}
-
-	useEffect(() => {
-		reset()
-	}, [isSubmitSuccessful, reset])
 
 	return (
 		<Form onSubmit={handleSubmit(onFormSubmit)} className='mt-4 form'>
