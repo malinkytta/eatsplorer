@@ -29,7 +29,7 @@ import Button from 'react-bootstrap/Button'
 
 const Map: React.FC = () => {
 	const [showHeader, setShowHeader] = useState(false)
-
+	const [showSuggestions, setShowSuggestions] = useState(true)
 	const [searchParams, setSearchParams] = useSearchParams()
 	const city = searchParams.get('city')
 	const lat = searchParams.get('lat')
@@ -71,6 +71,20 @@ const Map: React.FC = () => {
 	}
 	const onUnMount = () => {
 		mapRef.current = null
+	}
+
+	const panToLocation = () => {
+		if (userLocation && mapRef.current) {
+			mapRef.current.panTo({
+				lat: userLocation.lat,
+				lng: userLocation.lng,
+			})
+			setSearchParams({
+				lat: String(userLocation.lat),
+				lng: String(userLocation.lng),
+			})
+			// setRestaurants???
+		}
 	}
 
 	useEffect(() => {
@@ -145,9 +159,11 @@ const Map: React.FC = () => {
 
 	const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
 		setValue(e.target.value)
+		setShowSuggestions(true)
 	}
 
 	const handleSelect = (description: string) => async () => {
+		setShowSuggestions(false)
 		setValue(description)
 		clearSuggestions()
 		const searchedLocation = description.split(',')[0].trim()
@@ -188,24 +204,6 @@ const Map: React.FC = () => {
 	}
 	return (
 		<>
-			{/* <div className='d-flex flex-column justify-content-center align-items-start p-3 restaurant-category'>
-					<Form.Group controlId='category' className='mb-2'>
-						<Form.Label>Category:</Form.Label>
-						<Form.Select
-							value={category}
-							onChange={(e) => setCategory(e.target.value)}
-						>
-							<option value='Café'>Café</option>
-							<option value='Restaurant'>Restaurant</option>
-							<option value='Pub'>Pub</option>
-							<option value='Fine-dining'>Fine Dining</option>
-							<option value='Fast-food'>Fast Food</option>
-							<option value='Bakery'>Bakery</option>
-							<option value='Deli'>Deli</option>
-						</Form.Select>
-					</Form.Group>
-				</div> */}
-
 			{restaurants && (
 				<OffcanvasComponent
 					show={show}
@@ -228,40 +226,12 @@ const Map: React.FC = () => {
 				onUnmount={onUnMount}
 			>
 				<div>
-					{/* {userLocation && (
-					{/*{userLocation && (
-						<Button
-							className='my-position-btn'
-							variant='light'
-							onClick={() => {
-								if (mapRef.current) {
-									mapRef.current.panTo({
-										lat: userLocation.lat,
-										lng: userLocation.lng,
-									})
-								}
-							}}
-						>
-							Go to my position
-						</Button>
-					)} */}
-
 					<div className='search-input'>
 						<Button variant='transparent' onClick={toggleHeader}>
 							<FontAwesomeIcon icon={faBars} />
 						</Button>
 
-						<Button
-							variant='transparent'
-							onClick={() => {
-								if (userLocation && mapRef.current) {
-									mapRef.current.panTo({
-										lat: userLocation.lat,
-										lng: userLocation.lng,
-									})
-								}
-							}}
-						>
+						<Button variant='transparent' onClick={panToLocation}>
 							<FontAwesomeIcon icon={faLocationArrow} />
 						</Button>
 
@@ -279,14 +249,8 @@ const Map: React.FC = () => {
 							<FontAwesomeIcon icon={faSearch} />
 						</Button>
 					</div>
-					{/* <input
-						value={value}
-						onChange={handleInput}
-						disabled={!ready}
-						placeholder='Where are you going?'
-						className='search-input'
-					/> */}
-					{status === 'OK' && (
+
+					{showSuggestions && status === 'OK' && (
 						<ul className='suggestions'>{renderSuggestions()}</ul>
 					)}
 				</div>
