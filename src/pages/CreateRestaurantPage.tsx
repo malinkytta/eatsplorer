@@ -5,12 +5,12 @@ import Alert from 'react-bootstrap/Alert'
 import { Restaurant } from '../types/Restaurant.types'
 import { restaurantCol } from '../services/firebase'
 import { addDoc } from 'firebase/firestore'
-import { getLatLngFromAddress } from '../services/googleMapsAPI'
 import CreateRestaurantForm from '../components/CreateRestaurantForm'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FirebaseError } from 'firebase/app'
 import useAuth from '../hooks/useAuth'
+import { getLatLng, getGeocode } from 'use-places-autocomplete'
 
 const CreateRestaurantPage = () => {
 	const [success, setSuccess] = useState<boolean | null>(null)
@@ -20,10 +20,10 @@ const CreateRestaurantPage = () => {
 
 	const onCreate = async (data: Restaurant) => {
 		try {
-			const { lat, lng } = await getLatLngFromAddress(
-				data.address,
-				data.city
-			)
+			const { address, city } = data
+			const query = `${address}, ${city}`
+			const results = await getGeocode({ address: query })
+			const { lat, lng } = getLatLng(results[0])
 			setSuccess(true)
 
 			await addDoc(restaurantCol, {
