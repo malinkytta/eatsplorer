@@ -186,7 +186,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			}}
 		>
 			{loading ? (
-				<div id='initial-loader'>
+				<div className='loader'>
 					<ScaleLoader color={'#888'} speedMultiplier={1.1} />
 				</div>
 			) : (

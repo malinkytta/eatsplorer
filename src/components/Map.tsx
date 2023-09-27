@@ -157,7 +157,11 @@ const Map: React.FC = () => {
 			)
 		})
 	if (!userLocation) {
-		return <ScaleLoader color={'#888'} speedMultiplier={1.1} />
+		return (
+			<div className='loader'>
+				<ScaleLoader color={'#888'} speedMultiplier={1.1} />
+			</div>
+		)
 	}
 	return (
 		<>
