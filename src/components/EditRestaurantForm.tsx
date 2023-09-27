@@ -8,7 +8,6 @@ import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons'
 
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Restaurant } from '../types/Restaurant.types'
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface IProps {
@@ -217,9 +216,6 @@ const EditRestaurantForm: React.FC<IProps> = ({ onCreate, initialValues }) => {
 									)}
 								</Form.Group>
 							</Row>
-							{/* </Card.Body> */}
-							{/* </Card> */}
-							{/* </Col> */}
 
 							<Row>
 								<Col>
@@ -318,7 +314,6 @@ const EditRestaurantForm: React.FC<IProps> = ({ onCreate, initialValues }) => {
 							</Row>
 							<div className='d-flex align-items-center justify-content-end'>
 								<Button
-									// disabled={loading}
 									className='mt-3 form-btn'
 									variant='dark'
 									type='submit'

@@ -1,13 +1,13 @@
-import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Alert from 'react-bootstrap/Alert'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import useGetRestaurant from '../hooks/useGetRestaurant'
 import { SubmitHandler } from 'react-hook-form'
 import { Restaurant } from '../types/Restaurant.types'
-import { useState } from 'react'
 import EditRestaurantForm from './EditRestaurantForm'
 import useUpdateRestaurant from '../hooks/useUpdateRestaurant'
+import { toast } from 'react-toastify'
 
 interface IProps {
 	show: boolean
@@ -15,15 +15,31 @@ interface IProps {
 }
 
 const EditRestaurant: React.FC<IProps> = ({ show, onHide }) => {
-	const [success, setSuccess] = useState<boolean | null>(null)
-
 	const { id } = useParams()
 	const documentId = id as string
 	const { data: restaurant } = useGetRestaurant(documentId)
 	const { updateRestaurant } = useUpdateRestaurant(documentId)
 
 	if (!restaurant) {
-		return <p>Data do exist, dont be rude!</p>
+		return (
+			<Modal show={show}>
+				<Alert
+					variant='warning'
+					className='d-flex flex-column py-4 px-4 align-items-center'
+				>
+					<h2>Restaurant Not Found</h2>
+					We're sorry, but we couldn't find the restaurant with ID{' '}
+					{documentId}.
+					<div>
+						<Link to={'/'}>
+							<Button className='mt-3' variant='dark'>
+								Go Back Home
+							</Button>
+						</Link>
+					</div>
+				</Alert>
+			</Modal>
+		)
 	}
 
 	const onFormSubmit: SubmitHandler<Restaurant> = async (
@@ -31,21 +47,17 @@ const EditRestaurant: React.FC<IProps> = ({ show, onHide }) => {
 	) => {
 		try {
 			updateRestaurant(data)
-			setSuccess(true)
+			toast('Restaurant information updated and saved!')
 		} catch (error) {
 			console.error(error)
-			setSuccess(false)
+			toast(
+				'An error occurred while updating restaurant information. Please try again.'
+			)
 		}
 	}
 
 	return (
 		<Modal className='edit-restaurant-modal' show={show} onHide={onHide}>
-			{success && (
-				<Alert variant='success'>
-					Restaurant is successfully updated!
-				</Alert>
-			)}
-			<Card.Title>Edit restaurant: {restaurant.name}</Card.Title>
 			<EditRestaurantForm
 				onCreate={onFormSubmit}
 				initialValues={restaurant}
