@@ -5,6 +5,7 @@ import { containerStyle, options } from '../MapSettings'
 import { Restaurant } from '../types/Restaurant.types'
 import OffcanvasComponent from './OffcanvasComponent'
 import BeerIcon from '../assets/images/beer-27-128.png'
+import RestaurantIcon from '../assets/images/restaurant.png'
 import useGetUserLocation from '../hooks/useGetUserLocation'
 import { getDirections } from '../services/googleMapsAPI'
 import { LatLngCity } from '../types/Location.types'
@@ -63,7 +64,6 @@ const Map: React.FC = () => {
 	const [category, setCategory] = useState<string>('')
 	const [show, setShow] = useState(false)
 
-	const handleClose = () => setShow(false)
 	const toggleClose = () => setShow(!show)
 
 	const [restaurants, setRestaurants] = useState<Restaurant[]>()
@@ -207,29 +207,9 @@ const Map: React.FC = () => {
 	}
 	return (
 		<>
-			{/* <div className='d-flex flex-column justify-content-center align-items-start p-3 restaurant-category'>
-				<Form.Group controlId='category' className='mb-2'>
-					<Form.Label>Category:</Form.Label>
-					<Form.Select
-						value={category}
-						onChange={(e) => setCategory(e.target.value)}
-					>
-						<option value=''>All</option>
-						<option value='Café'>Café</option>
-						<option value='Restaurant'>Restaurant</option>
-						<option value='Pub'>Pub</option>
-						<option value='Fine-dining'>Fine Dining</option>
-						<option value='Fast-food'>Fast Food</option>
-						<option value='Bakery'>Bakery</option>
-						<option value='Deli'>Deli</option>
-					</Form.Select>
-				</Form.Group>
-			</div> */}
-
 			{restaurants && (
 				<OffcanvasComponent
 					show={show}
-					// handleClose={handleClose}
 					restaurants={restaurants}
 					showHeader={showHeader}
 					category={category}
@@ -265,7 +245,6 @@ const Map: React.FC = () => {
 							onChange={handleInput}
 							disabled={!ready}
 							placeholder='Where are you going?'
-							// className='search-input'
 						/>
 					</div>
 
@@ -292,7 +271,14 @@ const Map: React.FC = () => {
 													50
 												),
 									  }
-									: undefined
+									: {
+											url: RestaurantIcon,
+											scaledSize:
+												new window.google.maps.Size(
+													50,
+													50
+												),
+									  }
 							}
 							onClick={() => navigate(`/${restaurant._id}`)}
 						/>
