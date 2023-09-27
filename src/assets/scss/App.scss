@@ -211,3 +211,10 @@ body {
 	left: 500px;
 	z-index: 9999;
 }
+
+.loader {
+	display: flex;
+	min-height: 100vh;
+	justify-content: center;
+	align-items: center;
+}
