@@ -144,8 +144,12 @@ const Map: React.FC = () => {
 				<li
 					key={place_id}
 					onClick={handleSelect(suggestion.description)}
+					className='suggestion-list'
 				>
-					<span>{main_text}</span> <span>{secondary_text}</span>
+					<span>
+						{main_text}
+						{secondary_text && `, ${secondary_text}`}
+					</span>
 				</li>
 			)
 		})
