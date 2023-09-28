@@ -108,11 +108,6 @@ const OffcanvasComponent: React.FC<IProps> = ({
 								<p>No restaurants found</p>
 							</div>
 						)}
-						{restaurants.length > 0 && (
-							<div className='my-2 mx-2 flex-column'>
-								<Offcanvas.Title>Restaurants</Offcanvas.Title>
-							</div>
-						)}
 					</Offcanvas.Header>
 				)}
 
