@@ -146,10 +146,7 @@ const Map: React.FC = () => {
 					onClick={handleSelect(suggestion.description)}
 					className='suggestion-list'
 				>
-					<span>
-						{main_text}
-						{secondary_text && `, ${secondary_text}`}
-					</span>
+					<span>{main_text}</span> <span>, {secondary_text}</span>
 				</li>
 			)
 		})
