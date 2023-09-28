@@ -208,7 +208,9 @@ const Map: React.FC = () => {
 												),
 									  }
 							}
-							onClick={() => navigate(`/${restaurant._id}`)}
+							onClick={() =>
+								navigate(`/restaurant/${restaurant._id}`)
+							}
 						/>
 					))}
 
