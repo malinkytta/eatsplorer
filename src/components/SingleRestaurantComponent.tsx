@@ -92,7 +92,7 @@ export const SingleRestaurantComponent: React.FC<IProps> = ({
 					</Card.Body>
 				</Card>
 			</Col>
-			<Col xs={11} md={6}>
+			<Col xs={11} md={6} className='restaurant-col'>
 				<Card className='single-restaurant-card'>
 					{image.length ? (
 						<Image className='restaurant-img' src={image[0].url} />

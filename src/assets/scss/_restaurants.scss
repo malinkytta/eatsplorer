@@ -63,7 +63,7 @@
 }
 
 .restaurant-col {
-	margin-top: 100px;
+	margin-top: 80px;
 }
 
 @media (min-width: 769px) {
@@ -79,17 +79,13 @@
 		justify-content: center;
 	}
 	.restaurant-col {
-		margin-top: 0;
+		margin-top: 20px;
 	}
 }
 
 @media (min-width: 993px) {
 	.restaurant-card {
 		margin: 100px 5%;
-	}
-
-	.restaurant-col {
-		margin-top: 100px;
 	}
 
 	.single-restaurant-card {
