@@ -21,6 +21,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Button from 'react-bootstrap/Button'
 import useFilter from '../hooks/useFilter'
+import { getCityFromCoordinates } from '../services/googleMapsAPI'
 
 const Map: React.FC = () => {
 	const [showHeader, setShowHeader] = useState(true)
@@ -76,7 +77,17 @@ const Map: React.FC = () => {
 		setShow(!show)
 	}
 
-	const panToLocation = () => {
+	const panToLocation = async () => {
+		let town = null
+
+		if (userLocation) {
+			town = await getCityFromCoordinates(
+				userLocation.lat,
+				userLocation.lng
+			)
+			console.log(town)
+		}
+
 		if (userLocation && mapRef.current) {
 			mapRef.current.panTo({
 				lat: userLocation.lat,
@@ -86,6 +97,7 @@ const Map: React.FC = () => {
 			setSearchParams({
 				lat: String(userLocation.lat),
 				lng: String(userLocation.lng),
+				city: town,
 			})
 		}
 	}

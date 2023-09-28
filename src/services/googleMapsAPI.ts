@@ -38,3 +38,40 @@ export const getDirections = (
 		window.open(mapsUrl, '_blank')
 	}
 }
+
+export const getCityFromCoordinates = async (lat: number, lng: number) => {
+	try {
+		const response = await axios.get(
+			`https://maps.googleapis.com/maps/api/geocode/json`,
+			{
+				params: {
+					latlng: `${lat},${lng}`,
+					key: import.meta.env.VITE_GEOCODING_API_KEY,
+				},
+			}
+		)
+		if (response.data.status === 'OK') {
+			const results = response.data.results
+
+			if (results.length > 0) {
+				for (const result of results) {
+					for (const component of result.address_components) {
+						if (component.types.includes('postal_town')) {
+							const city = component.long_name
+							console.log('City:', city)
+							return city
+						}
+					}
+				}
+				throw new Error('No city found')
+			} else {
+				throw new Error('No results found')
+			}
+		} else {
+			throw new Error('Geocode error')
+		}
+	} catch (error) {
+		console.error('Geocode error', error)
+		return null
+	}
+}
