@@ -58,7 +58,6 @@ export const getCityFromCoordinates = async (lat: number, lng: number) => {
 					for (const component of result.address_components) {
 						if (component.types.includes('postal_town')) {
 							const city = component.long_name
-							console.log('City:', city)
 							return city
 						}
 					}

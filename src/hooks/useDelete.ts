@@ -14,7 +14,6 @@ import {
 import { deleteObject, getDownloadURL, ref } from 'firebase/storage'
 
 export const useDelete = () => {
-	//Ta bort bild från collection 'restaurant-image' för radera bild sida
 	const deleteImage = async (id: string) => {
 		try {
 			const docRef = doc(restaurantImageCol, id)
@@ -27,7 +26,6 @@ export const useDelete = () => {
 		}
 	}
 
-	// Ta bort bilden från Storage
 	const deleteImgFromStorage = async (photoPath: string) => {
 		try {
 			const storageRef = ref(storage, photoPath)
@@ -40,7 +38,6 @@ export const useDelete = () => {
 		}
 	}
 
-	// Ta bort bilden från collection 'restaurant-image' för radera restaurang
 	const deleteImageFromImgCol = async (id: string) => {
 		const queryRef = query(
 			restaurantImageCol,
@@ -62,7 +59,6 @@ export const useDelete = () => {
 		}
 	}
 
-	// Uppdatera doc 'restaurants' så att kopplingen till photo blir null ändra namn till updatePhotoInRestaurantDoc
 	const removeFromRestaurantDoc = async (documentId: string) => {
 		try {
 			const queryRef = query(
@@ -73,12 +69,10 @@ export const useDelete = () => {
 			const querySnapshot = await getDocs(queryRef)
 
 			if (!querySnapshot.empty) {
-				// Url till den första matchande dokument
 				const firstImageDoc = querySnapshot.docs[0].data()
 				const imageURL = firstImageDoc.url
 
 				const restaurantDocRef = doc(restaurantCol, documentId)
-				// Om fler bilder än 1, photo = imageURL annars null
 				await updateDoc(restaurantDocRef, {
 					photo: querySnapshot.size > 1 ? imageURL : null,
 				})
@@ -93,7 +87,6 @@ export const useDelete = () => {
 		}
 	}
 
-	// tar bort resturangen från 'restaurants'
 	const deleteRestaurant = async (id: string) => {
 		try {
 			const docRef = doc(restaurantCol, id)

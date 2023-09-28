@@ -65,7 +65,7 @@ const useFilter = (
 				}
 			},
 			(error) => {
-				console.log('ERROR ERROR', error)
+				console.error(error)
 			}
 		)
 		return unsubscribe

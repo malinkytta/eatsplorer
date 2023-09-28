@@ -92,7 +92,6 @@ const Map: React.FC = () => {
 				userLocation.lat,
 				userLocation.lng
 			)
-			console.log(town)
 		}
 
 		if (userLocation && mapRef.current) {

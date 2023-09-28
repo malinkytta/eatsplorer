@@ -334,7 +334,6 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 								</Row>
 								<div>
 									<Button
-										// disabled={loading}
 										className='mt-3 form-btn'
 										variant='dark'
 										type='submit'
