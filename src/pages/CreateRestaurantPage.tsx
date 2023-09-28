@@ -51,7 +51,6 @@ const CreateRestaurantPage = () => {
 					className: 'custom-toast',
 				})
 			}
-			console.log(error)
 			toast.error(
 				'Oops! Something went wrong while trying to create the restaurant. Please try again later.',
 				{

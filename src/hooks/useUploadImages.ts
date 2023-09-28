@@ -73,7 +73,6 @@ const useUploadImages = () => {
 			setIsSuccess(true)
 			setProgress(null)
 		} catch (error) {
-			console.log('Something went wrong with the upload', error)
 			setIsError(true)
 			if (error instanceof Error) {
 				setError(error.message)

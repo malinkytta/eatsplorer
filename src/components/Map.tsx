@@ -91,7 +91,6 @@ const Map: React.FC = () => {
 	}
 
 	useEffect(() => {
-		// console.log('Filtrerade restauranger har ändrats:', filteredRestaurants)
 		setRestaurants(filteredRestaurants)
 	}, [filteredRestaurants])
 

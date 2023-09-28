@@ -1,6 +1,7 @@
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import { Alert, Card } from 'react-bootstrap'
+import Card from 'react-bootstrap/Card'
+import Alert from 'react-bootstrap/Alert'
 import { Link, useNavigate } from 'react-router-dom'
 import { SubmitHandler } from 'react-hook-form'
 import { NewUserCredentials } from '../types/User.types'

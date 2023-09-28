@@ -6,7 +6,6 @@ import { Restaurant } from '../types/Restaurant.types'
 import EditRestaurantForm from './EditRestaurantForm'
 import useUpdateRestaurant from '../hooks/useUpdateRestaurant'
 import { toast } from 'react-toastify'
-import { ErrorModal } from './ErrorModal'
 import { ScaleLoader } from 'react-spinners'
 
 interface IProps {

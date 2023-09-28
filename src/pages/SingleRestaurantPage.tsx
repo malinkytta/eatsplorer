@@ -2,12 +2,10 @@ import UploadImages from '../components/UploadImages'
 import useGetRestaurant from '../hooks/useGetRestaurant'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import Col from 'react-bootstrap/Col'
-
 import useGetImage from '../hooks/useGetImage'
 import { useEffect, useState } from 'react'
 import EditRestaurant from '../components/EditRestaurant'
 import { SingleRestaurantComponent } from '../components/SingleRestaurantComponent'
-import { ErrorModal } from '../components/ErrorModal'
 import { ScaleLoader } from 'react-spinners'
 
 const SingleRestaurantPage = () => {

@@ -20,7 +20,6 @@ export type NewUser = {
 	name: string
 	email: string
 	isAdmin: boolean
-	// photoFile: string | null
 	photoFile: FileList | null
 }
 

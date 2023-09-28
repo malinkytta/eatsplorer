@@ -104,6 +104,7 @@ const EditProfilePage = () => {
 								className: 'custom-toast',
 							}
 						)
+						console.error(err)
 					},
 					async () => {
 						const photoURL = await getDownloadURL(fileRef)
@@ -173,9 +174,7 @@ const EditProfilePage = () => {
 					<Card text='white' className='edit-card'>
 						<Card.Body className='form-card'>
 							<Card.Title>Update profile</Card.Title>
-							{/* {errorMessage && (
-								<Alert variant='danger'>{errorMessage}</Alert>
-							)} */}
+
 							<Form onSubmit={handleSubmit(onUpdateProfile)}>
 								<div className='profile-photo-wrapper text-center my-3'></div>
 								<Form.Group

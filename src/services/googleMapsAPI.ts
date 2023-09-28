@@ -17,7 +17,6 @@ export const getLatLngFromAddress = async (address: string, city: string) => {
 
 	if (response.data.status === 'OK' && response.data.results.length > 0) {
 		const { lat, lng } = response.data.results[0].geometry.location
-		// console.log('latitude och longitude', lat, lng)
 		return { lat, lng }
 	} else {
 		throw new Error('Could not find latitude and longitude for adress')

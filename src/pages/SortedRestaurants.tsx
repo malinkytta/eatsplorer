@@ -34,10 +34,7 @@ const SortedRestaurants: React.FC<IProps> = ({ data }) => {
 	}
 
 	const handleDelete = async (id: string, photo: string) => {
-		console.log('path från adminpage', photo)
-		console.log('id från adminpage', id)
 		deleteImageFromImgCol(id)
-
 		deleteImgFromStorage(photo)
 		await deleteRestaurant(id)
 	}

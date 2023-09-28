@@ -17,7 +17,6 @@ const UploadImages: React.FC<IProps> = ({ restaurantId, restaurant }) => {
 	const onDrop = useCallback(
 		(acceptedFiles: File[]) => {
 			if (!acceptedFiles.length) {
-				console.log('ajabaja!')
 				return
 			}
 			acceptedFiles.forEach((file) => {

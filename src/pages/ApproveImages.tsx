@@ -12,12 +12,9 @@ import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import { useState } from 'react'
-import useDeleteImage from '../hooks/useDeleteImage'
 import useAdmin from '../hooks/useAdmin'
 import { ScaleLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
-import { restaurantImageCol } from '../services/firebase'
-import { deleteDoc, getDocs, query, where } from 'firebase/firestore'
 
 const ApproveImages = () => {
 	// const { removeDoc, removeFromRestaurantDoc } = useDeleteImage()

@@ -65,7 +65,6 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		setUserName(auth.currentUser.displayName)
 		setUserEmail(auth.currentUser.email)
 		setUserPhotoUrl(auth.currentUser.photoURL)
-		console.log('Reloaded user', auth.currentUser)
 		return true
 	}
 	const signup = async (

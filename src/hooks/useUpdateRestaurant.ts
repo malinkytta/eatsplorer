@@ -8,7 +8,6 @@ export const useUpdateRestaurant = (id: string) => {
 			const docRef = doc(restaurantCol, id)
 			await updateDoc(docRef, { ...data })
 		} catch (err) {
-			console.log(err)
 			console.error('Something went wrong when updating the restaurant')
 		}
 	}
