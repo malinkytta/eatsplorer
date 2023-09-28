@@ -12,7 +12,7 @@ import {
 
 import { Restaurant } from '../types/Restaurant.types'
 
-import useDeleteImage from '../hooks/useDeleteImage'
+import useDelete from '../hooks/useDelete'
 import useAdmin from '../hooks/useAdmin'
 
 interface IProps {
@@ -21,7 +21,7 @@ interface IProps {
 
 const SortedRestaurants: React.FC<IProps> = ({ data }) => {
 	const { deleteRestaurant, deleteImgFromStorage, deleteImageFromImgCol } =
-		useDeleteImage()
+		useDelete()
 	const columnHelper = createColumnHelper<Restaurant>()
 	const { confirmedByAdmin } = useAdmin()
 

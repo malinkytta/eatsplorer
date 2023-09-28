@@ -15,12 +15,15 @@ import { useState } from 'react'
 import useAdmin from '../hooks/useAdmin'
 import { ScaleLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
+import useDelete from '../hooks/useDelete'
 
 const ApproveImages = () => {
-	// const { removeDoc, removeFromRestaurantDoc } = useDeleteImage()
+	const {} = useDelete()
 	const { approvedByAdmin } = useAdmin()
 	const [show, setShow] = useState(false)
 	const [selectedImage, setSelectedImage] = useState('')
+	const { removeFromRestaurantDoc, deleteImage, deleteImgFromStorage } =
+		useDelete()
 
 	const openModal = (imageUrl: string) => {
 		setShow(!show)
@@ -55,11 +58,22 @@ const ApproveImages = () => {
 		}
 	}
 
-	const handleDelete = (restaurantId: string, path: string, id: string) => {
-		console.log(restaurantId, path, id)
+	const handleDelete = async (
+		restaurantId: string,
+		path: string,
+		id: string
+	) => {
 		try {
-			// removeFromRestaurantDoc(restaurantId)
-			// removeDoc(id, path)
+			console.log(
+				'restaurantId %o, path %o och id%o',
+				restaurantId,
+				path,
+				id
+			)
+
+			await removeFromRestaurantDoc(restaurantId)
+			await deleteImage(id, path)
+			await deleteImgFromStorage(path)
 		} catch (error) {
 			toast.error('An error occurred while removing images', {
 				className: 'custom-toast',

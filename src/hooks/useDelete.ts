@@ -13,7 +13,8 @@ import {
 } from '../services/firebase'
 import { deleteObject, ref } from 'firebase/storage'
 
-export const useDeleteImage = () => {
+export const useDelete = () => {
+	//Ta bort bild från collection 'restaurant-image' för radera bild sida
 	const deleteImage = async (id: string, photoPath: string) => {
 		try {
 			console.log('id från hook', id)
@@ -32,6 +33,7 @@ export const useDeleteImage = () => {
 		}
 	}
 
+	// Ta bort bilden från Storage
 	const deleteImgFromStorage = async (photoPath: string) => {
 		try {
 			const storageRef = ref(storage, photoPath)
@@ -41,27 +43,24 @@ export const useDeleteImage = () => {
 		}
 	}
 
+	// Ta bort bilden från collection 'restaurant-image' för radera restaurang
 	const deleteImageFromImgCol = async (id: string) => {
 		const queryRef = query(
 			restaurantImageCol,
 			where('restaurantId', '==', id)
 		)
-
 		try {
 			const querySnapshot = await getDocs(queryRef)
 
 			if (!querySnapshot.empty) {
 				querySnapshot.forEach(async (doc) => {
 					await deleteDoc(doc.ref)
-					console.log(`Dokument med ID ${doc.id} har tagits bort.`)
 				})
 				return true
 			} else {
-				console.log('Inga dokument att ta bort.')
 				return false
 			}
 		} catch (error) {
-			console.error('Fel vid borttagning av dokument:', error)
 			return false
 		}
 	}
@@ -97,4 +96,4 @@ export const useDeleteImage = () => {
 	}
 }
 
-export default useDeleteImage
+export default useDelete
