@@ -11,20 +11,14 @@ import {
 	restaurantImageCol,
 	storage,
 } from '../services/firebase'
-import { deleteObject, ref } from 'firebase/storage'
+import { deleteObject, getDownloadURL, ref } from 'firebase/storage'
 
 export const useDelete = () => {
 	//Ta bort bild från collection 'restaurant-image' för radera bild sida
-	const deleteImage = async (id: string, photoPath: string) => {
+	const deleteImage = async (id: string) => {
 		try {
-			console.log('id från hook', id)
-			console.log('path från hook', photoPath)
-			//Ta bort bilden från 'restaurant-images'
 			const docRef = doc(restaurantImageCol, id)
 			await deleteDoc(docRef)
-			//Ta bort bilden från Storage
-			// const storageRef = ref(storage, photoPath)
-			// await deleteObject(storageRef)
 		} catch (err) {
 			console.error(
 				'Something went wrong when deleting the document',
@@ -37,6 +31,9 @@ export const useDelete = () => {
 	const deleteImgFromStorage = async (photoPath: string) => {
 		try {
 			const storageRef = ref(storage, photoPath)
+
+			await getDownloadURL(storageRef)
+
 			await deleteObject(storageRef)
 		} catch (error) {
 			console.error(error)
@@ -65,15 +62,34 @@ export const useDelete = () => {
 		}
 	}
 
-	// Uppdatera doc 'restaurants' så att kopplingen till photo blir null
-	const removeFromRestaurantDoc = async (documenId: string) => {
+	// Uppdatera doc 'restaurants' så att kopplingen till photo blir null ändra namn till updatePhotoInRestaurantDoc
+	const removeFromRestaurantDoc = async (documentId: string) => {
 		try {
-			const docImgRef = doc(restaurantCol, documenId)
-			await updateDoc(docImgRef, {
-				photo: null,
-			})
-		} catch (err) {
-			console.error(err)
+			const queryRef = query(
+				restaurantImageCol,
+				where('restaurantId', '==', documentId)
+			)
+
+			const querySnapshot = await getDocs(queryRef)
+
+			if (!querySnapshot.empty) {
+				// Url till den första matchande dokument
+				const firstImageDoc = querySnapshot.docs[0].data()
+				const imageURL = firstImageDoc.url
+
+				const restaurantDocRef = doc(restaurantCol, documentId)
+				// Om fler bilder än 1, photo = imageURL annars null
+				await updateDoc(restaurantDocRef, {
+					photo: querySnapshot.size > 1 ? imageURL : null,
+				})
+			} else {
+				const restaurantDocRef = doc(restaurantCol, documentId)
+				await updateDoc(restaurantDocRef, {
+					photo: null,
+				})
+			}
+		} catch (error) {
+			console.error(error)
 		}
 	}
 

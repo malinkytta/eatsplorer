@@ -64,15 +64,8 @@ const ApproveImages = () => {
 		id: string
 	) => {
 		try {
-			console.log(
-				'restaurantId %o, path %o och id%o',
-				restaurantId,
-				path,
-				id
-			)
-
 			await removeFromRestaurantDoc(restaurantId)
-			await deleteImage(id, path)
+			await deleteImage(id)
 			await deleteImgFromStorage(path)
 		} catch (error) {
 			toast.error('An error occurred while removing images', {
