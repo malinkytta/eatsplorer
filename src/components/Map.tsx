@@ -50,7 +50,6 @@ const Map: React.FC = () => {
 	const [_location, setLocation] = useState<LatLngCity | null>(null)
 	const [category, setCategory] = useState<string>('')
 	const [offer, setOffer] = useState<string>('')
-	const [filter, setFilter] = useState<string>('')
 
 	const [show, setShow] = useState(true)
 	const [showMobile, setShowMobile] = useState(true)
@@ -161,8 +160,6 @@ const Map: React.FC = () => {
 						setCategory={setCategory}
 						offer={offer}
 						setOffer={setOffer}
-						filter={filter}
-						setFilter={setFilter}
 					/>
 				</>
 			)}

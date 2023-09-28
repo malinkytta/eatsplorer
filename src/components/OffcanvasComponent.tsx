@@ -3,7 +3,6 @@ import Offcanvas from 'react-bootstrap/Offcanvas'
 import Row from 'react-bootstrap/Row'
 import RestaurantsList from './RestaurantsList'
 import { Restaurant } from '../types/Restaurant.types'
-import MobileCarousel from './MobileCarousel'
 import FilterForm from './FilterForm'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
