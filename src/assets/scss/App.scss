@@ -234,15 +234,13 @@ body {
 	justify-content: center;
 	align-items: center;
 }
-.not-found {
-	display: flex;
-	min-height: 100vh;
-	justify-content: center;
-	align-items: center;
+
 	.not-found-title{
 		color: white;
+		text-align: center;
+		margin-top: 35vh;
 	}
-}
+
 
 .filter-header {
 	backdrop-filter: blur(11.2px);
