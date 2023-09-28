@@ -145,36 +145,16 @@ const Map: React.FC = () => {
 					onClick={handleSelect(suggestion.description)}
 					className='suggestion-list'
 				>
-					<span>{main_text}</span> <span>, {secondary_text}</span>
+					<span>
+						{main_text}
+						{secondary_text && `, ${secondary_text}`}
+					</span>
 				</li>
 			)
 		})
 
 	return (
 		<>
-			{/* {restaurants && (
-				<>
-					<OffcanvasComponent
-						show={show}
-						restaurants={restaurants}
-						showHeader={showHeader}
-						category={category}
-						setCategory={setCategory}
-						offer={offer}
-						setOffer={setOffer}
-					/>
-
-					<MobileCarousel
-						show={show}
-						showMobile={showMobile}
-						data={restaurants}
-						category={category}
-						setCategory={setCategory}
-						offer={offer}
-						setOffer={setOffer}
-					/>
-				</>
-			)} */}
 			<GoogleMap
 				mapContainerStyle={containerStyle}
 				options={options}
