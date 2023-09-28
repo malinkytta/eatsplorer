@@ -245,9 +245,9 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 												type='tel'
 												{...register('phone', {
 													pattern: {
-														value: /^(?:(?:\+|00)46|0)[\s-]?[1-9]\d{1,2}[\s-]?\d{2}[\s-]?\d{2}[\s-]?\d{2}$/,
+														value: /^(?:(?:\+|00)46|0)[\s-]?[1-9]\d{1,2}[\s-]?\d{2,3}[\s-]?\d{2}[\s-]?\d{2}$/,
 														message:
-															'Invalid phone number, please enter 10 digits',
+															'Invalid phone number, please enter a valid Swedish phone number.',
 													},
 												})}
 												placeholder='Phone Number'
