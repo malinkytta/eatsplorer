@@ -58,15 +58,7 @@ const MobileCarousel: React.FC<IProps> = ({
 		const newUrl = `?${searchParamsCopy.toString()}`
 		navigate(newUrl)
 		setSortedRestaurants(filteredRestaurants)
-	}, [
-		filter,
-		data,
-		offer,
-		// offerparams,
-		filterparams,
-		searchParams,
-		navigate,
-	])
+	}, [filter, data, offer, filterparams, searchParams, navigate])
 
 	return (
 		<>
@@ -81,6 +73,11 @@ const MobileCarousel: React.FC<IProps> = ({
 							setOffer={setOffer}
 							setFilter={setFilter}
 						/>
+						{data.length === 0 && (
+							<div className='my-2 mx-3 flex-column'>
+								<p>No restaurants found</p>
+							</div>
+						)}
 					</div>
 				</div>
 			)}
