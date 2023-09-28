@@ -23,13 +23,8 @@ body {
 	z-index: 2;
 }
 
-// .dropdown-menu.show {
-// 	background: rgba(0, 0, 0, 0.3);
-// }
-
 .dropdown-item.active {
 	background: rgba(0, 0, 0, 0.3);
-	// backdrop-filter: blur(11.2px);
 }
 
 .invalid {
@@ -85,7 +80,6 @@ body {
 		width: 178px;
 		padding: 3px;
 		border-radius: 0;
-		// border: 1px solid grey;
 		color: white;
 		border: none;
 
@@ -129,18 +123,30 @@ body {
 }
 
 .mobile-filter-wrapper {
-	display: flex;
-	justify-content: center;
 	padding: 11px 25px;
 	z-index: 2;
-	position: absolute;
-	top: 112px;
+	position: relative;
+	top: 100px;
+	right: 1%;
 	width: 100%;
 	color: white;
+	font-size: 14px;
+
+	.form-select {
+		border: none;
+		background: transparent;
+		backdrop-filter: blur(12.7px);
+		border-radius: 10px;
+		padding: 2px 13px;
+		color: white;
+		font-size: 14px;
+	}
 }
+
 .mobile-filter {
 	width: auto;
 	border-radius: 5px;
+	padding: 6px 0;
 	background: rgba(255, 255, 255, 0.09);
 	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(12.7px);
@@ -151,8 +157,6 @@ body {
 	a .svg-inline--fa,
 	button .svg-inline--fa,
 	.btn {
-		// width: 16px;
-		// height: 16px;
 		padding: 0 6px 0 0;
 	}
 }
@@ -194,7 +198,6 @@ body {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
-	// border: 1px solid rgba(255, 255, 2/55, 0.3);
 	border-left: 1px solid rgba(0, 0, 0, 0.5);
 	border-right: 1px solid rgba(0, 0, 0, 0.5);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.5);

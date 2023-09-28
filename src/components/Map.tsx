@@ -153,7 +153,7 @@ const Map: React.FC = () => {
 
 	return (
 		<>
-			{restaurants && (
+			{/* {restaurants && (
 				<>
 					<OffcanvasComponent
 						show={show}
@@ -175,7 +175,7 @@ const Map: React.FC = () => {
 						setOffer={setOffer}
 					/>
 				</>
-			)}
+			)} */}
 			<GoogleMap
 				mapContainerStyle={containerStyle}
 				options={options}
@@ -207,6 +207,29 @@ const Map: React.FC = () => {
 							placeholder='Where are you going?'
 						/>
 					</div>
+					{restaurants && (
+						<>
+							<OffcanvasComponent
+								show={show}
+								restaurants={restaurants}
+								showHeader={showHeader}
+								category={category}
+								setCategory={setCategory}
+								offer={offer}
+								setOffer={setOffer}
+							/>
+
+							<MobileCarousel
+								show={show}
+								showMobile={showMobile}
+								data={restaurants}
+								category={category}
+								setCategory={setCategory}
+								offer={offer}
+								setOffer={setOffer}
+							/>
+						</>
+					)}
 
 					{showSuggestions && status === 'OK' && (
 						<ul className='suggestions'>{renderSuggestions()}</ul>
