@@ -56,6 +56,7 @@ const ApproveImages = () => {
 	}
 
 	const handleDelete = (restaurantId: string, path: string, id: string) => {
+		console.log(restaurantId, path, id)
 		try {
 			// removeFromRestaurantDoc(restaurantId)
 			// removeDoc(id, path)
