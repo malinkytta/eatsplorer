@@ -132,6 +132,25 @@ body {
 	overflow-x: scroll;
 }
 
+.mobile-filter-wrapper {
+	display: flex;
+	justify-content: center;
+	padding: 11px 25px;
+	z-index: 2;
+	position: absolute;
+	top: 112px;
+	width: 100%;
+	color: white;
+}
+.mobile-filter {
+	width: auto;
+	border-radius: 5px;
+	background: rgba(255, 255, 255, 0.09);
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(12.7px);
+	-webkit-backdrop-filter: blur(12.7px);
+}
+
 .restaurant-icons {
 	a .svg-inline--fa,
 	button .svg-inline--fa,

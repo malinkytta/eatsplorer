@@ -129,7 +129,6 @@ const OffcanvasComponent: React.FC<IProps> = ({
 					</Row>
 				</Offcanvas.Body>
 			</Offcanvas>
-			<MobileCarousel data={restaurants} />
 		</>
 	)
 }

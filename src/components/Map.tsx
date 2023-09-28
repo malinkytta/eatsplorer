@@ -21,6 +21,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Button from 'react-bootstrap/Button'
 import useFilter from '../hooks/useFilter'
+import MobileCarousel from './MobileCarousel'
 
 const Map: React.FC = () => {
 	const [showHeader, setShowHeader] = useState(true)
@@ -49,8 +50,11 @@ const Map: React.FC = () => {
 	const [_location, setLocation] = useState<LatLngCity | null>(null)
 	const [category, setCategory] = useState<string>('')
 	const [offer, setOffer] = useState<string>('')
+	const [filter, setFilter] = useState<string>('')
 
 	const [show, setShow] = useState(true)
+	const [showMobile, setShowMobile] = useState(true)
+
 	const filteredRestaurants = useFilter(city, category, offer, userLocation)
 
 	const [restaurants, setRestaurants] = useState<Restaurant[]>()
@@ -63,10 +67,14 @@ const Map: React.FC = () => {
 	}
 
 	const toggleHeader = () => {
-		if (!show) {
-			setShow(true)
+		if (window.innerWidth <= 768) {
+			setShowMobile(!showMobile)
+		} else {
+			if (!show) {
+				setShow(true)
+			}
+			setShowHeader(!showHeader)
 		}
-		setShowHeader(!showHeader)
 	}
 
 	const toggleShow = () => {
@@ -134,15 +142,29 @@ const Map: React.FC = () => {
 	return (
 		<>
 			{restaurants && (
-				<OffcanvasComponent
-					show={show}
-					restaurants={restaurants}
-					showHeader={showHeader}
-					category={category}
-					setCategory={setCategory}
-					offer={offer}
-					setOffer={setOffer}
-				/>
+				<>
+					<OffcanvasComponent
+						show={show}
+						restaurants={restaurants}
+						showHeader={showHeader}
+						category={category}
+						setCategory={setCategory}
+						offer={offer}
+						setOffer={setOffer}
+					/>
+
+					<MobileCarousel
+						show={show}
+						showMobile={showMobile}
+						data={restaurants}
+						category={category}
+						setCategory={setCategory}
+						offer={offer}
+						setOffer={setOffer}
+						filter={filter}
+						setFilter={setFilter}
+					/>
+				</>
 			)}
 			<GoogleMap
 				mapContainerStyle={containerStyle}
