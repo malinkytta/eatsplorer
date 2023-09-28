@@ -46,7 +46,6 @@ const CreateRestaurantPage = () => {
 			navigate('/')
 		} catch (error) {
 			if (error instanceof FirebaseError) {
-				console.error(error.message)
 				toast.error(error.message, {
 					className: 'custom-toast',
 				})

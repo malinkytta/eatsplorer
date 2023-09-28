@@ -42,7 +42,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 		<Row>
 			<Form onSubmit={handleSubmit(onFormSubmit)} className='mt-4 form'>
 				<Row className='justify-content-center'>
-					<Col sm={10} md={6} lg={4}>
+					<Col sm={10} md={6} lg={4} className='restaurant-col'>
 						<Card className='restaurant-card'>
 							<Card.Body className='restaurant-card-body'>
 								<Card.Title>Add a Restaurant</Card.Title>
@@ -53,7 +53,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 							</Card.Body>
 						</Card>
 					</Col>
-					<Col sm={10} md={6} lg={4}>
+					<Col sm={10} md={6} lg={4} className='restaurant-col'>
 						<Card className='restaurant-card'>
 							<Card.Body className='restaurant-card-body'>
 								<Form.Group controlId='name' className='mb-2'>
@@ -229,7 +229,7 @@ const CreateRestaurantForm: React.FC<IProps> = ({ onCreate }) => {
 					</Col>
 
 					{/* Second card */}
-					<Col sm={10} md={6} lg={4}>
+					<Col sm={10} md={6} lg={4} className='restaurant-col'>
 						<Card className='restaurant-card'>
 							<Card.Body className='restaurant-card-body'>
 								<Row>

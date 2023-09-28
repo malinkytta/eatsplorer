@@ -146,8 +146,12 @@ const EditProfilePage = () => {
 
 	return (
 		<div className='edit-profile'>
-			<Row className='d-flex justify-content-center align-items-center'>
-				<Col md={4} sm={8}>
+			<Row className='d-flex mx-auto justify-content-center align-items-center align-items-stretch'>
+				<Col
+					md={4}
+					sm={8}
+					className='restaurant-col d-flex justify-content-center'
+				>
 					<Card className='edit-card'>
 						<Card.Body className='form-card d-flex flex-column align-items-center justify-content-center'>
 							<Image
@@ -170,7 +174,7 @@ const EditProfilePage = () => {
 					</Card>
 				</Col>
 
-				<Col md={4} sm={8}>
+				<Col md={4} sm={8} className='restaurant-col'>
 					<Card text='white' className='edit-card'>
 						<Card.Body className='form-card'>
 							<Card.Title>Update profile</Card.Title>

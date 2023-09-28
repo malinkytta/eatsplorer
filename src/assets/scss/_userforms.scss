@@ -10,10 +10,17 @@
 	background-color: transparent;
 	-webkit-backdrop-filter: blur(11.2px);
 	border: none;
-	height: 100vh;
 }
+
 .login-card {
 	padding: 200px 57px 0;
+	height: 100vh;
+	a {
+		color: #d98576;
+		&:hover {
+			color: #913728;
+		}
+	}
 }
 
 .reset-card {
@@ -34,6 +41,12 @@
 .signup-card {
 	padding: 100px 57px 0;
 	height: 100vh;
+	a {
+		color: #d98576;
+		&:hover {
+			color: #913728;
+		}
+	}
 }
 
 .transparent-navbar {
@@ -94,5 +107,52 @@
 }
 
 .edit-card {
-	padding: 100px 57px 0;
+	width: 100%;
+}
+
+@media (min-width: 769px) {
+	.restaurant-card {
+		height: 60vh;
+		margin: 20px 5%;
+	}
+
+	.edit-profile {
+		height: 60vh;
+		padding-top: 100px;
+	}
+
+	.edit-card {
+		// width: 100%;
+		display: flex;
+		justify-content: center;
+	}
+	.single-restaurant-card {
+		height: 50vh;
+		margin: 30px 5%;
+	}
+	.restaurant-img-slider {
+		justify-content: center;
+	}
+	.restaurant-col {
+		margin-top: 0;
+	}
+}
+
+@media (min-width: 993px) {
+	.restaurant-card {
+		margin: 100px 5%;
+	}
+
+	.single-restaurant-card {
+		margin: 119px 10px 10px;
+	}
+}
+
+@media (min-width: 1600px) {
+	.login-card {
+		padding: 300px 57px 0;
+	}
+	.signup-card {
+		padding: 250px 57px 0;
+	}
 }
