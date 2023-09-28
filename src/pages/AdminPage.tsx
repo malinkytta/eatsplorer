@@ -7,17 +7,26 @@ import useGetConfirmStatus from '../hooks/useGetConfirmStatus'
 import ApproveImages from './ApproveImages'
 import useGetImages from '../hooks/useGetImages'
 import { ScaleLoader } from 'react-spinners'
+import { ErrorModal } from '../components/ErrorModal'
 
 const AdminPage = () => {
 	const { confirmedByAdminTrue, confirmedByAdminFalse } =
 		useGetConfirmStatus()
 	const { data } = useGetImages()
 
-	if (!confirmedByAdminFalse.data || !confirmedByAdminTrue.data) {
+	if (confirmedByAdminFalse.loading || confirmedByAdminTrue.loading) {
 		return (
 			<div className='loader'>
 				<ScaleLoader color={'#888'} speedMultiplier={1.1} />
 			</div>
+		)
+	}
+
+	if (!confirmedByAdminFalse.data || !confirmedByAdminTrue.data) {
+		return (
+			<ErrorModal>
+				<h2>No data found</h2>
+			</ErrorModal>
 		)
 	}
 

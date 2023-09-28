@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import EditRestaurant from '../components/EditRestaurant'
 import { SingleRestaurantComponent } from '../components/SingleRestaurantComponent'
 import { ScaleLoader } from 'react-spinners'
+import { ErrorModal } from '../components/ErrorModal'
 
 const SingleRestaurantPage = () => {
 	const [show, setShow] = useState(false)
@@ -16,7 +17,7 @@ const SingleRestaurantPage = () => {
 	const { id } = useParams()
 	const documentId = id as string
 
-	const { data } = useGetRestaurant(documentId)
+	const { data, loading } = useGetRestaurant(documentId)
 	const { data: image } = useGetImage(documentId)
 
 	useEffect(() => {
@@ -34,11 +35,18 @@ const SingleRestaurantPage = () => {
 		navigate(`/restaurant/${documentId}`)
 	}
 
-	if (!data || !image) {
+	if (loading) {
 		return (
 			<div className='loader'>
 				<ScaleLoader color={'#888'} speedMultiplier={1.1} />
 			</div>
+		)
+	}
+	if (!data || !image) {
+		return (
+			<ErrorModal>
+				<h2>No data found</h2>
+			</ErrorModal>
 		)
 	}
 
