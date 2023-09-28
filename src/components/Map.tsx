@@ -172,9 +172,14 @@ const Map: React.FC = () => {
 							<FontAwesomeIcon icon={faBars} />
 						</Button>
 
-						<Button variant='transparent' onClick={panToLocation}>
-							<FontAwesomeIcon icon={faLocationArrow} />
-						</Button>
+						{userLocation && (
+							<Button
+								variant='transparent'
+								onClick={panToLocation}
+							>
+								<FontAwesomeIcon icon={faLocationArrow} />
+							</Button>
+						)}
 
 						<Button onClick={toggleShow} variant='transparent'>
 							<FontAwesomeIcon icon={faUtensils} />
