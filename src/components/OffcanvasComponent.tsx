@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import Row from 'react-bootstrap/Row'
-import Form from 'react-bootstrap/Form'
 import RestaurantsList from './RestaurantsList'
 import { Restaurant } from '../types/Restaurant.types'
 import MobileCarousel from './MobileCarousel'
+import FilterForm from './FilterForm'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 
 interface IProps {
-	// handleClose: () => void
 	show: boolean
 	restaurants: Restaurant[]
 	showHeader: boolean
 	category: string
+	offer: string
 	setCategory: React.Dispatch<React.SetStateAction<string>>
+	setOffer: React.Dispatch<React.SetStateAction<string>>
 }
 
 const OffcanvasComponent: React.FC<IProps> = ({
@@ -20,37 +22,68 @@ const OffcanvasComponent: React.FC<IProps> = ({
 	restaurants,
 	showHeader,
 	category,
+	offer,
 	setCategory,
+	setOffer,
 }) => {
 	const [sortedRestaurants, setSortedRestaurants] = useState<
 		Restaurant[] | null
 	>(null)
-	const [filter, setFilter] = useState<string>()
+	const [filter, setFilter] = useState<string>('')
+	const [searchParams] = useSearchParams()
+
+	const navigate = useNavigate()
+
+	const filterparams = searchParams.get('filter')
 
 	useEffect(() => {
-		if (filter === 'Name') {
-			const sortByName = () => {
-				const sortedByName = [...restaurants]
-				sortedByName.sort((a, b) => a.name.localeCompare(b.name))
-				setSortedRestaurants(sortedByName)
-			}
-			sortByName()
-			console.log('sorted rest', sortedRestaurants)
-		} else if (filter === 'Distance') {
-			const sortByDistance = () => {
-				const sortedByDistance = [...restaurants]
-				sortedByDistance.sort((a, b) => {
-					const distanceA = Number(a.distance)
-					const distanceB = Number(b.distance)
-					return distanceA - distanceB
-				})
-				setSortedRestaurants(sortedByDistance)
-			}
-			sortByDistance()
-		} else {
-			setSortedRestaurants(restaurants)
+		const sortedRestaurantsCopy = [...restaurants]
+		if (filterparams === 'Name') {
+			sortedRestaurantsCopy.sort((a, b) => a.name.localeCompare(b.name))
+		} else if (filterparams === 'Distance') {
+			sortedRestaurantsCopy.sort((a, b) => {
+				const distanceA = Number(a.distance)
+				const distanceB = Number(b.distance)
+				return distanceA - distanceB
+			})
 		}
-	}, [filter, restaurants])
+		let filteredRestaurants = sortedRestaurantsCopy
+		// if (offerparams && offerparams !== 'All') {
+		// 	filteredRestaurants = sortedRestaurantsCopy.filter(
+		// 		(restaurant) => restaurant.offer === offerparams
+		// 	)
+		// }
+		const searchParamsCopy = new URLSearchParams(searchParams.toString())
+
+		if (filter) {
+			if (!filterparams) {
+				searchParamsCopy.set('filter', filter)
+			} else {
+				searchParamsCopy.set('filter', filter)
+			}
+		}
+
+		// if (offer) {
+		// 	if (!offerparams) {
+		// 		searchParamsCopy.set('offer', offer)
+		// 	} else {
+		// 		searchParamsCopy.set('offer', offer)
+		// 	}
+		// }
+
+		const newUrl = `?${searchParamsCopy.toString()}`
+		navigate(newUrl)
+		setSortedRestaurants(filteredRestaurants)
+	}, [
+		filter,
+		restaurants,
+		offer,
+		// offerparams,
+		filterparams,
+		searchParams,
+		navigate,
+	])
+
 	return (
 		<>
 			<Offcanvas
@@ -62,47 +95,15 @@ const OffcanvasComponent: React.FC<IProps> = ({
 			>
 				{showHeader && (
 					<Offcanvas.Header className='justify-content-center flex-column filter-header'>
-						<div className='d-flex '>
-							<Form.Group
-								controlId='category'
-								className='mb-2 mx-2'
-							>
-								<Form.Label>Category:</Form.Label>
-								<Form.Select
-									value={category}
-									onChange={(e) =>
-										setCategory(e.target.value)
-									}
-								>
-									<option value=''>All</option>
-									<option value='Café'>Café</option>
-									<option value='Restaurant'>
-										Restaurant
-									</option>
-									<option value='Pub'>Pub</option>
-									<option value='Fine-dining'>
-										Fine Dining
-									</option>
-									<option value='Fast-food'>Fast Food</option>
-									<option value='Bakery'>Bakery</option>
-									<option value='Deli'>Deli</option>
-								</Form.Select>
-							</Form.Group>
+						<FilterForm
+							category={category}
+							offer={offer}
+							filter={filter}
+							setCategory={setCategory}
+							setOffer={setOffer}
+							setFilter={setFilter}
+						/>
 
-							<Form.Group className='mb-2 mx-3'>
-								<Form.Label>Filter: </Form.Label>
-								<Form.Select
-									value={filter}
-									onChange={(e) => {
-										setFilter(e.target.value)
-									}}
-								>
-									<option value='No filter'>No filter</option>
-									<option value='Name'>Name</option>
-									<option value='Distance'>Distance</option>
-								</Form.Select>
-							</Form.Group>
-						</div>
 						{restaurants.length === 0 && (
 							<div className='my-2 mx-2 flex-column'>
 								<p>No restaurants found</p>

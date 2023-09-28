@@ -19,14 +19,11 @@ import {
 	faBars,
 	faLocationArrow,
 } from '@fortawesome/free-solid-svg-icons'
-import { restaurantCol } from '../services/firebase'
-import { onSnapshot, query, where } from 'firebase/firestore'
-import { calculateDistance } from '../helpers/calulateDistance'
-import { ScaleLoader } from 'react-spinners'
 import Button from 'react-bootstrap/Button'
+import useFilter from '../hooks/useFilter'
 
 const Map: React.FC = () => {
-	const [showHeader, setShowHeader] = useState(false)
+	const [showHeader, setShowHeader] = useState(true)
 	const [showSuggestions, setShowSuggestions] = useState(true)
 
 	const [searchParams, setSearchParams] = useSearchParams()
@@ -39,16 +36,7 @@ const Map: React.FC = () => {
 		longitude: lng ? Number(lng) : 13.021011006455181,
 	}
 
-	console.log(city)
 	const navigate = useNavigate()
-
-	const toggleHeader = () => {
-		if (!show) {
-			setShow(true)
-			setShowHeader(true)
-		}
-		setShowHeader(!showHeader)
-	}
 	const {
 		ready,
 		value,
@@ -60,9 +48,10 @@ const Map: React.FC = () => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_location, setLocation] = useState<LatLngCity | null>(null)
 	const [category, setCategory] = useState<string>('')
-	const [show, setShow] = useState(false)
+	const [offer, setOffer] = useState<string>('')
 
-	const toggleClose = () => setShow(!show)
+	const [show, setShow] = useState(true)
+	const filteredRestaurants = useFilter(city, category, offer, userLocation)
 
 	const [restaurants, setRestaurants] = useState<Restaurant[]>()
 	const mapRef = useRef<google.maps.Map | null>(null)
@@ -71,6 +60,20 @@ const Map: React.FC = () => {
 	}
 	const onUnMount = () => {
 		mapRef.current = null
+	}
+
+	const toggleHeader = () => {
+		if (!show) {
+			setShow(true)
+		}
+		setShowHeader(!showHeader)
+	}
+
+	const toggleShow = () => {
+		if (!showHeader) {
+			setShowHeader(true)
+		}
+		setShow(!show)
 	}
 
 	const panToLocation = () => {
@@ -88,71 +91,9 @@ const Map: React.FC = () => {
 	}
 
 	useEffect(() => {
-		let queryRef
-
-		if (city && category) {
-			queryRef = query(
-				restaurantCol,
-				where('isConfirmedByAdmin', '==', true),
-				where('city', '==', city),
-				where('category', '==', category)
-			)
-		} else if (city) {
-			queryRef = query(
-				restaurantCol,
-				where('isConfirmedByAdmin', '==', true),
-				where('city', '==', city)
-			)
-		} else if (category) {
-			queryRef = query(
-				restaurantCol,
-				where('isConfirmedByAdmin', '==', true),
-				where('category', '==', category)
-			)
-		} else {
-			console.log('hamnar vi här?')
-			queryRef = query(
-				restaurantCol,
-				where('isConfirmedByAdmin', '==', true)
-			)
-		}
-		const unsubscribe = onSnapshot(
-			queryRef,
-			(snapshot) => {
-				const data: Restaurant[] = snapshot.docs.map((doc) => {
-					return {
-						...doc.data(),
-						_id: doc.id,
-					}
-				})
-				if (data.length === 0) {
-					setRestaurants([])
-					// setShow(false)
-				}
-				if (userLocation && data.length > 0) {
-					const updatedRestaurants = data.map((restaurant) => {
-						const distance = calculateDistance(
-							userLocation.lat,
-							userLocation.lng,
-							restaurant.lat,
-							restaurant.lng
-						)
-						return {
-							...restaurant,
-							distance: distance,
-						}
-					})
-					setRestaurants(updatedRestaurants)
-				}
-			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			(error) => {
-				console.log('ERROR ERROR', error)
-			}
-		)
-
-		return unsubscribe
-	}, [city, userLocation, category])
+		// console.log('Filtrerade restauranger har ändrats:', filteredRestaurants)
+		setRestaurants(filteredRestaurants)
+	}, [filteredRestaurants])
 
 	const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
 		setValue(e.target.value)
@@ -173,8 +114,6 @@ const Map: React.FC = () => {
 			city: searchedLocation,
 		})
 	}
-	console.log('vilket värde har "show" till restaurangerna', show)
-	console.log('vilket värde har showHeader för filtrering?', showHeader)
 
 	const renderSuggestions = () =>
 		data.map((suggestion) => {
@@ -192,13 +131,7 @@ const Map: React.FC = () => {
 				</li>
 			)
 		})
-	if (!userLocation) {
-		return (
-			<div className='loader'>
-				<ScaleLoader color={'#888'} speedMultiplier={1.1} />
-			</div>
-		)
-	}
+
 	return (
 		<>
 			{restaurants && (
@@ -208,6 +141,8 @@ const Map: React.FC = () => {
 					showHeader={showHeader}
 					category={category}
 					setCategory={setCategory}
+					offer={offer}
+					setOffer={setOffer}
 				/>
 			)}
 			<GoogleMap
@@ -231,7 +166,7 @@ const Map: React.FC = () => {
 							<FontAwesomeIcon icon={faLocationArrow} />
 						</Button>
 
-						<Button onClick={toggleClose} variant='transparent'>
+						<Button onClick={toggleShow} variant='transparent'>
 							<FontAwesomeIcon icon={faUtensils} />
 						</Button>
 						<input
@@ -286,7 +221,7 @@ const Map: React.FC = () => {
 						title='Your Location'
 					/>
 				)}
-				{position && (
+				{position && city && (
 					<MarkerF
 						position={{
 							lat: position.latitude,

@@ -74,7 +74,7 @@ const RestaurantsList: React.FC<IProps> = ({ data }) => {
 						</Card.Text>
 
 						<div className='restaurant-icons'>
-							<Link to={`/${restaurant._id}`}>
+							<Link to={`restaurant/${restaurant._id}`}>
 								<Button variant='transparent'>
 									<FontAwesomeIcon icon={faCircleInfo} />
 								</Button>
