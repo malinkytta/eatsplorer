@@ -12,7 +12,6 @@ import {
 
 import { Restaurant } from '../types/Restaurant.types'
 
-// import useDeleteRestaurant from '../hooks/useDeleteRestaurant'
 import useDeleteImage from '../hooks/useDeleteImage'
 import useAdmin from '../hooks/useAdmin'
 
@@ -37,8 +36,9 @@ const SortedRestaurants: React.FC<IProps> = ({ data }) => {
 	const handleDelete = async (id: string, photo: string) => {
 		console.log('path från adminpage', photo)
 		console.log('id från adminpage', id)
-		deleteImgFromStorage(photo)
 		deleteImageFromImgCol(id)
+
+		deleteImgFromStorage(photo)
 		await deleteRestaurant(id)
 	}
 
