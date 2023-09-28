@@ -33,7 +33,7 @@ const SingleRestaurantPage = () => {
 
 	const handleHide = () => {
 		setShow(false)
-		navigate(`/${documentId}`)
+		navigate(`/restaurant/${documentId}`)
 	}
 
 	if (!data || !image) {

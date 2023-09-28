@@ -1,25 +1,20 @@
-import { deleteDoc, doc } from 'firebase/firestore'
-import { useState } from 'react'
-import { restaurantCol } from '../services/firebase'
+// import { deleteDoc, doc } from 'firebase/firestore'
+// import { restaurantCol } from '../services/firebase'
 
-export const useDeleteRestaurant = () => {
-	const [error, setError] = useState(false)
+// export const useDeleteRestaurant = () => {
 
-	const removeDoc = async (id: string) => {
-		setError(false)
+// 	const removeDoc = async (id: string) => {
+// 		try {
+// 			const docRef = doc(restaurantCol, id)
+// 			await deleteDoc(docRef)
 
-		try {
-			const docRef = doc(restaurantCol, id)
-			await deleteDoc(docRef)
-		} catch (err) {
-			setError(true)
-			console.error('Something went wrong when deleting the document')
-		}
-	}
-	return {
-		removeDoc,
-		error,
-	}
-}
+// 		} catch (err) {
+// 			console.error('Something went wrong when deleting the document')
+// 		}
+// 	}
+// 	return {
+// 		removeDoc,
+// 	}
+// }
 
-export default useDeleteRestaurant
+// export default useDeleteRestaurant

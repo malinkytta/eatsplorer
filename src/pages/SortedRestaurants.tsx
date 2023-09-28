@@ -12,7 +12,8 @@ import {
 
 import { Restaurant } from '../types/Restaurant.types'
 
-import useDeleteRestaurant from '../hooks/useDeleteRestaurant'
+// import useDeleteRestaurant from '../hooks/useDeleteRestaurant'
+import useDeleteImage from '../hooks/useDeleteImage'
 import useAdmin from '../hooks/useAdmin'
 
 interface IProps {
@@ -20,7 +21,8 @@ interface IProps {
 }
 
 const SortedRestaurants: React.FC<IProps> = ({ data }) => {
-	const { removeDoc } = useDeleteRestaurant()
+	const { deleteRestaurant, deleteImgFromStorage, deleteImageFromImgCol } =
+		useDeleteImage()
 	const columnHelper = createColumnHelper<Restaurant>()
 	const { confirmedByAdmin } = useAdmin()
 
@@ -32,8 +34,12 @@ const SortedRestaurants: React.FC<IProps> = ({ data }) => {
 		}
 	}
 
-	const handleDelete = (id: string) => {
-		removeDoc(id)
+	const handleDelete = async (id: string, photo: string) => {
+		console.log('path från adminpage', photo)
+		console.log('id från adminpage', id)
+		deleteImgFromStorage(photo)
+		deleteImageFromImgCol(id)
+		await deleteRestaurant(id)
 	}
 
 	const columns = [
@@ -114,7 +120,7 @@ const SortedRestaurants: React.FC<IProps> = ({ data }) => {
 					header: 'Edit',
 					cell: (props) => (
 						<Button
-							href={`/${props.row.original._id}?openModal=true`}
+							href={`restaurant/${props.row.original._id}?openModal=true`}
 							variant='transparent'
 						>
 							<FontAwesomeIcon icon={faEdit} />
@@ -128,7 +134,12 @@ const SortedRestaurants: React.FC<IProps> = ({ data }) => {
 					cell: (props) => (
 						<Button
 							variant='transparent'
-							onClick={() => handleDelete(props.row.original._id)}
+							onClick={() =>
+								handleDelete(
+									props.row.original._id,
+									props.row.original.photo
+								)
+							}
 						>
 							<FontAwesomeIcon icon={faTrashCan} />
 						</Button>

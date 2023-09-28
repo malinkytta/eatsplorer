@@ -16,9 +16,11 @@ import useDeleteImage from '../hooks/useDeleteImage'
 import useAdmin from '../hooks/useAdmin'
 import { ScaleLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
+import { restaurantImageCol } from '../services/firebase'
+import { deleteDoc, getDocs, query, where } from 'firebase/firestore'
 
 const ApproveImages = () => {
-	const { removeDoc, removeFromRestaurantDoc } = useDeleteImage()
+	// const { removeDoc, removeFromRestaurantDoc } = useDeleteImage()
 	const { approvedByAdmin } = useAdmin()
 	const [show, setShow] = useState(false)
 	const [selectedImage, setSelectedImage] = useState('')
@@ -58,8 +60,8 @@ const ApproveImages = () => {
 
 	const handleDelete = (restaurantId: string, path: string, id: string) => {
 		try {
-			removeFromRestaurantDoc(restaurantId)
-			removeDoc(id, path)
+			// removeFromRestaurantDoc(restaurantId)
+			// removeDoc(id, path)
 		} catch (error) {
 			toast.error('An error occurred while removing images', {
 				className: 'custom-toast',
