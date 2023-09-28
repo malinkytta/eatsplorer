@@ -19,17 +19,17 @@ export const SingleRestaurantComponent: React.FC<IProps> = ({
 	image,
 }) => {
 	return (
-		<Row
-			className='d-flex align-items-center justify-content-center'
-			style={{ width: '100%' }}
-		>
-			<Col xs={10} md={6}>
-				<Card className='single-restaurant-card '>
-					<Card.Body className='d-flex flex-column  justify-content-center'>
+		<Row className='d-flex align-items-center justify-content-center mx-auto'>
+			<Col xs={12} md={6} className='restaurant-col'>
+				<Card className='single-restaurant-card'>
+					<Card.Body className='d-flex flex-column justify-content-center align-items-center'>
 						<h2>{data.name}</h2>
 
-						<Row>
-							<Col xs={4}>
+						<Row
+							className='py-3 d-flex justify-content-center'
+							style={{ padding: '0 20px' }}
+						>
+							<Col xs={5}>
 								<p>Address:</p>
 								<p>Description:</p>
 								<p>Category:</p>
@@ -37,7 +37,7 @@ export const SingleRestaurantComponent: React.FC<IProps> = ({
 								<p>Phone:</p>
 								<p>Email:</p>
 							</Col>
-							<Col xs={8}>
+							<Col xs={7}>
 								<p>
 									{data.address}, {data.city}
 								</p>
@@ -92,7 +92,7 @@ export const SingleRestaurantComponent: React.FC<IProps> = ({
 					</Card.Body>
 				</Card>
 			</Col>
-			<Col xs={10} md={6}>
+			<Col xs={11} md={6}>
 				<Card className='single-restaurant-card'>
 					{image.length ? (
 						<Image className='restaurant-img' src={image[0].url} />
@@ -106,12 +106,9 @@ export const SingleRestaurantComponent: React.FC<IProps> = ({
 				</Card>
 			</Col>
 			{image.length > 0 && (
-				<Col
-					xs={12}
-					className='d-flex restaurant-img-slider justify-content-center'
-				>
+				<Col xs={12} className='d-flex restaurant-img-slider'>
 					{image.map((image) => (
-						<Col key={image._id} xs={12} sm={6} md={4} lg={3}>
+						<Col key={image._id} xs={10} sm={6} md={4} lg={3}>
 							<img
 								className='restaurant-img'
 								src={image.url}

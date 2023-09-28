@@ -51,17 +51,24 @@ const SingleRestaurantPage = () => {
 	}
 
 	return (
-		<>
-			<EditRestaurant show={show} onHide={handleHide} />
-			<SingleRestaurantComponent data={data} image={image} />
+		<div
+			className='background-restaurant'
+			style={{
+				backgroundImage: data.photo ? `url(${data.photo})` : '',
+			}}
+		>
+			<div className='blur'>
+				<EditRestaurant show={show} onHide={handleHide} />
+				<SingleRestaurantComponent data={data} image={image} />
 
-			<Col sm={10} className='mx-auto'>
-				<UploadImages
-					restaurantId={documentId}
-					restaurant={data.name}
-				/>
-			</Col>
-		</>
+				<Col sm={10} className='mx-auto'>
+					<UploadImages
+						restaurantId={documentId}
+						restaurant={data.name}
+					/>
+				</Col>
+			</div>
+		</div>
 	)
 }
 
