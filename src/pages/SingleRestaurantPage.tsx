@@ -8,8 +8,11 @@ import EditRestaurant from '../components/EditRestaurant'
 import { SingleRestaurantComponent } from '../components/SingleRestaurantComponent'
 import { ScaleLoader } from 'react-spinners'
 import { ErrorModal } from '../components/ErrorModal'
+import useAuth from '../hooks/useAuth'
 
 const SingleRestaurantPage = () => {
+	const { currentUser } = useAuth()
+
 	const [show, setShow] = useState(false)
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
@@ -61,12 +64,14 @@ const SingleRestaurantPage = () => {
 				<EditRestaurant show={show} onHide={handleHide} />
 				<SingleRestaurantComponent data={data} image={image} />
 
-				<Col sm={10} className='mx-auto'>
-					<UploadImages
-						restaurantId={documentId}
-						restaurant={data.name}
-					/>
-				</Col>
+				{currentUser && (
+					<Col sm={10} className='mx-auto'>
+						<UploadImages
+							restaurantId={documentId}
+							restaurant={data.name}
+						/>
+					</Col>
+				)}
 			</div>
 		</div>
 	)
