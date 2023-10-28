@@ -1,10 +1,13 @@
-# FED22 JavaScript 2
-## Submission Assignment 3
+# FED22 JavaScript 2 - Assignment 2
+## Restaurant/Café Map 
 
-## Restaurant/Café Map (I Require Sustenance)
+<img src="https://media.giphy.com/media/3ohzdESy4qBmm24kTu/giphy.gif" width="50%">
+
 
 ### Description
-You are tasked with creating an app that functions as a food guide for when you're hangry and don't know where to eat, or when you just need a coffee/snack (like after this lecture). You should be able to view restaurants/cafés from various categories around your location. All data should be fetched/created/modified using Firebase. Google Maps should only display the food establishments that are in the Firebase Firestore database. The assignment should be completed in groups of three, where you will work with two classmates you have not previously collaborated with.
+*Your assignment is to develop an app that serves as a food guide for when you're hangry and don't know where to eat, or when you just need a coffee/snack. You should be able to view restaurants/cafés from various categories around your location. All data should be fetched/created/modified using Firebase. Google Maps should only display the food establishments that are in the Firebase Firestore database. The assignment should be completed in groups of three, where you will work with two classmates you have not previously collaborated with.*
+
+This is a collaborative group project involving three team members.
 
 ### Hygiene Requirements
 The following hygiene requirements should be met regardless of the grade level:
@@ -52,3 +55,6 @@ The following hygiene requirements should be met regardless of the grade level:
 - Uploaded (and approved) photos should be displayed when the user clicks on a food establishment
 - Users should be able to create restaurants that must be approved by admin (replacing the "tips" function)
 - Admins can designate users as admins
+
+## Assignment Deadline: 10 days
+
