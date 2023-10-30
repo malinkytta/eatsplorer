@@ -13,7 +13,7 @@ This is a collaborative group project involving three team members.
 The following hygiene requirements should be met regardless of the grade level:
 - Responsive (mobile-first, of course)
 - Version-controlled (with clear, descriptive commit messages from all group members)
-- All code should be written by yourselves, and unused code should be cleaned up (meaning, you should create an entirely new, empty app and code it from scratch, not just modify one of my examples!)
+- All code should be written by yourselves, and unused code should be cleaned up
 - Properly indented and commented source code (you should easily be able to understand each other's code)
 - Deployed to Netlify (or Firebase Hosting as an alternative)
 
@@ -23,7 +23,7 @@ The following hygiene requirements should be met regardless of the grade level:
 - Utilizes Firebase Firestore, Auth, and Storage
 - Uses React Table
 - Uses React Hook Form
-- Uses Google Maps (or OpenStreetMap, but Google Maps is strongly recommended)
+- Uses Google Maps 
 - Communication with the API should occur via an intermediary (components rendering content should not contain data retrieval logic, only call a hook to fetch data)
 - Of course, you are allowed to use additional libraries if needed. You can choose your own layout framework, but I recommend using Bootstrap and focusing on the code.
 
